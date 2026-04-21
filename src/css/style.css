@@ -4,6 +4,13 @@ html {
     padding: 0;
 }
 
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
 .center {
     position: absolute;
     left: 50%;
