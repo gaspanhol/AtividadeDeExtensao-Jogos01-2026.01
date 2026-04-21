@@ -6,7 +6,7 @@ export default class abertura extends Phaser.Scene {
   }
 
   preload () {
-    this.load.image('fundo', 'Public/assets/tilemaps/imagem_museu_teste.jpg')
+    this.load.image('fundo', '../assets/tilemaps/imagem_museu_teste.jpg')
   } 
 
   create () {
