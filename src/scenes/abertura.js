@@ -6,7 +6,7 @@ export default class Abertura extends Phaser.Scene {
 
   preload () {
     this.load.setBaseURL('public/assets/')
-    this.load.image('fundo', 'tilemaps/imagem_museu_teste.jpg')
+    this.load.image('fundo', 'telas/tela_inicial_1280x720.png')
   } 
 
   create () {
