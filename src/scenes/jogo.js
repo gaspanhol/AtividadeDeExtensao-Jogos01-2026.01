@@ -45,60 +45,53 @@ export default class Jogo extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, mapa.widthInPixels, mapa.heightInPixels)
         this.cameras.main.setZoom(2)
 
-        // animações parado
+        const animacoes = [
+            {
+                nome: 'cima',
+                idle: [66, 67],    
+                andar: [1, 8]
+            },
+            {
+                nome: 'esquerda',
+                idle: [68, 69],        
+                andar: [10, 17]
+            },
+            {
+                nome: 'baixo',
+                idle: [70, 71],     
+                andar: [19, 26]
+            },
+            {
+                nome: 'direita',
+                idle: [72, 73],      
+                andar: [28, 35]
+            }
+        ]
 
-        this.anims.create({
-            key: 'idle-cima',
-            frames: [{ key: 'player', frame: 0 }],
-            frameRate: 1
-        })
+        animacoes.forEach(anim => {
 
-        this.anims.create({
-            key: 'idle-esquerda',
-            frames: [{ key: 'player', frame: 9 }],
-            frameRate: 1
-        })
+            // IDLE (parado)
+            this.anims.create({
+                key: 'idle-' + anim.nome,
+                frames: this.anims.generateFrameNumbers('player', {
+                    start: anim.idle[0],
+                    end: anim.idle[1]
+                }),
+                frameRate: 2, 
+                repeat: -1
+            })
 
-        this.anims.create({
-            key: 'idle-baixo',
-            frames: [{ key: 'player', frame: 18 }],
-            frameRate: 1
-        })
+            // ANDAR 
+            this.anims.create({
+                key: 'andar-' + anim.nome,
+                frames: this.anims.generateFrameNumbers('player', {
+                    start: anim.andar[0],
+                    end: anim.andar[1]
+                }),
+                frameRate: 8,
+                repeat: -1
+            })
 
-        this.anims.create({
-            key: 'idle-direita',
-            frames: [{ key: 'player', frame: 27 }],
-            frameRate: 1
-        })
-
-        //animações de andar
-
-        this.anims.create({
-            key: 'andar-cima',
-            frames: this.anims.generateFrameNumbers('player', { start: 1, end: 8 }),
-            frameRate: 8,
-            repeat: -1
-        })
-
-        this.anims.create({
-            key: 'andar-esquerda',
-            frames: this.anims.generateFrameNumbers('player', { start: 10, end: 17 }),
-            frameRate: 8,
-            repeat: -1
-        })
-
-        this.anims.create({
-            key: 'andar-baixo',
-            frames: this.anims.generateFrameNumbers('player', { start: 19, end: 26 }),
-            frameRate: 8,
-            repeat: -1
-        })
-
-        this.anims.create({
-            key: 'andar-direita',
-            frames: this.anims.generateFrameNumbers('player', { start: 28, end: 35 }),
-            frameRate: 8,
-            repeat: -1
         })
 
     }
@@ -106,45 +99,44 @@ export default class Jogo extends Phaser.Scene {
     update () {
 
         // debug colisão
-        this.layerColisao.renderDebug(this.add.graphics(), {
-            tileColor: null,
-            collidingTileColor: new Phaser.Display.Color(255, 0, 0, 100)
-        })
+        //this.layerColisao.renderDebug(this.add.graphics(), {
+        //    tileColor: null,
+        //    collidingTileColor: new Phaser.Display.Color(255, 0, 0, 100)
+        //})
 
         // debug posição do personagem
         // console.log(this.player.x, this.player.y)
 
-        // velocidade do personagem
         const velocidade = 150
 
-        this.player.setVelocity(0)
+        let vx = 0
+        let vy = 0
 
-        // movimento e animação
-
+        // detectar direção
         if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-velocidade)
-            this.player.anims.play('andar-esquerda', true)
+            vx = -velocidade
             this.direcao = 'esquerda'
 
         } else if (this.cursors.right.isDown) {
-            this.player.setVelocityX(velocidade)
-            this.player.anims.play('andar-direita', true)
+            vx = velocidade
             this.direcao = 'direita'
 
         } else if (this.cursors.up.isDown) {
-            this.player.setVelocityY(-velocidade)
-            this.player.anims.play('andar-cima', true)
+            vy = -velocidade
             this.direcao = 'cima'
 
         } else if (this.cursors.down.isDown) {
-            this.player.setVelocityY(velocidade)
-            this.player.anims.play('andar-baixo', true)
+            vy = velocidade
             this.direcao = 'baixo'
+        }
 
+        // aplicar movimento
+        this.player.setVelocity(vx, vy)
+
+        // animação
+        if (vx !== 0 || vy !== 0) {
+            this.player.anims.play('andar-' + this.direcao, true)
         } else {
-            this.player.setVelocity(0)
-
-            // toca o idle baseado na última direção
             this.player.anims.play('idle-' + this.direcao, true)
         }
     }
