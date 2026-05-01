@@ -30,11 +30,15 @@ export default class Jogo extends Phaser.Scene {
 
         mapa.createLayer('chao', tilesets, 0, 0)
         mapa.createLayer('parede', tilesets, 0, 0)
+        this.layerColisao = mapa.createLayer('paredecolisao', tilesets, 0, 0)
         mapa.createLayer('teto', tilesets, 0, 0)
         mapa.createLayer('objetos', tilesets, 0, 0)
+        
+        this.layerColisao.setCollisionByExclusion([-1])
 
-        this.player = this.physics.add.sprite(100, 100, 'player')
+        this.player = this.physics.add.sprite(178, 405, 'player')
         this.direcao = 'baixo'
+        this.physics.add.collider(this.player, this.layerColisao)
 
         // Câmera
         this.cameras.main.startFollow(this.player)
@@ -100,6 +104,15 @@ export default class Jogo extends Phaser.Scene {
     }
 
     update () {
+
+        // debug colisão
+        this.layerColisao.renderDebug(this.add.graphics(), {
+            tileColor: null,
+            collidingTileColor: new Phaser.Display.Color(255, 0, 0, 100)
+        })
+
+        // debug posição do personagem
+        // console.log(this.player.x, this.player.y)
 
         // velocidade do personagem
         const velocidade = 150
