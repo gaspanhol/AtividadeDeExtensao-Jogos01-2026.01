@@ -36,6 +36,11 @@ export default class Jogo extends Phaser.Scene {
         this.player = this.physics.add.sprite(100, 100, 'player')
         this.direcao = 'baixo'
 
+        // Câmera
+        this.cameras.main.startFollow(this.player)
+        this.cameras.main.setBounds(0, 0, mapa.widthInPixels, mapa.heightInPixels)
+        this.cameras.main.setZoom(2)
+
         // animações parado
 
         this.anims.create({
