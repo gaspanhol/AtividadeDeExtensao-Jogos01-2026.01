@@ -21,12 +21,8 @@ export default class Abertura extends Phaser.Scene {
 
     fundo.setScale(scale)
     .setInteractive()
-    .on('pointerdown', () => {
-      navigator.mediaDevices.getUserMedia({ video: false, audio: true })
-        .then((stream) => {
-          globalThis.game.midias = stream
-        })
-        .catch((error) => console.error(error))
+      .on('pointerdown', () => {
+      this.scene.start('Jogo')  
     })
   }
 
