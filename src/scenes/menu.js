@@ -1,16 +1,16 @@
 export default class Menu extends Phaser.Scene {
-  
+
   constructor () {
     super('Menu')
   }
 
   preload () {
     this.load.setBaseURL('public/assets/')
-    this.load.image('fundoMenu', 'telas/tela_menu.png')
-    this.load.image('botaoJogar', 'botoes/botao_jogar_menu.png')
-    this.load.image('botaoConfiguracoes', 'botoes/botao_configuracoes_menu.png')
-    this.load.image('botaoExtras', 'botoes/botao_extras_menu.png')
-  } 
+    this.load.image('fundoMenu', 'telas/Tela_Menu.png')
+    this.load.image('botaoJogar', 'botoes/Botao_Jogar_menu.png')
+    this.load.image('botaoConfiguracoes', 'botoes/Botao_configuracoes_menu.png')
+    this.load.image('botaoExtras', 'botoes/Botao_extras_menu.png')
+  }
 
   create () {
     const { width, height } = this.scale
