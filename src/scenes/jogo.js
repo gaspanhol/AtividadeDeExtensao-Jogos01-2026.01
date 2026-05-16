@@ -32,6 +32,7 @@ export default class Jogo extends Phaser.Scene {
     create () {
         const mapa = this.make.tilemap({ key: 'mapa' })
         this.cursors = this.input.keyboard.createCursorKeys()
+        this.shift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT) 
 
         const tilesetChao = mapa.addTilesetImage('mansao', 'mansao')
         const tilesetObjetos = mapa.addTilesetImage('objetos', 'objetos')
@@ -123,22 +124,26 @@ export default class Jogo extends Phaser.Scene {
             {
                 nome: 'cima',
                 idle: [66, 67],    
-                andar: [1, 8]
+                andar: [1, 8],
+                correr: [75,81]
             },
             {
                 nome: 'esquerda',
                 idle: [68, 69],        
-                andar: [10, 17]
+                andar: [10, 17],
+                correr: [82,88]
             },
             {
                 nome: 'baixo',
                 idle: [70, 71],     
-                andar: [19, 26]
+                andar: [19, 26],
+                correr: [91,97]
             },
             {
                 nome: 'direita',
                 idle: [72, 73],      
-                andar: [28, 35]
+                andar: [28, 35],
+                correr: [98,105]
             }
         ]
 
@@ -166,6 +171,16 @@ export default class Jogo extends Phaser.Scene {
                 repeat: -1
             })
 
+            this.anims.create({
+                key: 'correr-' + anim.nome,
+                frames: this.anims.generateFrameNumbers('player', {
+                    start: anim.correr[0],
+                    end: anim.correr[1]
+                }),
+                frameRate: 12,
+                repeat: -1
+            })
+
         })
 
     }
@@ -181,35 +196,33 @@ export default class Jogo extends Phaser.Scene {
         // debug posição do personagem
         // console.log(this.player.x, this.player.y)
 
-        const velocidade = 150
+        const correndo = this.shift.isDown  // 👈
+
+        const velocidade = correndo ? 250 : 150  // 👈 velocidade maior ao correr
 
         let vx = 0
         let vy = 0
 
-        // detectar direção
         if (this.cursors.left.isDown) {
             vx = -velocidade
             this.direcao = 'esquerda'
-
         } else if (this.cursors.right.isDown) {
             vx = velocidade
             this.direcao = 'direita'
-
         } else if (this.cursors.up.isDown) {
             vy = -velocidade
             this.direcao = 'cima'
-
         } else if (this.cursors.down.isDown) {
             vy = velocidade
             this.direcao = 'baixo'
         }
 
-        // aplicar movimento
         this.player.setVelocity(vx, vy)
 
         // animação
         if (vx !== 0 || vy !== 0) {
-            this.player.anims.play('andar-' + this.direcao, true)
+            const prefixo = correndo ? 'correr' : 'andar'  // 👈
+            this.player.anims.play(prefixo + '-' + this.direcao, true)
         } else {
             this.player.anims.play('idle-' + this.direcao, true)
         }
