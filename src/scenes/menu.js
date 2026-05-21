@@ -1,3 +1,5 @@
+import SoundManager from './SoundManager.js'
+
 export default class Menu extends Phaser.Scene {
 
   constructor () {
@@ -10,10 +12,18 @@ export default class Menu extends Phaser.Scene {
     this.load.image('botaoJogar', 'botoes/Botao_Jogar_menu.png')
     this.load.image('botaoConfiguracoes', 'botoes/Botao_configuracoes_menu.png')
     this.load.image('botaoExtras', 'botoes/Botao_extras_menu.png')
+    const sonsParaCarregar = [
+      { key: 'abertura', path: 'sons/abertura.mp3'}]
+    sonsParaCarregar.forEach(({ key, path }) => {
+      this.load.audio(key, path)})
+      this.load.on('loaderror', (file) => {
+        console.warn(`Arquivo não encontrado, ignorando: ${file.key}`)})
   }
 
   create () {
     const { width, height } = this.scale
+    this.SoundManager = new SoundManager(this)
+    this.SoundManager.create()
 
     // Fundo
     const fundoMenu = this.add.image(width / 2, height / 2, 'fundoMenu')
@@ -31,6 +41,7 @@ export default class Menu extends Phaser.Scene {
     botaoJogar.setInteractive()
 
     botaoJogar.on('pointerdown', () => {
+      this.SoundManager.tocarAbertura('abertura')
       this.scene.start('Jogo')
     })
 

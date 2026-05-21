@@ -1,3 +1,5 @@
+import SoundManager from './SoundManager.js'
+
 export default class Jogo extends Phaser.Scene {
     constructor () {
         super('Jogo')
@@ -27,12 +29,37 @@ export default class Jogo extends Phaser.Scene {
             frameWidth: 48,
             frameHeight: 50
         })
-    }
+
+        const sonsParaCarregar = [
+            { key: 'passo',  path: 'public/assets/sons/passo.mp3'  },
+            { key: 'correr', path: 'public/assets/sons/passo.mp3' },
+            { key: 'musica', path: 'public/assets/sons/musica.mp3' },
+            { key: 'porta', path: 'public/assets/sons/porta.mp3'},
+            { key: 'item', path: 'public/assets/sons/item.mp3'},
+        ]
+
+            sonsParaCarregar.forEach(({ key, path }) => {
+                this.load.audio(key, path)
+            })
+
+            this.load.on('loaderror', (file) => {
+                console.warn(`Arquivo não encontrado, ignorando: ${file.key}`)  
+            })
+
+        }
 
     create () {
         const mapa = this.make.tilemap({ key: 'mapa' })
         this.cursors = this.input.keyboard.createCursorKeys()
-        this.shift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT) 
+
+        this.shift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT) //botão shift
+
+        this.wasd = this.input.keyboard.addKeys({    //movimentação no WASD
+        up:    Phaser.Input.Keyboard.KeyCodes.W,
+        left:  Phaser.Input.Keyboard.KeyCodes.A,
+        down:  Phaser.Input.Keyboard.KeyCodes.S,
+        right: Phaser.Input.Keyboard.KeyCodes.D
+        })
 
         const tilesetChao = mapa.addTilesetImage('mansao', 'mansao')
         const tilesetObjetos = mapa.addTilesetImage('objetos', 'objetos')
@@ -183,6 +210,13 @@ export default class Jogo extends Phaser.Scene {
 
         })
 
+        this.soundManager = new SoundManager(this)
+        this.soundManager.create()
+        this.soundManager.tocarMusica()
+
+
+
+
     }
 
     update () {
@@ -196,35 +230,37 @@ export default class Jogo extends Phaser.Scene {
         // debug posição do personagem
         // console.log(this.player.x, this.player.y)
 
-        const correndo = this.shift.isDown  // 👈
+        const correndo = this.shift.isDown
 
-        const velocidade = correndo ? 250 : 150  // 👈 velocidade maior ao correr
+        const velocidade = correndo ? 250 : 150
 
         let vx = 0
         let vy = 0
 
-        if (this.cursors.left.isDown) {
+        if (this.cursors.left.isDown || this.wasd.left.isDown) {
             vx = -velocidade
             this.direcao = 'esquerda'
-        } else if (this.cursors.right.isDown) {
+        } else if (this.cursors.right.isDown || this.wasd.right.isDown) {
             vx = velocidade
             this.direcao = 'direita'
-        } else if (this.cursors.up.isDown) {
+        } else if (this.cursors.up.isDown || this.wasd.up.isDown) {
             vy = -velocidade
             this.direcao = 'cima'
-        } else if (this.cursors.down.isDown) {
+        } else if (this.cursors.down.isDown || this.wasd.down.isDown) {
             vy = velocidade
             this.direcao = 'baixo'
         }
 
         this.player.setVelocity(vx, vy)
 
-        // animação
-        if (vx !== 0 || vy !== 0) {
-            const prefixo = correndo ? 'correr' : 'andar'  // 👈
+
+         if (vx !== 0 || vy !== 0) {
+            const prefixo = correndo ? 'correr' : 'andar'
             this.player.anims.play(prefixo + '-' + this.direcao, true)
-        } else {
-            this.player.anims.play('idle-' + this.direcao, true)
-        }
+             this.soundManager.tocarPasso(correndo) 
+             } else {
+             this.player.anims.play('idle-' + this.direcao, true)
+             this.soundManager.pararPassos()
+         }
     }
 }
