@@ -15,12 +15,14 @@ export default class Menu extends Phaser.Scene {
 
 
     const sonsParaCarregar = [
-      { key: 'abertura', path: 'sons/abertura.mp3'},
-      { key: 'musica', path: 'sons/musica.mp3'}]
+      { key: 'abertura', path: 'sons/abertura.mp3' },
+      { key: 'musica', path: 'sons/musica.mp3' }]
     sonsParaCarregar.forEach(({ key, path }) => {
-      this.load.audio(key, path)})
-      this.load.on('loaderror', (file) => {
-        console.warn(`Arquivo não encontrado, ignorando: ${file.key}`)})
+      this.load.audio(key, path)
+    })
+    this.load.on('loaderror', (file) => {
+      console.warn(`Arquivo não encontrado, ignorando: ${file.key}`)
+    })
   }
 
   create () {
@@ -39,23 +41,93 @@ export default class Menu extends Phaser.Scene {
     // ESCALA DOS BOTÕES
     const escalaBotao = 0.5
 
-    // JOGAR (mais em cima)
+    // ..:: BOTÃO JOGAR ::..
     const botaoJogar = this.add.image(width / 2, 250, 'botaoJogar')
     botaoJogar.setScale(escalaBotao)
     botaoJogar.setInteractive()
 
+    // aumentar escala quando o mouse está sobre o botão
+    botaoJogar.on('pointerover', () => {
+      this.tweens.add({
+        targets: botaoJogar,
+        scale: escalaBotao * 1.1,
+        duration: 100
+      })
+
+      botaoJogar.setTint(0xE6B967)
+    })
+
+    // voltar escala ao padrão quando o mouse não está sobre o botão
+    botaoJogar.on('pointerout', () => {
+      this.tweens.add({
+        targets: botaoJogar,
+        scale: escalaBotao,
+        duration: 100
+      })
+
+      botaoJogar.clearTint()
+    })
+
+    // Mudar cena ao clicar no botão
     botaoJogar.on('pointerdown', () => {
       this.SoundManager.pararMusica()
       this.SoundManager.tocarAbertura()
       this.scene.start('Jogo')
     })
 
-    // CONFIGURAÇÕES
+    // ..:: BOTÃO CONFIGURAÇÕES ::..
     const botaoConfiguracoes = this.add.image(width / 2, 380, 'botaoConfiguracoes')
     botaoConfiguracoes.setScale(escalaBotao)
+    botaoConfiguracoes.setInteractive()
 
-    // EXTRAS
+    // aumentar escala quando o mouse está sobre o botão
+    botaoConfiguracoes.on('pointerover', () => {
+      this.tweens.add({
+        targets: botaoConfiguracoes,
+        scale: escalaBotao * 1.1,
+        duration: 100
+      })
+
+      botaoConfiguracoes.setTint(0xE6B967)
+    })
+
+    // voltar escala ao padrão quando o mouse não está sobre o botão
+    botaoConfiguracoes.on('pointerout', () => {
+      this.tweens.add({
+        targets: botaoConfiguracoes,
+        scale: escalaBotao,
+        duration: 100
+      })
+
+      botaoConfiguracoes.clearTint()
+    })
+
+    // ..:: BOTÃO EXTRAS ::..
     const botaoExtras = this.add.image(width / 2, 510, 'botaoExtras')
     botaoExtras.setScale(escalaBotao)
+    botaoExtras.setInteractive()
+
+    // aumentar escala quando o mouse está sobre o botão
+    botaoExtras.on('pointerover', () => {
+      this.tweens.add({
+        targets: botaoExtras,
+        scale: escalaBotao * 1.1,
+        duration: 100
+      })
+
+      botaoExtras.setTint(0xE6B967)
+    })
+
+    // voltar escala ao padrão quando o mouse não está sobre o botão
+    botaoExtras.on('pointerout', () => {
+      this.tweens.add({
+        targets: botaoExtras,
+        scale: escalaBotao,
+        duration: 100
+      })
+
+      botaoExtras.clearTint()
+    })
+
   }
 }
