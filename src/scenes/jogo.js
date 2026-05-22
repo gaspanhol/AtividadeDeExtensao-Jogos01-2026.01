@@ -34,8 +34,6 @@ export default class Jogo extends Phaser.Scene {
             { key: 'passo',  path: 'public/assets/sons/passo.mp3'  },
             { key: 'correr', path: 'public/assets/sons/passo.mp3' },
             { key: 'musica', path: 'public/assets/sons/musica.mp3' },
-            { key: 'porta', path: 'public/assets/sons/porta.mp3'},
-            { key: 'item', path: 'public/assets/sons/item.wav'},
         ]
 
         sonsParaCarregar.forEach(({ key, path }) => {
@@ -60,6 +58,7 @@ export default class Jogo extends Phaser.Scene {
         down:  Phaser.Input.Keyboard.KeyCodes.S,
         right: Phaser.Input.Keyboard.KeyCodes.D
         })
+        this.teclaEsc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
 
         const tilesetChao = mapa.addTilesetImage('mansao', 'mansao')
         const tilesetObjetos = mapa.addTilesetImage('objetos', 'objetos')
@@ -238,6 +237,18 @@ export default class Jogo extends Phaser.Scene {
 
         // debug posição do personagem
         // console.log(this.player.x, this.player.y)
+    if (!this.soundManager) return 
+    if (Phaser.Input.Keyboard.JustDown(this.teclaEsc)) {
+        this.scene.pause()
+        this.scene.launch('MenuPausa')
+        this.soundManager.tocarMusica()  // minúsculo
+    } else {
+        this.soundManager.pararMusica()  // minúsculo
+    }
+
+
+
+
 
         const correndo = this.shift.isDown
 

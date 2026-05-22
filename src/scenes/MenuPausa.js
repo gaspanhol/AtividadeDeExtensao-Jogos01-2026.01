@@ -1,55 +1,25 @@
-import SoundManager from './SoundManager.js'
+export default class MenuPausa extends Phaser.Scene {
 
-export default class Menupausa extends Phaser.Scene {
-
-  constructor () {
-    super('Menu')
-  }
-
-  preload () {
-
-    const sonsParaCarregar = [
-      { key: 'abertura', path: 'sons/abertura.mp3'},
-      { key: 'musica', path: 'sons/musica.mp3'}]
-    sonsParaCarregar.forEach(({ key, path }) => {
-      this.load.audio(key, path)})
-      this.load.on('loaderror', (file) => {
-        console.warn(`Arquivo não encontrado, ignorando: ${file.key}`)})
+  constructor() {
+    super('MenuPausa')
   }
 
   create () {
     const { width, height } = this.scale
-    this.SoundManager = new SoundManager(this)
-    this.SoundManager.create()
-    this.SoundManager.tocarMusica('musica')
 
-    // Fundo
-    const fundoMenu = this.add.image(width / 2, height / 2, 'fundoMenu')
+    this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.6)
+      .setScrollFactor(0)
 
-    const scaleX = width / fundoMenu.width
-    const scaleY = height / fundoMenu.height
-    fundoMenu.setScale(Math.max(scaleX, scaleY))
+    // texto temporário só pra confirmar que está abrindo
+    this.add.text(width / 2, height / 2, 'PAUSADO', {
+      fontSize: '48px',
+      fill: '#ffffff'
+    }).setOrigin(0.5).setScrollFactor(0)
 
-    // ESCALA DOS BOTÕES
-    const escalaBotao = 0.5
-
-    // JOGAR (mais em cima)
-    const botaoJogar = this.add.image(width / 2, 250, 'botaoJogar')
-    botaoJogar.setScale(escalaBotao)
-    botaoJogar.setInteractive()
-
-    botaoJogar.on('pointerdown', () => {
-      this.SoundManager.pararMusica()
-      this.SoundManager.tocarAbertura()
-      this.scene.start('Jogo')
+    // ESC para voltar
+    this.input.keyboard.once('keydown-ESC', () => {
+      this.scene.resume('Jogo')
+      this.scene.stop()
     })
-
-    // CONFIGURAÇÕES
-    const botaoConfiguracoes = this.add.image(width / 2, 380, 'botaoConfiguracoes')
-    botaoConfiguracoes.setScale(escalaBotao)
-
-    // EXTRAS
-    const botaoExtras = this.add.image(width / 2, 510, 'botaoExtras')
-    botaoExtras.setScale(escalaBotao)
   }
 }
