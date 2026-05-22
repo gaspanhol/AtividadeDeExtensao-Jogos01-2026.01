@@ -1,18 +1,12 @@
 import SoundManager from './SoundManager.js'
 
-export default class Menu extends Phaser.Scene {
+export default class Menupausa extends Phaser.Scene {
 
   constructor () {
     super('Menu')
   }
 
   preload () {
-    this.load.setBaseURL('public/assets/')
-    this.load.image('fundoMenu', 'telas/Tela_Menu.png')
-    this.load.image('botaoJogar', 'botoes/Botao_Jogar_menu.png')
-    this.load.image('botaoConfiguracoes', 'botoes/Botao_configuracoes_menu.png')
-    this.load.image('botaoExtras', 'botoes/Botao_extras_menu.png')
-
 
     const sonsParaCarregar = [
       { key: 'abertura', path: 'sons/abertura.mp3'},

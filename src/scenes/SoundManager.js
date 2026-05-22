@@ -21,15 +21,14 @@ export default class SoundManager {
         tentarAdicionar('musica', { loop: true,  volume: 0.3 })
         tentarAdicionar('porta', { loop: false,  volume: 0.3 })
         tentarAdicionar('item', { loop: false,  volume: 0.3 })
-        tentarAdicionar('abertura', { loop: false,  volume: 0.3 }
-        )
+        tentarAdicionar('abertura', { loop: false,  volume: 0.7 })
     }
 
   
 
     tocarMusica() {
         if (this.sons.musica && !this.sons.musica.isPlaying) {
-            this.sons.musica.play()
+            this.sons.musica.play({seek: 12})
         }
     }
 
@@ -58,7 +57,7 @@ export default class SoundManager {
 
      tocarAbertura() {
         if (this.sons.abertura && !this.sons.abertura.isPlaying) {
-            this.sons.abertura.play({seek: 0.5}Sim,)
+            this.sons.abertura.play({seek: 0.5})
         }
     }
   

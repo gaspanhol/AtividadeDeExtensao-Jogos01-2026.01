@@ -35,14 +35,14 @@ export default class Jogo extends Phaser.Scene {
             { key: 'correr', path: 'public/assets/sons/passo.mp3' },
             { key: 'musica', path: 'public/assets/sons/musica.mp3' },
             { key: 'porta', path: 'public/assets/sons/porta.mp3'},
-            { key: 'item', path: 'public/assets/sons/item.mp3'},
+            { key: 'item', path: 'public/assets/sons/item.wav'},
         ]
 
-            sonsParaCarregar.forEach(({ key, path }) => {
+        sonsParaCarregar.forEach(({ key, path }) => {
                 this.load.audio(key, path)
             })
 
-            this.load.on('loaderror', (file) => {
+        this.load.on('loaderror', (file) => {
                 console.warn(`Arquivo não encontrado, ignorando: ${file.key}`)  
             })
 
@@ -152,25 +152,29 @@ export default class Jogo extends Phaser.Scene {
                 nome: 'cima',
                 idle: [66, 67],    
                 andar: [1, 8],
-                correr: [75,81]
+                correr: [75,81],
+                pegarItem: [37,42]
             },
             {
                 nome: 'esquerda',
                 idle: [68, 69],        
                 andar: [10, 17],
-                correr: [82,88]
+                correr: [82,88],
+                pegarItem: [43,48]
             },
             {
                 nome: 'baixo',
                 idle: [70, 71],     
                 andar: [19, 26],
-                correr: [91,97]
+                correr: [91,97],
+                pegarItem: [49,54]
             },
             {
                 nome: 'direita',
                 idle: [72, 73],      
                 andar: [28, 35],
-                correr: [98,105]
+                correr: [98,105],
+                pegarItem:[55,60]
             }
         ]
 
@@ -208,15 +212,20 @@ export default class Jogo extends Phaser.Scene {
                 repeat: -1
             })
 
+            this.anims.create({
+                key: 'pegarItem-' + anim.nome,
+                frames: this.anims.generateFrameNumbers('player', {
+                    start: anim.pegarItem[0],
+                    end: anim.pegarItem[1]
+                }),
+                frameRate: 8,
+                repeat: -1
+            })
+
         })
 
         this.soundManager = new SoundManager(this)
         this.soundManager.create()
-        this.soundManager.tocarMusica()
-
-
-
-
     }
 
     update () {
