@@ -24,6 +24,18 @@ export default class Jogo extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32
         })
+        this.load.spritesheet('Graveyard', 'public/assets/mapa/Graveyard.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+        this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+        this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
 
         this.load.spritesheet('player', 'public/assets/personagens/player.png', {
             frameWidth: 48,
@@ -64,12 +76,23 @@ export default class Jogo extends Phaser.Scene {
         const tilesetObjetos = mapa.addTilesetImage('objetos', 'objetos')
         const tilesetObjetosInv = mapa.addTilesetImage('objetosinv', 'objetosinv')
         const tilesetQuadros = mapa.addTilesetImage('quadros', 'quadros')
+        const tilesetGraveyard = mapa.addTilesetImage('Graveyard', 'Graveyard')
+        const tilesetGardenWalls = mapa.addTilesetImage('GardenWalls', 'GardenWalls')
+        const tilesetGardenTerrain = mapa.addTilesetImage('GardenTerrain', 'GardenTerrain')
 
-        if (!tilesetChao || !tilesetObjetos || !tilesetQuadros) {
-            console.error('Erro ao carregar tilesets')
+        if (
+            !tilesetChao ||
+            !tilesetObjetos ||
+            !tilesetObjetosInv ||
+            !tilesetQuadros ||
+            !tilesetGraveyard ||
+            !tilesetGardenWalls ||
+            !tilesetGardenTerrain
+        ) {
+            console.error('Erro ao carregar algum tileset')
         }
 
-        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetQuadros]
+        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetQuadros, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard]
 
         mapa.createLayer('chao', tilesets, 0, 0)
         mapa.createLayer('parede', tilesets, 0, 0)
@@ -135,7 +158,7 @@ export default class Jogo extends Phaser.Scene {
         
         this.layerColisao.setCollisionByExclusion([-1])
 
-        this.player = this.physics.add.sprite(290, 407, 'player')
+        this.player = this.physics.add.sprite(932, 2200, 'player')
         this.direcao = 'baixo'
         this.physics.add.collider(this.player, this.layerColisao)
         this.player.setDepth(2)
