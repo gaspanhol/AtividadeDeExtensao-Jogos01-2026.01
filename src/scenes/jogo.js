@@ -164,8 +164,9 @@ export default class Jogo extends Phaser.Scene {
         this.direcao = 'baixo'
         this.physics.add.collider(this.player, this.layerColisao)
         this.player.setDepth(2)
-        mapa.createLayer('teto', tilesets, 0, 0)
-
+        const teto = mapa.createLayer('teto', tilesets, 0, 0)
+        teto.setDepth(3)
+        
         // Câmera
         this.cameras.main.startFollow(this.player)
         this.cameras.main.setBounds(0, 0, mapa.widthInPixels, mapa.heightInPixels)
