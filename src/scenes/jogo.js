@@ -41,6 +41,7 @@ export default class Jogo extends Phaser.Scene {
             frameWidth: 48,
             frameHeight: 50
         })
+        this.load.image('vazio128x128', 'public/assets/vazio_128x128.png')
 
         const sonsParaCarregar = [
             { key: 'passo',  path: 'public/assets/sons/passo.mp3'  },
@@ -158,7 +159,8 @@ export default class Jogo extends Phaser.Scene {
         
         this.layerColisao.setCollisionByExclusion([-1])
 
-        this.player = this.physics.add.sprite(932, 2200, 'player')
+        this.player = this.physics.add.sprite(784.5, 3233.6, 'player')
+        window.player = this.player //Comando para ver a localização do player no jogo, usando o comando console.log(player.x, player.y)
         this.direcao = 'baixo'
         this.physics.add.collider(this.player, this.layerColisao)
         this.player.setDepth(2)
@@ -248,6 +250,143 @@ export default class Jogo extends Phaser.Scene {
 
         this.soundManager = new SoundManager(this)
         this.soundManager.create()
+
+        // ..:: PORTAS ::..
+
+        // ..:: cenário Lobby ::..
+        this.porta1 = this.physics.add.sprite(319.5, 3071.1, 'vazio128x128')
+        this.physics.add.overlap(this.player, this.porta1, () => {
+            this.cameras.main.fadeOut(200)
+            this.player.x = 319.5
+            this.player.y = 2818.6
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                camera.fadeIn(200)
+            })
+        })
+
+        this.porta2 = this.physics.add.sprite(592, 3071.1, 'vazio128x128')
+        this.physics.add.overlap(this.player, this.porta2, () => {
+            this.cameras.main.fadeOut(200)
+            this.player.x = 592
+            this.player.y = 2818.6
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                camera.fadeIn(200)
+            })
+        })
+
+        this.porta3 = this.physics.add.sprite(862.83, 3071.1, 'vazio128x128')
+        this.physics.add.overlap(this.player, this.porta3, () => {
+            this.cameras.main.fadeOut(200)
+            this.player.x = 862.83
+            this.player.y = 2818.6
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                camera.fadeIn(200)
+            })
+        })
+
+        this.porta4 = this.physics.add.sprite(1040.5, 3166.9, 'vazio128x128')
+        this.physics.add.overlap(this.player, this.porta4, () => {
+            this.cameras.main.fadeOut(200)
+            this.player.x = 1241.9
+            this.player.y = 3166.9
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                camera.fadeIn(200)
+            })
+        })
+
+
+        this.porta5 = this.physics.add.sprite(1040.5, 3328.77, 'vazio128x128')
+        this.physics.add.overlap(this.player, this.porta5, () => {
+            this.cameras.main.fadeOut(200)
+            this.player.x = 1241.9
+            this.player.y = 3322.77
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                camera.fadeIn(200)
+            })
+        })
+
+        // ..:: cenário fase 1 ::..
+        this.porta6 = this.physics.add.sprite(319.5, 2864.6, 'vazio128x128')
+        this.physics.add.overlap(this.player, this.porta6, () => {
+            this.cameras.main.fadeOut(200)
+            this.player.x = 319.5
+            this.player.y = 3128.6
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                camera.fadeIn(200)
+            })
+        })
+
+        this.porta7 = this.physics.add.sprite(592, 2864.6, 'vazio128x128')
+        this.physics.add.overlap(this.player, this.porta7, () => {
+            this.cameras.main.fadeOut(200)
+            this.player.x = 592
+            this.player.y = 3128.6
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                camera.fadeIn(200)
+            })
+        })
+
+        this.porta8 = this.physics.add.sprite(864.5, 2864.6, 'vazio128x128')
+        this.physics.add.overlap(this.player, this.porta8, () => {
+            this.cameras.main.fadeOut(200)
+            this.player.x = 864.5
+            this.player.y = 3128.6
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                camera.fadeIn(200)
+            })
+        })
+
+        this.porta9 = this.physics.add.sprite(319.5, 2426.9, 'vazio128x128')
+        this.physics.add.overlap(this.player, this.porta9, () => {
+            this.cameras.main.fadeOut(200)
+            this.player.x = 319.5
+            this.player.y = 2181.9
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                camera.fadeIn(200)
+            })
+        })
+
+        this.porta10 = this.physics.add.sprite(592, 2426.9, 'vazio128x128')
+        this.physics.add.overlap(this.player, this.porta10, () => {
+            this.cameras.main.fadeOut(200)
+            this.player.x = 592
+            this.player.y = 2181.9
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                camera.fadeIn(200)
+            })
+        })
+
+        this.porta11 = this.physics.add.sprite(864.5, 2426.9, 'vazio128x128')
+        this.physics.add.overlap(this.player, this.porta11, () => {
+            this.cameras.main.fadeOut(200)
+            this.player.x = 864.5
+            this.player.y = 2181.9
+            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                camera.fadeIn(200)
+            })
+        })
+
+        // ..:: cenário fase 2 ::..
+    //     this.porta12 = this.physics.add.sprite(1189.4, 3166.9, 'vazio128x128')
+    //     this.physics.add.overlap(this.player, this.porta12, () => {
+    //         this.cameras.main.fadeOut(200)
+    //         this.player.x = 996.9
+    //         this.player.y = 3166.9
+    //         this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+    //             camera.fadeIn(200)
+    //         })
+    //     })
+
+
+    //     this.porta13 = this.physics.add.sprite(1189.4, 3328.77, 'vazio128x128')
+    //     this.physics.add.overlap(this.player, this.porta13, () => {
+    //         this.cameras.main.fadeOut(200)
+    //         this.player.x = 996.9
+    //         this.player.y = 3322.77
+    //         this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+    //             camera.fadeIn(200)
+    //         })
+    //     })
     }
 
     update () {
@@ -255,8 +394,9 @@ export default class Jogo extends Phaser.Scene {
         // debug colisão
         //this.layerColisao.renderDebug(this.add.graphics(), {
         //tileColor: null,
-        //  collidingTileColor: new Phaser.Display.Color(255, 0, 0, 100)
+          //collidingTileColor: new Phaser.Display.Color(255, 0, 0, 100)
         //})
+
 
         // debug posição do personagem
         // console.log(this.player.x, this.player.y)
