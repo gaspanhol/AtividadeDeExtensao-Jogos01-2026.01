@@ -44,20 +44,20 @@ export default class Jogo extends Phaser.Scene {
         this.load.image('vazio128x128', 'public/assets/vazio_128x128.png')
 
         const sonsParaCarregar = [
-            { key: 'passo',  path: 'public/assets/sons/passo.mp3'  },
+            { key: 'passo', path: 'public/assets/sons/passo.mp3' },
             { key: 'correr', path: 'public/assets/sons/passo.mp3' },
             { key: 'musica', path: 'public/assets/sons/musica.mp3' },
         ]
 
         sonsParaCarregar.forEach(({ key, path }) => {
-                this.load.audio(key, path)
-            })
+            this.load.audio(key, path)
+        })
 
         this.load.on('loaderror', (file) => {
-                console.warn(`Arquivo não encontrado, ignorando: ${file.key}`)  
-            })
+            console.warn(`Arquivo não encontrado, ignorando: ${file.key}`)
+        })
 
-        }
+    }
 
     create () {
         const mapa = this.make.tilemap({ key: 'mapa' })
@@ -66,10 +66,10 @@ export default class Jogo extends Phaser.Scene {
         this.shift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT) //botão shift
 
         this.wasd = this.input.keyboard.addKeys({    //movimentação no WASD
-        up:    Phaser.Input.Keyboard.KeyCodes.W,
-        left:  Phaser.Input.Keyboard.KeyCodes.A,
-        down:  Phaser.Input.Keyboard.KeyCodes.S,
-        right: Phaser.Input.Keyboard.KeyCodes.D
+            up: Phaser.Input.Keyboard.KeyCodes.W,
+            left: Phaser.Input.Keyboard.KeyCodes.A,
+            down: Phaser.Input.Keyboard.KeyCodes.S,
+            right: Phaser.Input.Keyboard.KeyCodes.D
         })
         this.teclaEsc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
 
@@ -156,7 +156,7 @@ export default class Jogo extends Phaser.Scene {
                 }
             })
         })
-        
+
         this.layerColisao.setCollisionByExclusion([-1])
 
         this.player = this.physics.add.sprite(784.5, 3233.6, 'player')
@@ -166,7 +166,7 @@ export default class Jogo extends Phaser.Scene {
         this.player.setDepth(2)
         const teto = mapa.createLayer('teto', tilesets, 0, 0)
         teto.setDepth(3)
-        
+
         // Câmera
         this.cameras.main.startFollow(this.player)
         this.cameras.main.setBounds(0, 0, mapa.widthInPixels, mapa.heightInPixels)
@@ -175,31 +175,31 @@ export default class Jogo extends Phaser.Scene {
         const animacoes = [
             {
                 nome: 'cima',
-                idle: [66, 67],    
+                idle: [66, 67],
                 andar: [1, 8],
-                correr: [75,81],
-                pegarItem: [37,42]
+                correr: [75, 81],
+                pegarItem: [37, 42]
             },
             {
                 nome: 'esquerda',
-                idle: [68, 69],        
+                idle: [68, 69],
                 andar: [10, 17],
-                correr: [82,88],
-                pegarItem: [43,48]
+                correr: [82, 88],
+                pegarItem: [43, 48]
             },
             {
                 nome: 'baixo',
-                idle: [70, 71],     
+                idle: [70, 71],
                 andar: [19, 26],
-                correr: [91,97],
-                pegarItem: [49,54]
+                correr: [91, 97],
+                pegarItem: [49, 54]
             },
             {
                 nome: 'direita',
-                idle: [72, 73],      
+                idle: [72, 73],
                 andar: [28, 35],
-                correr: [98,105],
-                pegarItem:[55,60]
+                correr: [98, 105],
+                pegarItem: [55, 60]
             }
         ]
 
@@ -212,7 +212,7 @@ export default class Jogo extends Phaser.Scene {
                     start: anim.idle[0],
                     end: anim.idle[1]
                 }),
-                frameRate: 2, 
+                frameRate: 2,
                 repeat: -1
             })
 
@@ -254,140 +254,40 @@ export default class Jogo extends Phaser.Scene {
 
         // ..:: PORTAS ::..
 
-        // ..:: cenário Lobby ::..
-        this.porta1 = this.physics.add.sprite(319.5, 3071.1, 'vazio128x128')
-        this.physics.add.overlap(this.player, this.porta1, () => {
-            this.cameras.main.fadeOut(200)
-            this.player.x = 319.5
-            this.player.y = 2818.6
-            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-                camera.fadeIn(200)
+        const configPortas = [
+            // ..:: cenário Lobby ::..
+            { x: 319.5, y: 3071.1, destX: 319.5, destY: 2818.6 }, //porta 1
+            { x: 592, y: 3071.1, destX: 592, destY: 2818.6 }, // porta 2
+            { x: 862.83, y: 3071.1, destX: 862.83, destY: 2818.6 }, // porta 3
+            { x: 1040.5, y: 3166.9, destX: 1241.9, destY: 3166.9 }, // porta 4
+            { x: 1040.5, y: 3328.77, destX: 1241.9, destY: 3322.77 }, // porta 5
+
+            // ..:: cenário fase 1 ::..
+            { x: 319.5, y: 2864.6, destX: 319.5, destY: 3128.6 },
+            { x: 592, y: 2864.6, destX: 592, destY: 3128.6 },
+            { x: 864.5, y: 2864.6, destX: 864.5, destY: 3128.6 },
+            { x: 319.5, y: 2426.9, destX: 319.5, destY: 2181.9 },
+            { x: 592, y: 2426.9, destX: 592, destY: 2181.9 },
+            { x: 864.5, y: 2426.9, destX: 864.5, destY: 2181.9 },
+
+            // ..:: cenário fase 2 (comentadas por ora) ::..
+            //{ x: 1767.5, y: 3201.9, destX:  }
+        ]
+
+        this.portas = configPortas.map(({ x, y, destX, destY }) => {
+            const sprite = this.physics.add.sprite(x, y, 'vazio128x128')
+
+            this.physics.add.overlap(this.player, sprite, () => {
+                this.cameras.main.fadeOut(200)
+                this.player.x = destX
+                this.player.y = destY
+                this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+                    camera.fadeIn(200)
+                })
             })
+
+            return sprite
         })
-
-        this.porta2 = this.physics.add.sprite(592, 3071.1, 'vazio128x128')
-        this.physics.add.overlap(this.player, this.porta2, () => {
-            this.cameras.main.fadeOut(200)
-            this.player.x = 592
-            this.player.y = 2818.6
-            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-                camera.fadeIn(200)
-            })
-        })
-
-        this.porta3 = this.physics.add.sprite(862.83, 3071.1, 'vazio128x128')
-        this.physics.add.overlap(this.player, this.porta3, () => {
-            this.cameras.main.fadeOut(200)
-            this.player.x = 862.83
-            this.player.y = 2818.6
-            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-                camera.fadeIn(200)
-            })
-        })
-
-        this.porta4 = this.physics.add.sprite(1040.5, 3166.9, 'vazio128x128')
-        this.physics.add.overlap(this.player, this.porta4, () => {
-            this.cameras.main.fadeOut(200)
-            this.player.x = 1241.9
-            this.player.y = 3166.9
-            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-                camera.fadeIn(200)
-            })
-        })
-
-
-        this.porta5 = this.physics.add.sprite(1040.5, 3328.77, 'vazio128x128')
-        this.physics.add.overlap(this.player, this.porta5, () => {
-            this.cameras.main.fadeOut(200)
-            this.player.x = 1241.9
-            this.player.y = 3322.77
-            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-                camera.fadeIn(200)
-            })
-        })
-
-        // ..:: cenário fase 1 ::..
-        this.porta6 = this.physics.add.sprite(319.5, 2864.6, 'vazio128x128')
-        this.physics.add.overlap(this.player, this.porta6, () => {
-            this.cameras.main.fadeOut(200)
-            this.player.x = 319.5
-            this.player.y = 3128.6
-            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-                camera.fadeIn(200)
-            })
-        })
-
-        this.porta7 = this.physics.add.sprite(592, 2864.6, 'vazio128x128')
-        this.physics.add.overlap(this.player, this.porta7, () => {
-            this.cameras.main.fadeOut(200)
-            this.player.x = 592
-            this.player.y = 3128.6
-            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-                camera.fadeIn(200)
-            })
-        })
-
-        this.porta8 = this.physics.add.sprite(864.5, 2864.6, 'vazio128x128')
-        this.physics.add.overlap(this.player, this.porta8, () => {
-            this.cameras.main.fadeOut(200)
-            this.player.x = 864.5
-            this.player.y = 3128.6
-            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-                camera.fadeIn(200)
-            })
-        })
-
-        this.porta9 = this.physics.add.sprite(319.5, 2426.9, 'vazio128x128')
-        this.physics.add.overlap(this.player, this.porta9, () => {
-            this.cameras.main.fadeOut(200)
-            this.player.x = 319.5
-            this.player.y = 2181.9
-            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-                camera.fadeIn(200)
-            })
-        })
-
-        this.porta10 = this.physics.add.sprite(592, 2426.9, 'vazio128x128')
-        this.physics.add.overlap(this.player, this.porta10, () => {
-            this.cameras.main.fadeOut(200)
-            this.player.x = 592
-            this.player.y = 2181.9
-            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-                camera.fadeIn(200)
-            })
-        })
-
-        this.porta11 = this.physics.add.sprite(864.5, 2426.9, 'vazio128x128')
-        this.physics.add.overlap(this.player, this.porta11, () => {
-            this.cameras.main.fadeOut(200)
-            this.player.x = 864.5
-            this.player.y = 2181.9
-            this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-                camera.fadeIn(200)
-            })
-        })
-
-        // ..:: cenário fase 2 ::..
-    //     this.porta12 = this.physics.add.sprite(1189.4, 3166.9, 'vazio128x128')
-    //     this.physics.add.overlap(this.player, this.porta12, () => {
-    //         this.cameras.main.fadeOut(200)
-    //         this.player.x = 996.9
-    //         this.player.y = 3166.9
-    //         this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-    //             camera.fadeIn(200)
-    //         })
-    //     })
-
-
-    //     this.porta13 = this.physics.add.sprite(1189.4, 3328.77, 'vazio128x128')
-    //     this.physics.add.overlap(this.player, this.porta13, () => {
-    //         this.cameras.main.fadeOut(200)
-    //         this.player.x = 996.9
-    //         this.player.y = 3322.77
-    //         this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-    //             camera.fadeIn(200)
-    //         })
-    //     })
     }
 
     update () {
@@ -395,20 +295,20 @@ export default class Jogo extends Phaser.Scene {
         // debug colisão
         //this.layerColisao.renderDebug(this.add.graphics(), {
         //tileColor: null,
-          //collidingTileColor: new Phaser.Display.Color(255, 0, 0, 100)
+        //collidingTileColor: new Phaser.Display.Color(255, 0, 0, 100)
         //})
 
 
         // debug posição do personagem
         // console.log(this.player.x, this.player.y)
-    if (!this.soundManager) return 
-    if (Phaser.Input.Keyboard.JustDown(this.teclaEsc)) {
-        this.scene.pause()
-        this.scene.launch('MenuPausa')
-        this.soundManager.tocarMusica()  // minúsculo
-    } else {
-        this.soundManager.pararMusica()  // minúsculo
-    }
+        if (!this.soundManager) return
+        if (Phaser.Input.Keyboard.JustDown(this.teclaEsc)) {
+            this.scene.pause()
+            this.scene.launch('MenuPausa')
+            this.soundManager.tocarMusica()  // minúsculo
+        } else {
+            this.soundManager.pararMusica()  // minúsculo
+        }
 
 
 
@@ -438,13 +338,13 @@ export default class Jogo extends Phaser.Scene {
         this.player.setVelocity(vx, vy)
 
 
-         if (vx !== 0 || vy !== 0) {
+        if (vx !== 0 || vy !== 0) {
             const prefixo = correndo ? 'correr' : 'andar'
             this.player.anims.play(prefixo + '-' + this.direcao, true)
-             this.soundManager.tocarPasso(correndo) 
-             } else {
-             this.player.anims.play('idle-' + this.direcao, true)
-             this.soundManager.pararPassos()
-         }
+            this.soundManager.tocarPasso(correndo)
+        } else {
+            this.player.anims.play('idle-' + this.direcao, true)
+            this.soundManager.pararPassos()
+        }
     }
 }
