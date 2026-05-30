@@ -8,34 +8,14 @@ export default class Jogo extends Phaser.Scene {
     preload () {
         this.load.tilemapTiledJSON('mapa', 'public/assets/mapa/mapa.json')
 
-        this.load.spritesheet('mansao', 'public/assets/mapa/mansao.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-        this.load.spritesheet('objetos', 'public/assets/mapa/objetos.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-        this.load.spritesheet('objetosinv', 'public/assets/mapa/objetosinv.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-        this.load.spritesheet('quadros', 'public/assets/mapa/quadros.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-        this.load.spritesheet('Graveyard', 'public/assets/mapa/Graveyard.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-        this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-        this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
+        // Carregando os sprites do mapa
+        this.load.image('mansao', 'public/assets/mapa/mansao.png')
+        this.load.image('objetos', 'public/assets/mapa/objetos.png')
+        this.load.image('objetosinv', 'public/assets/mapa/objetosinv.png')
+        this.load.image('quadros', 'public/assets/mapa/quadros.png')
+        this.load.image('Graveyard', 'public/assets/mapa/Graveyard.png')
+        this.load.image('GardenWalls', 'public/assets/mapa/GardenWalls.png')
+        this.load.image('GardenTerrain', 'public/assets/mapa/GardenTerrain.png')
 
         this.load.spritesheet('player', 'public/assets/personagens/player.png', {
             frameWidth: 48,
