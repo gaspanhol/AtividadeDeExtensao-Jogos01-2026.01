@@ -41,6 +41,11 @@ export default class Jogo extends Phaser.Scene {
             frameWidth: 48,
             frameHeight: 50
         })
+        this.load.spritesheet('colunaV', 'public/assets/personagens/player.png', {
+            frameWidth: 6,
+            frameHeight: 32
+        })
+
         this.load.image('vazio128x128', 'public/assets/vazio_128x128.png')
 
         const sonsParaCarregar = [
@@ -80,6 +85,7 @@ export default class Jogo extends Phaser.Scene {
         const tilesetGraveyard = mapa.addTilesetImage('Graveyard', 'Graveyard')
         const tilesetGardenWalls = mapa.addTilesetImage('GardenWalls', 'GardenWalls')
         const tilesetGardenTerrain = mapa.addTilesetImage('GardenTerrain', 'GardenTerrain')
+        const tilesetColunaV = mapa.addTilesetImage('colunaV', 'colunaV')
 
         if (
             !tilesetChao ||
@@ -88,12 +94,13 @@ export default class Jogo extends Phaser.Scene {
             !tilesetQuadros ||
             !tilesetGraveyard ||
             !tilesetGardenWalls ||
-            !tilesetGardenTerrain
+            !tilesetGardenTerrain ||
+            !tilesetColunaV
         ) {
             console.error('Erro ao carregar algum tileset')
         }
 
-        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetQuadros, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard]
+        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetQuadros, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV]
 
         mapa.createLayer('chao', tilesets, 0, 0)
         mapa.createLayer('parede', tilesets, 0, 0)
@@ -105,6 +112,8 @@ export default class Jogo extends Phaser.Scene {
 
         const FLIP_X = 0x80000000
         const FLIP_Y = 0x40000000
+
+        this.colunasColisao = this.physics.add.staticGroup()
 
         layers.forEach(nome => {
             const layer = mapa.getObjectLayer(nome)
@@ -136,8 +145,12 @@ export default class Jogo extends Phaser.Scene {
 
                 const frame = gid - tileset.firstgid
 
-                const sprite = this.add.image(obj.x, obj.y, tileset.name, frame)
-                    .setOrigin(0, 1)
+                const sprite = this.add.image(
+                    obj.x,
+                    obj.y,
+                    tileset.name,
+                    frame
+                ).setOrigin(0, 1)
 
                 // aplicar flip
                 sprite.setFlip(flipX, flipY)
@@ -147,12 +160,36 @@ export default class Jogo extends Phaser.Scene {
                     case '1':
                         sprite.setDepth(1)
                         break
+
                     case '2':
                         sprite.setDepth(2)
                         break
+
                     case '3':
                         sprite.setDepth(3)
                         break
+                }
+
+                // ==========================
+                // COLISÃO DAS COLUNAS
+                // ==========================
+                if (tileset.name === 'colunaV') {
+
+                    const largura = 6
+                    const altura = 32
+
+                    const cx = obj.x + largura / 2
+                    const cy = obj.y - altura / 2
+
+                    const colisor = this.add.rectangle(cx, cy, largura, altura)
+
+                    // deixe true para testar
+                    // colisor.visible = false
+                    colisor.setAlpha(0.5)
+
+                    this.physics.add.existing(colisor, true)
+
+                    this.colunasColisao.add(colisor)
                 }
             })
         })
@@ -163,6 +200,7 @@ export default class Jogo extends Phaser.Scene {
         window.player = this.player //Comando para ver a localização do player no jogo, usando o comando console.log(player.x, player.y)
         this.direcao = 'baixo'
         this.physics.add.collider(this.player, this.layerColisao)
+        this.physics.add.collider(this.player, this.colunasColisao)
         this.player.setDepth(2)
         const teto = mapa.createLayer('teto', tilesets, 0, 0)
         teto.setDepth(3)
@@ -309,9 +347,6 @@ export default class Jogo extends Phaser.Scene {
         } else {
             this.soundManager.pararMusica()  // minúsculo
         }
-
-
-
 
 
         const correndo = this.shift.isDown
