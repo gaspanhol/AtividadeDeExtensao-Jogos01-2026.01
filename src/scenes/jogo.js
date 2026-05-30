@@ -17,13 +17,23 @@ export default class Jogo extends Phaser.Scene {
         this.load.image('GardenWalls', 'public/assets/mapa/GardenWalls.png')
         this.load.image('GardenTerrain', 'public/assets/mapa/GardenTerrain.png')
 
+
+
         this.load.spritesheet('player', 'public/assets/personagens/player.png', {
             frameWidth: 48,
             frameHeight: 50
         })
-        this.load.spritesheet('colunaV', 'public/assets/personagens/player.png', {
+        this.load.spritesheet('colunaV', 'public/assets/mapa/colunaV.png', {
             frameWidth: 6,
             frameHeight: 32
+        })
+        this.load.spritesheet('colunaH', 'public/assets/mapa/colunaH.png', {
+            frameWidth: 32,
+            frameHeight: 6
+        })
+        this.load.spritesheet('portas', 'public/assets/mapa/portas.png', {
+            frameWidth: 96,
+            frameHeight: 70
         })
 
         this.load.image('vazio128x128', 'public/assets/vazio_128x128.png')
@@ -66,6 +76,8 @@ export default class Jogo extends Phaser.Scene {
         const tilesetGardenWalls = mapa.addTilesetImage('GardenWalls', 'GardenWalls')
         const tilesetGardenTerrain = mapa.addTilesetImage('GardenTerrain', 'GardenTerrain')
         const tilesetColunaV = mapa.addTilesetImage('colunaV', 'colunaV')
+        const tilesetColunaH = mapa.addTilesetImage('colunaH', 'colunaH')
+        const tilesetPortas = mapa.addTilesetImage('portas', 'portas')
 
         if (
             !tilesetChao ||
@@ -75,12 +87,14 @@ export default class Jogo extends Phaser.Scene {
             !tilesetGraveyard ||
             !tilesetGardenWalls ||
             !tilesetGardenTerrain ||
-            !tilesetColunaV
+            !tilesetColunaV ||
+            !tilesetColunaH ||
+            !tilesetPortas
         ) {
             console.error('Erro ao carregar algum tileset')
         }
 
-        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetQuadros, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV]
+        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetQuadros, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas]
 
         mapa.createLayer('chao', tilesets, 0, 0)
         mapa.createLayer('parede', tilesets, 0, 0)
@@ -157,6 +171,24 @@ export default class Jogo extends Phaser.Scene {
 
                     const largura = 6
                     const altura = 32
+
+                    const cx = obj.x + largura / 2
+                    const cy = obj.y - altura / 2
+
+                    const colisor = this.add.rectangle(cx, cy, largura, altura)
+
+                    // deixe true para testar
+                    // colisor.visible = false
+                    colisor.setAlpha(0.5)
+
+                    this.physics.add.existing(colisor, true)
+
+                    this.colunasColisao.add(colisor)
+                }
+                if (tileset.name === 'colunaH') {
+
+                    const largura = 32
+                    const altura = 6
 
                     const cx = obj.x + largura / 2
                     const cy = obj.y - altura / 2
@@ -290,19 +322,19 @@ export default class Jogo extends Phaser.Scene {
 
             // ..:: cenário fase 2 ::..
             { x: 1773.5, y: 3200, destX: 990, destY: 3166.9 }, // porta 1
-            { x: 1773.5, y: 3360.8, destX: 995, destY: 3328.77}, // porta 2
-            { x: 2096.6, y: 2458.5, destX: 1330, destY: 2175.8}, // porta 3
+            { x: 1773.5, y: 3360.8, destX: 995, destY: 3328.77 }, // porta 2
+            { x: 2096.6, y: 2458.5, destX: 1330, destY: 2175.8 }, // porta 3
 
             // ..:: cenário fase 3 ::..
             { x: 319.16, y: 2225, destX: 319.16, destY: 2480 }, // porta 1
-            { x: 593, y: 2225, destX: 593, destY: 2480}, // porta 2
-            { x: 863.5, y: 2225, destX: 863.5, destY: 2480}, // porta 3
-            { x: 1328.6, y: 2225, destX: 2097.6, destY: 2507.5}, // porta 4
-            { x: 513.60, y: 1940, destX: 512.8, destY: 1598.3}, // porta 5
+            { x: 593, y: 2225, destX: 593, destY: 2480 }, // porta 2
+            { x: 863.5, y: 2225, destX: 863.5, destY: 2480 }, // porta 3
+            { x: 1328.6, y: 2225, destX: 2097.6, destY: 2507.5 }, // porta 4
+            { x: 513.60, y: 1940, destX: 512.8, destY: 1598.3 }, // porta 5
 
             // ..:: cenário fase 4 ::..
             { x: 512.8, y: 1655.8, destX: 511.6, destY: 1995.2 }, // porta 1
-            { x: 1010.3, y: 1651.6, destX: 2450.3, destY: 527.5}, // porta 2
+            { x: 1010.3, y: 1651.6, destX: 2450.3, destY: 527.5 }, // porta 2
 
             // ..:: cenário fase 5 ::..
             { x: 2449.4, y: 473, destX: 1012.5, destY: 1602.5 }, // porta 1
