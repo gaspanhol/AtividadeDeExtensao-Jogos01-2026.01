@@ -277,19 +277,36 @@ export default class Jogo extends Phaser.Scene {
             { x: 319.5, y: 3071.1, destX: 319.5, destY: 2818.6 }, //porta 1
             { x: 592, y: 3071.1, destX: 592, destY: 2818.6 }, // porta 2
             { x: 862.83, y: 3071.1, destX: 862.83, destY: 2818.6 }, // porta 3
-            { x: 1040.5, y: 3166.9, destX: 1241.9, destY: 3166.9 }, // porta 4
-            { x: 1040.5, y: 3328.77, destX: 1241.9, destY: 3322.77 }, // porta 5
+            { x: 1040.5, y: 3166.9, destX: 1822.5, destY: 3196.9 }, // porta 4
+            { x: 1040.5, y: 3328.77, destX: 1825, destY: 3360.8 }, // porta 5
 
             // ..:: cenário fase 1 ::..
-            { x: 319.5, y: 2864.6, destX: 319.5, destY: 3128.6 },
-            { x: 592, y: 2864.6, destX: 592, destY: 3128.6 },
-            { x: 864.5, y: 2864.6, destX: 864.5, destY: 3128.6 },
-            { x: 319.5, y: 2426.9, destX: 319.5, destY: 2181.9 },
-            { x: 592, y: 2426.9, destX: 592, destY: 2181.9 },
-            { x: 864.5, y: 2426.9, destX: 864.5, destY: 2181.9 },
+            { x: 319.5, y: 2864.6, destX: 319.5, destY: 3128.6 }, // porta 1
+            { x: 592, y: 2864.6, destX: 592, destY: 3128.6 }, // porta 2
+            { x: 864.5, y: 2864.6, destX: 864.5, destY: 3128.6 }, // porta 3
+            { x: 319.5, y: 2426.9, destX: 319.5, destY: 2181.9 }, // porta 4
+            { x: 592, y: 2426.9, destX: 592, destY: 2181.9 }, // porta 5
+            { x: 864.5, y: 2426.9, destX: 864.5, destY: 2181.9 }, // porta 6
 
-            // ..:: cenário fase 2 (comentadas por ora) ::..
-            //{ x: 1767.5, y: 3201.9, destX:  }
+            // ..:: cenário fase 2 ::..
+            { x: 1773.5, y: 3200, destX: 990, destY: 3166.9 }, // porta 1
+            { x: 1773.5, y: 3360.8, destX: 995, destY: 3328.77}, // porta 2
+            { x: 2096.6, y: 2458.5, destX: 1330, destY: 2175.8}, // porta 3
+
+            // ..:: cenário fase 3 ::..
+            { x: 319.16, y: 2225, destX: 319.16, destY: 2480 }, // porta 1
+            { x: 593, y: 2225, destX: 593, destY: 2480}, // porta 2
+            { x: 863.5, y: 2225, destX: 863.5, destY: 2480}, // porta 3
+            { x: 1328.6, y: 2225, destX: 2097.6, destY: 2507.5}, // porta 4
+            { x: 513.60, y: 1940, destX: 512.8, destY: 1598.3}, // porta 5
+
+            // ..:: cenário fase 4 ::..
+            { x: 512.8, y: 1655.8, destX: 511.6, destY: 1995.2 }, // porta 1
+            { x: 1010.3, y: 1651.6, destX: 2450.3, destY: 527.5}, // porta 2
+
+            // ..:: cenário fase 5 ::..
+            { x: 2449.4, y: 473, destX: 1012.5, destY: 1602.5 }, // porta 1
+
         ]
 
         this.portas = configPortas.map(({ x, y, destX, destY }) => {
