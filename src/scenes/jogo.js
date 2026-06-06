@@ -10,13 +10,28 @@ export default class Jogo extends Phaser.Scene {
 
         // Carregando os sprites do mapa
         this.load.image('mansao', 'public/assets/mapa/mansao.png')
-        this.load.image('objetos', 'public/assets/mapa/objetos.png')
-        this.load.image('objetosinv', 'public/assets/mapa/objetosinv.png')
-        this.load.image('quadros', 'public/assets/mapa/quadros.png')
         this.load.image('Graveyard', 'public/assets/mapa/Graveyard.png')
         this.load.image('GardenWalls', 'public/assets/mapa/GardenWalls.png')
         this.load.image('GardenTerrain', 'public/assets/mapa/GardenTerrain.png')
+        this.load.spritesheet('escadaPrincipal', 'public/assets/mapa/escadaPrincipal.png', {
+            frameWidth: 175,
+            frameHeight: 125
+        })
+        
+        this.load.spritesheet('objetos', 'public/assets/mapa/objetos.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
 
+        this.load.spritesheet('objetosinv', 'public/assets/mapa/objetosinv.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
+        this.load.spritesheet('mesasCadeiras', 'public/assets/mapa/mesasCadeiras.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
 
 
         this.load.spritesheet('player', 'public/assets/personagens/player.png', {
@@ -36,7 +51,10 @@ export default class Jogo extends Phaser.Scene {
             frameHeight: 70
         })
 
-        this.load.image('vazio128x128', 'public/assets/vazio_128x128.png')
+        this.load.spritesheet('vazio128x128', 'public/assets/mapa/vazio_128x128.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
 
         const sonsParaCarregar = [
             { key: 'passo', path: 'public/assets/sons/passo.mp3' },
@@ -71,22 +89,24 @@ export default class Jogo extends Phaser.Scene {
         const tilesetChao = mapa.addTilesetImage('mansao', 'mansao')
         const tilesetObjetos = mapa.addTilesetImage('objetos', 'objetos')
         const tilesetObjetosInv = mapa.addTilesetImage('objetosinv', 'objetosinv')
-        const tilesetQuadros = mapa.addTilesetImage('quadros', 'quadros')
         const tilesetGraveyard = mapa.addTilesetImage('Graveyard', 'Graveyard')
         const tilesetGardenWalls = mapa.addTilesetImage('GardenWalls', 'GardenWalls')
         const tilesetGardenTerrain = mapa.addTilesetImage('GardenTerrain', 'GardenTerrain')
         const tilesetColunaV = mapa.addTilesetImage('colunaV', 'colunaV')
         const tilesetColunaH = mapa.addTilesetImage('colunaH', 'colunaH')
         const tilesetPortas = mapa.addTilesetImage('portas', 'portas')
+        const tilesetEscada = mapa.addTilesetImage('escadaPrincipal', 'escadaPrincipal')
+        const tilesetMesasCadeiras = mapa.addTilesetImage('mesasCadeiras', 'mesasCadeiras')
 
         if (
             !tilesetChao ||
             !tilesetObjetos ||
             !tilesetObjetosInv ||
-            !tilesetQuadros ||
             !tilesetGraveyard ||
             !tilesetGardenWalls ||
             !tilesetGardenTerrain ||
+            !tilesetMesasCadeiras ||
+            !tilesetEscada ||
             !tilesetColunaV ||
             !tilesetColunaH ||
             !tilesetPortas
@@ -94,7 +114,7 @@ export default class Jogo extends Phaser.Scene {
             console.error('Erro ao carregar algum tileset')
         }
 
-        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetQuadros, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas]
+        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas, tilesetEscada, tilesetMesasCadeiras]
 
         mapa.createLayer('chao', tilesets, 0, 0)
         mapa.createLayer('parede', tilesets, 0, 0)

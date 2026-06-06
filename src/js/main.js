@@ -5,6 +5,7 @@ import MenuPausa from '../scenes/MenuPausa.js'
 
 const config = {
     type: Phaser.AUTO,
+    pixelArt: true,
     width: 1280,
     height: 720,
     scene: [Abertura, Menu, Jogo, MenuPausa],
