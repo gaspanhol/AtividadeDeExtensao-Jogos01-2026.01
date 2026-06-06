@@ -81,6 +81,21 @@ export default class Jogo extends Phaser.Scene {
             frameHeight: 64
         })
 
+        this.load.spritesheet('armas', 'public/assets/mapa/armas.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
+        this.load.spritesheet('carruagem', 'public/assets/mapa/carruagem.png', {
+            frameWidth: 190,
+            frameHeight: 160
+        })
+
+        this.load.spritesheet('banheiro', 'public/assets/mapa/banheiro.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
         const sonsParaCarregar = [
             { key: 'passo', path: 'public/assets/sons/passo.mp3' },
             { key: 'correr', path: 'public/assets/sons/passo.mp3' },
@@ -127,6 +142,9 @@ export default class Jogo extends Phaser.Scene {
         const tilesetMaquinaFilmagem = mapa.addTilesetImage('maquinaFilmagem', 'maquinaFilmagem')
         const tilesetTapeteEDecoracoes = mapa.addTilesetImage('tapeteEDecoracoes', 'tapeteEDecoracoes')
         const tilesetCadeiraDentista = mapa.addTilesetImage('cadeiraDentista', 'cadeiraDentista')
+        const tilesetArmas = mapa.addTilesetImage('armas', 'armas')
+        const tilesetBanheiro = mapa.addTilesetImage('banheiro', 'banheiro')
+        const tilesetCarruagem = mapa.addTilesetImage('carruagem', 'carruagem')
 
         if (
             !tilesetChao ||
@@ -144,12 +162,15 @@ export default class Jogo extends Phaser.Scene {
             !tilesetEnfeitesPequenos ||
             !tilesetMaquinaFilmagem ||
             !tilesetTapeteEDecoracoes ||
-            !tilesetCadeiraDentista
+            !tilesetCadeiraDentista ||
+            !tilesetArmas ||
+            !tilesetBanheiro ||
+            !tilesetCarruagem
         ) {
             console.error('Erro ao carregar algum tileset')
         }
 
-        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas, tilesetEscada, tilesetMesasCadeiras, tilesetEnfeites ,tilesetEnfeitesPequenos ,tilesetMaquinaFilmagem ,tilesetTapeteEDecoracoes, tilesetCadeiraDentista]
+        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas, tilesetEscada, tilesetMesasCadeiras, tilesetEnfeites ,tilesetEnfeitesPequenos ,tilesetMaquinaFilmagem ,tilesetTapeteEDecoracoes, tilesetCadeiraDentista, tilesetArmas, tilesetBanheiro, tilesetCarruagem]
 
         mapa.createLayer('chao', tilesets, 0, 0)
         mapa.createLayer('parede', tilesets, 0, 0)
