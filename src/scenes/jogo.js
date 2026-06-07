@@ -17,7 +17,7 @@ export default class Jogo extends Phaser.Scene {
             frameWidth: 175,
             frameHeight: 125
         })
-        
+
         this.load.spritesheet('objetos', 'public/assets/mapa/objetos.png', {
             frameWidth: 32,
             frameHeight: 32
@@ -67,14 +67,14 @@ export default class Jogo extends Phaser.Scene {
         })
 
         this.load.spritesheet('maquinaFilmagem', 'public/assets/mapa/maquinaFilmagem.png', {
-            frameWidth: 64,
-            frameHeight: 64
-        })   
-        
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
         this.load.spritesheet('tapeteEDecoracoes', 'public/assets/mapa/tapeteEDecoracoes.png', {
             frameWidth: 32,
             frameHeight: 32
-        })      
+        })
 
         this.load.spritesheet('cadeiraDentista', 'public/assets/mapa/cadeiraDentista.png', {
             frameWidth: 64,
@@ -88,7 +88,7 @@ export default class Jogo extends Phaser.Scene {
 
         this.load.spritesheet('carruagem', 'public/assets/mapa/carruagem.png', {
             frameWidth: 190,
-            frameHeight: 160
+            frameHeight: 80
         })
 
         this.load.spritesheet('banheiro', 'public/assets/mapa/banheiro.png', {
@@ -170,7 +170,7 @@ export default class Jogo extends Phaser.Scene {
             console.error('Erro ao carregar algum tileset')
         }
 
-        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas, tilesetEscada, tilesetMesasCadeiras, tilesetEnfeites ,tilesetEnfeitesPequenos ,tilesetMaquinaFilmagem ,tilesetTapeteEDecoracoes, tilesetCadeiraDentista, tilesetArmas, tilesetBanheiro, tilesetCarruagem]
+        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas, tilesetEscada, tilesetMesasCadeiras, tilesetEnfeites, tilesetEnfeitesPequenos, tilesetMaquinaFilmagem, tilesetTapeteEDecoracoes, tilesetCadeiraDentista, tilesetArmas, tilesetBanheiro, tilesetCarruagem]
 
         mapa.createLayer('chao', tilesets, 0, 0)
         mapa.createLayer('parede', tilesets, 0, 0)
@@ -245,6 +245,8 @@ export default class Jogo extends Phaser.Scene {
                 // ==========================
                 if (tileset.name === 'colunaV') {
 
+                    sprite.setVisible(false)
+
                     const largura = 6
                     const altura = 32
 
@@ -262,6 +264,8 @@ export default class Jogo extends Phaser.Scene {
                     this.colunasColisao.add(colisor)
                 }
                 if (tileset.name === 'colunaH') {
+
+                    sprite.setVisible(false)
 
                     const largura = 32
                     const altura = 6
