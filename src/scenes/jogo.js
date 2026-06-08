@@ -96,6 +96,46 @@ export default class Jogo extends Phaser.Scene {
             frameHeight: 32
         })
 
+        this.load.spritesheet('canoa', 'public/assets/mapa/canoa.png', {
+            frameWidth: 128,
+            frameHeight: 128
+        })
+
+        this.load.spritesheet('acessoriosIndigenas', 'public/assets/mapa/acessoriosIndigenas.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
+        this.load.spritesheet('cozinha', 'public/assets/mapa/cozinha.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
+        this.load.spritesheet('pedestalCatolico', 'public/assets/mapa/pedestalCatolico.png', {
+            frameWidth: 128,
+            frameHeight: 128
+        })
+
+        this.load.spritesheet('quadros', 'public/assets/mapa/quadros.png', {
+            frameWidth: 64,
+            frameHeight: 64
+        })
+
+        this.load.spritesheet('roupaPadre', 'public/assets/mapa/roupaPadre.png', {
+            frameWidth: 128,
+            frameHeight: 128
+        })
+
+        this.load.spritesheet('roupasFestivas', 'public/assets/mapa/roupasFestivas.png', {
+            frameWidth: 128,
+            frameHeight: 128
+        })
+
+        this.load.spritesheet('roupasFestivasInv', 'public/assets/mapa/roupasFestivasInv.png', {
+            frameWidth: 128,
+            frameHeight: 128
+        })
+
         const sonsParaCarregar = [
             { key: 'passo', path: 'public/assets/sons/passo.mp3' },
             { key: 'correr', path: 'public/assets/sons/passo.mp3' },
@@ -145,6 +185,14 @@ export default class Jogo extends Phaser.Scene {
         const tilesetArmas = mapa.addTilesetImage('armas', 'armas')
         const tilesetBanheiro = mapa.addTilesetImage('banheiro', 'banheiro')
         const tilesetCarruagem = mapa.addTilesetImage('carruagem', 'carruagem')
+        const tilesetCanoa = mapa.addTilesetImage('canoa', 'canoa')
+        const tilesetAcessoriosIndigenas = mapa.addTilesetImage('acessoriosIndigenas', 'acessoriosIndigenas')
+        const tilesetCozinha = mapa.addTilesetImage('cozinha', 'cozinha')
+        const tilesetPedestal = mapa.addTilesetImage('pedestalCatolico', 'pedestalCatolico')
+        const tilesetQuadros = mapa.addTilesetImage('quadros', 'quadros')
+        const tilesetRoupaPadre = mapa.addTilesetImage('roupaPadre', 'roupaPadre')
+        const tilesetRoupasFestivas = mapa.addTilesetImage('roupasFestivas', 'roupasFestivas')
+        const tilesetRoupasFestivasInv = mapa.addTilesetImage('roupasFestivasInv', 'roupasFestivasInv')
 
         if (
             !tilesetChao ||
@@ -165,12 +213,19 @@ export default class Jogo extends Phaser.Scene {
             !tilesetCadeiraDentista ||
             !tilesetArmas ||
             !tilesetBanheiro ||
-            !tilesetCarruagem
+            !tilesetCanoa ||
+            !tilesetAcessoriosIndigenas ||
+            !tilesetCozinha ||
+            !tilesetPedestal ||
+            !tilesetQuadros ||
+            !tilesetRoupaPadre ||
+            !tilesetRoupasFestivas ||
+            !tilesetRoupasFestivasInv
         ) {
             console.error('Erro ao carregar algum tileset')
         }
 
-        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas, tilesetEscada, tilesetMesasCadeiras, tilesetEnfeites, tilesetEnfeitesPequenos, tilesetMaquinaFilmagem, tilesetTapeteEDecoracoes, tilesetCadeiraDentista, tilesetArmas, tilesetBanheiro, tilesetCarruagem]
+        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas, tilesetEscada, tilesetMesasCadeiras, tilesetEnfeites, tilesetEnfeitesPequenos, tilesetMaquinaFilmagem, tilesetTapeteEDecoracoes, tilesetCadeiraDentista, tilesetArmas, tilesetBanheiro, tilesetCarruagem, tilesetCanoa, tilesetAcessoriosIndigenas, tilesetCozinha, tilesetPedestal, tilesetQuadros, tilesetRoupaPadre, tilesetRoupasFestivas, tilesetRoupasFestivasInv]
 
         mapa.createLayer('chao', tilesets, 0, 0)
         mapa.createLayer('parede', tilesets, 0, 0)
