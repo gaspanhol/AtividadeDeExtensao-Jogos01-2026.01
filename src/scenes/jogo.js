@@ -1,3 +1,4 @@
+import MenuPausa from './MenuPausa.js'
 import SoundManager from './SoundManager.js'
 
 export default class Jogo extends Phaser.Scene {
@@ -150,6 +151,13 @@ export default class Jogo extends Phaser.Scene {
             console.warn(`Arquivo não encontrado, ignorando: ${file.key}`)
         })
 
+        //menu
+        this.load.image('menuPausa','public/assets/telas/menu/menuPausa.png');
+        this.load.image('reiniciar','public/assets/telas/menu/reiniciar.png');
+        this.load.image('voltar','public/assets/telas/menu/voltar.png');
+        this.load.image('volume','public/assets/telas/menu/volume8.png');
+        this.load.image('menos','public/assets/telas/menu/btn_menos.png');
+        this.load.image('mais','public/assets/telas/menu/btn_mais.png');
     }
 
     create () {
@@ -505,11 +513,11 @@ export default class Jogo extends Phaser.Scene {
         // console.log(this.player.x, this.player.y)
         if (!this.soundManager) return
         if (Phaser.Input.Keyboard.JustDown(this.teclaEsc)) {
+            this.soundManager.tocarMusica()
             this.scene.pause()
             this.scene.launch('MenuPausa')
-            this.soundManager.tocarMusica()  // minúsculo
         } else {
-            this.soundManager.pararMusica()  // minúsculo
+            this.soundManager.pararMusica() 
         }
 
 

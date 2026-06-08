@@ -4,31 +4,32 @@ export default class SoundManager {
         this.sons = {}
         this.musicaAtual = null
         this._mutado = false
-        this._volumeGlobal = 1
+        this._niveisVolume = [0, 0.25, 0.5, 0.75, 1]
+        this._indiceVolume = 2 // começa em 0.5
     }
 
     create() {
-    const tentarAdicionar = (key, config) => {
-        if (this.scene.cache.audio.exists(key)) {
-            this.sons[key] = this.scene.sound.add(key, config)
-        } else {
-            console.warn(`SoundManager: "${key}" não carregado, pulando.`)
+        const tentarAdicionar = (key, config) => {
+            if (this.scene.cache.audio.exists(key)) {
+                this.sons[key] = this.scene.sound.add(key, config)
+            } else {
+                console.warn(`SoundManager: "${key}" não carregado, pulando.`)
+            }
         }
+
+        tentarAdicionar('passo',   { loop: false, volume: 0.5 })
+        tentarAdicionar('correr',  { loop: false, volume: 0.7 })
+        tentarAdicionar('musica',  { loop: true,  volume: 0.3 })
+        tentarAdicionar('porta',   { loop: false, volume: 0.3 })
+        tentarAdicionar('item',    { loop: false, volume: 0.3 })
+        tentarAdicionar('abertura',{ loop: false, volume: 0.7 })
     }
 
-        tentarAdicionar('passo',  { loop: false, volume: 0.5 })
-        tentarAdicionar('correr', { loop: false, volume: 0.7 })
-        tentarAdicionar('musica', { loop: true,  volume: 0.3 })
-        tentarAdicionar('porta', { loop: false,  volume: 0.3 })
-        tentarAdicionar('item', { loop: false,  volume: 0.3 })
-        tentarAdicionar('abertura', { loop: false,  volume: 0.7 })
-    }
-
-  
+    // --- Música ---
 
     tocarMusica() {
         if (this.sons.musica && !this.sons.musica.isPlaying) {
-            this.sons.musica.play({seek: 12})
+            this.sons.musica.play({ seek: 12 })
         }
     }
 
@@ -38,15 +39,17 @@ export default class SoundManager {
         }
     }
 
-  
+    // --- Passos ---
 
     tocarPasso(correndo) {
         if (correndo) {
-        if (this.sons.passo?.isPlaying) this.sons.passo.stop()
-            if (this.sons.correr && !this.sons.correr.isPlaying) this.sons.correr.play({seek: 1.1, rate: 1.3})
-            } else {
+            if (this.sons.passo?.isPlaying) this.sons.passo.stop()
+            if (this.sons.correr && !this.sons.correr.isPlaying)
+                this.sons.correr.play({ seek: 1.1, rate: 1.3 })
+        } else {
             if (this.sons.correr?.isPlaying) this.sons.correr.stop()
-            if (this.sons.passo && !this.sons.passo.isPlaying) this.sons.passo.play({seek: 1.1})
+            if (this.sons.passo && !this.sons.passo.isPlaying)
+                this.sons.passo.play({ seek: 1.1 })
         }
     }
 
@@ -55,13 +58,13 @@ export default class SoundManager {
         if (this.sons.correr?.isPlaying) this.sons.correr.stop()
     }
 
-     tocarAbertura() {
+    tocarAbertura() {
         if (this.sons.abertura && !this.sons.abertura.isPlaying) {
-            this.sons.abertura.play({seek: 0.5})
+            this.sons.abertura.play({ seek: 0.5 })
         }
     }
-  
-    //  Efeitos avulsos
+
+    // --- Efeitos avulsos ---
 
     tocar(nome) {
         const som = this.sons[nome]
@@ -69,16 +72,29 @@ export default class SoundManager {
             console.warn(`SoundManager: som "${nome}" não encontrado.`)
             return
         }
-        // Reinicia se já estiver tocando (bom pra efeitos rápidos)
         if (som.isPlaying) som.stop()
         som.play()
     }
 
-    // Volume e mute
+    // --- Volume e mute ---
 
-    setVolume(valor) {
-        this._volumeGlobal = Phaser.Math.Clamp(valor, 0, 1)
-        this.scene.sound.setVolume(this._volumeGlobal)
+    setVolume(indice) {
+        this._indiceVolume = Phaser.Math.Clamp(indice, 0, this._niveisVolume.length - 1)
+        this.scene.sound.setVolume(this._niveisVolume[this._indiceVolume])
+    }
+
+    aumentarVolume() {
+        this.setVolume(this._indiceVolume + 1)
+        return this._niveisVolume[this._indiceVolume]
+    }
+
+    diminuirVolume() {
+        this.setVolume(this._indiceVolume - 1)
+        return this._niveisVolume[this._indiceVolume]
+    }
+
+    getVolume() {
+        return this._niveisVolume[this._indiceVolume]
     }
 
     toggleMute() {
@@ -91,7 +107,7 @@ export default class SoundManager {
         return this._mutado
     }
 
-    //  Limpeza
+    // --- Limpeza ---
 
     destroy() {
         Object.values(this.sons).forEach(som => {
