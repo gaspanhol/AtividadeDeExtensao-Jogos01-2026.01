@@ -22,7 +22,7 @@ export default class MenuPausa extends Phaser.Scene {
     const voltar =  this.add.image(width / 2.02, 400, 'voltar')
     voltar.setScale(0.7)
     .setInteractive();
-    const volume = this.add.image(centroX+3, 500, 'volume') 
+    const volume = this.add.sprite(centroX + 3, 500, 'volume', 2) 
     volume.setScale(0.7)
     .setOrigin(0.5)
     .setScrollFactor(0);
@@ -39,7 +39,14 @@ export default class MenuPausa extends Phaser.Scene {
 
 
     const jogo = this.scene.get('Jogo');
+    const atualizarVolumeVisual = () => {
+    const indice = jogo.soundManager._indiceVolume
 
+    // inverte porque o spritesheet está ao contrário
+    volume.setFrame(4 - indice)
+    }
+
+    atualizarVolumeVisual()
 
     reiniciar.on('pointerover', () => {
         reiniciar.setTint(0xE6B967);
@@ -113,6 +120,7 @@ botaoMenos.on('pointerout', () => {
 })
 botaoMenos.on('pointerdown', () => {
     jogo.soundManager.diminuirVolume()
+    atualizarVolumeVisual()
 })
 
 botaoMais.on('pointerover', () => {
@@ -136,10 +144,8 @@ botaoMais.on('pointerout', () => {
 })
 botaoMais.on('pointerdown', () => {
     jogo.soundManager.aumentarVolume()
+    atualizarVolumeVisual()
 })
-
-
-
 
     // ESC para voltar
     const sairMenu = this.input.keyboard.once('keydown-ESC', () => {

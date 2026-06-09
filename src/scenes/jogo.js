@@ -155,9 +155,12 @@ export default class Jogo extends Phaser.Scene {
         this.load.image('menuPausa','public/assets/telas/menu/menuPausa.png');
         this.load.image('reiniciar','public/assets/telas/menu/reiniciar.png');
         this.load.image('voltar','public/assets/telas/menu/voltar.png');
-        this.load.image('volume','public/assets/telas/menu/volume8.png');
         this.load.image('menos','public/assets/telas/menu/btn_menos.png');
         this.load.image('mais','public/assets/telas/menu/btn_mais.png');
+        this.load.spritesheet('volume','public/assets/telas/menu/volumeMenu.png', {
+            frameWidth: 485,
+            frameHeight: 138
+        });
     }
 
     create () {
