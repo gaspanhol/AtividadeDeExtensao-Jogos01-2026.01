@@ -10,10 +10,29 @@ export default class Jogo extends Phaser.Scene {
         this.load.tilemapTiledJSON('mapa', 'public/assets/mapa/mapa.json')
 
         // Carregando os sprites do mapa
-        this.load.image('mansao', 'public/assets/mapa/mansao.png')
-        this.load.image('Graveyard', 'public/assets/mapa/Graveyard.png')
-        this.load.image('GardenWalls', 'public/assets/mapa/GardenWalls.png')
-        this.load.image('GardenTerrain', 'public/assets/mapa/GardenTerrain.png')
+        this.load.image('casinhaDeEstoque', 'public/assets/mapa/casinhaDeEstoque.png')
+        this.load.image('engenho', 'public/assets/mapa/engenho.png')
+
+        this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
+        this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
+        this.load.spritesheet('mansao', 'public/assets/mapa/mansao.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
+        this.load.spritesheet('Graveyard', 'public/assets/mapa/Graveyard.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
         this.load.spritesheet('escadaPrincipal', 'public/assets/mapa/escadaPrincipal.png', {
             frameWidth: 175,
             frameHeight: 125
@@ -137,6 +156,31 @@ export default class Jogo extends Phaser.Scene {
             frameHeight: 128
         })
 
+        this.load.spritesheet('arvoresGrandes', 'public/assets/mapa/arvoresGrandes.png', {
+            frameWidth: 256,
+            frameHeight: 256
+        })
+
+        this.load.spritesheet('caixasMobilias', 'public/assets/mapa/caixasMobilias.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
+        this.load.spritesheet('cozinhaModificada', 'public/assets/mapa/cozinhaModificada.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
+        this.load.spritesheet('jardimFundos', 'public/assets/mapa/jardimFundos.png', {
+            frameWidth: 32,
+            frameHeight: 32
+        })
+
+        this.load.spritesheet('pilares', 'public/assets/mapa/pilares.png', {
+            frameWidth: 64,
+            frameHeight: 64
+        })
+
         const sonsParaCarregar = [
             { key: 'passo', path: 'public/assets/sons/passo.mp3' },
             { key: 'correr', path: 'public/assets/sons/passo.mp3' },
@@ -204,6 +248,15 @@ export default class Jogo extends Phaser.Scene {
         const tilesetRoupaPadre = mapa.addTilesetImage('roupaPadre', 'roupaPadre')
         const tilesetRoupasFestivas = mapa.addTilesetImage('roupasFestivas', 'roupasFestivas')
         const tilesetRoupasFestivasInv = mapa.addTilesetImage('roupasFestivasInv', 'roupasFestivasInv')
+        const tilesetArvoresGrandes = mapa.addTilesetImage('arvoresGrandes', 'arvoresGrandes')
+        const tilesetCaixasMobilias = mapa.addTilesetImage('caixasMobilias', 'caixasMobilias')
+        const tilesetCasinhaDeEstoque = mapa.addTilesetImage('casinhaDeEstoque', 'casinhaDeEstoque')
+        const tilesetCozinhaModificada = mapa.addTilesetImage('cozinhaModificada', 'cozinhaModificada')
+        const tilesetEngenho = mapa.addTilesetImage('engenho', 'engenho')
+        const tilesetJardimFundos = mapa.addTilesetImage('jardimFundos', 'jardimFundos')
+        const tilesetPilares = mapa.addTilesetImage('pilares', 'pilares')
+
+        
 
         if (
             !tilesetChao ||
@@ -231,12 +284,19 @@ export default class Jogo extends Phaser.Scene {
             !tilesetQuadros ||
             !tilesetRoupaPadre ||
             !tilesetRoupasFestivas ||
-            !tilesetRoupasFestivasInv
+            !tilesetRoupasFestivasInv ||
+            !tilesetArvoresGrandes ||
+            !tilesetCaixasMobilias ||
+            !tilesetCasinhaDeEstoque||
+            !tilesetCozinhaModificada||
+            !tilesetEngenho ||
+            !tilesetJardimFundos ||
+            !tilesetPilares
         ) {
             console.error('Erro ao carregar algum tileset')
         }
 
-        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas, tilesetEscada, tilesetMesasCadeiras, tilesetEnfeites, tilesetEnfeitesPequenos, tilesetMaquinaFilmagem, tilesetTapeteEDecoracoes, tilesetCadeiraDentista, tilesetArmas, tilesetBanheiro, tilesetCarruagem, tilesetCanoa, tilesetAcessoriosIndigenas, tilesetCozinha, tilesetPedestal, tilesetQuadros, tilesetRoupaPadre, tilesetRoupasFestivas, tilesetRoupasFestivasInv]
+        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas, tilesetEscada, tilesetMesasCadeiras, tilesetEnfeites, tilesetEnfeitesPequenos, tilesetMaquinaFilmagem, tilesetTapeteEDecoracoes, tilesetCadeiraDentista, tilesetArmas, tilesetBanheiro, tilesetCarruagem, tilesetCanoa, tilesetAcessoriosIndigenas, tilesetCozinha, tilesetPedestal, tilesetQuadros, tilesetRoupaPadre, tilesetRoupasFestivas, tilesetRoupasFestivasInv, tilesetArvoresGrandes, tilesetCaixasMobilias, tilesetCasinhaDeEstoque, tilesetCozinhaModificada, tilesetEngenho, tilesetJardimFundos, tilesetPilares]
 
         mapa.createLayer('chao', tilesets, 0, 0)
         mapa.createLayer('parede', tilesets, 0, 0)
