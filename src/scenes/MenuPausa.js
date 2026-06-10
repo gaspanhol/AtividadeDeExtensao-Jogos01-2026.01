@@ -19,8 +19,8 @@ export default class MenuPausa extends Phaser.Scene {
     const reiniciar = this.add.image(centroX, 290, 'reiniciar')
     reiniciar.setScale(0.7)
     .setInteractive();
-    const voltar =  this.add.image(width / 2.02, 400, 'voltar')
-    voltar.setScale(0.7)
+    const voltar =  this.add.image(width / 2.0, 400, 'voltar')
+    voltar.setScale(0.4)
     .setInteractive();
     const volume = this.add.sprite(centroX + 3, 500, 'volume', 2) 
     volume.setScale(0.7)
@@ -79,7 +79,7 @@ export default class MenuPausa extends Phaser.Scene {
         voltar.setTint(0xE6B967);
         this.tweens.add({
           targets: voltar,
-          scale: 0.77,
+          scale: 0.44,
           duration: 100
       });
   });
@@ -89,14 +89,15 @@ export default class MenuPausa extends Phaser.Scene {
 
           this.tweens.add({
               targets: voltar,
-              scale: 0.7,
+              scale: 0.4,
               duration: 100
           });
       });
 
       voltar.on('pointerdown', () => {
-          this.scene.resume('Jogo')
-          this.scene.stop()
+          this.scene.stop('Jogo')
+          this.scene.stop('MenuPausa')
+          this.scene.start('Abertura')
       });
 
       botaoMenos.on('pointerover', () => {
