@@ -11,9 +11,9 @@ export default class Jogo extends Phaser.Scene {
 
         // Carregando os sprites dos personagens
         this.load.spritesheet('player', 'public/assets/personagens/player.png', { frameWidth: 48, frameHeight: 50 })
-        this.load.spritesheet('enemy1', 'public/assets/personagens/enemy1.png', { frameWidth: 48, frameHeight: 60 })
-        this.load.spritesheet('enemy2', 'public/assets/personagens/enemy2.png', { frameWidth: 48, frameHeight: 60 })
-        this.load.spritesheet('enemy3', 'public/assets/personagens/enemy3.png', { frameWidth: 48, frameHeight: 60 })
+        this.load.spritesheet('enemy1', 'public/assets/personagens/enemy1.png', { frameWidth: 48, frameHeight: 50 })
+        this.load.spritesheet('enemy2', 'public/assets/personagens/enemy2.png', { frameWidth: 48, frameHeight: 50 })
+        this.load.spritesheet('enemy3', 'public/assets/personagens/enemy3.png', { frameWidth: 48, frameHeight: 50 })
         this.load.spritesheet('npc', 'public/assets/personagens/npc.png', { frameWidth: 48, frameHeight: 50 })
 
         // Carregando os sprites do mapa
