@@ -9,43 +9,49 @@ export default class Jogo extends Phaser.Scene {
     preload () {
         this.load.tilemapTiledJSON('mapa', 'public/assets/mapa/mapa.json')
 
+        // Carregando os sprites dos personagens
+        this.load.spritesheet('player', 'public/assets/personagens/player.png', { frameWidth: 48, frameHeight: 50 })
+        this.load.spritesheet('enemy1', 'public/assets/personagens/enemy1.png', { frameWidth: 48, frameHeight: 60 })
+        this.load.spritesheet('enemy2', 'public/assets/personagens/enemy2.png', { frameWidth: 48, frameHeight: 60 })
+        this.load.spritesheet('enemy3', 'public/assets/personagens/enemy3.png', { frameWidth: 48, frameHeight: 60 })
+        this.load.spritesheet('npc', 'public/assets/personagens/npc.png', { frameWidth: 48, frameHeight: 60 })
+
         // Carregando os sprites do mapa
         this.load.image('casinhaDeEstoque', 'public/assets/mapa/casinhaDeEstoque.png')
         this.load.image('engenho', 'public/assets/mapa/engenho.png')
-        this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', {frameWidth: 32, frameHeight: 32 })
-        this.load.spritesheet('mansao', 'public/assets/mapa/mansao.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('Graveyard', 'public/assets/mapa/Graveyard.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('escadaPrincipal', 'public/assets/mapa/escadaPrincipal.png', {frameWidth: 175, frameHeight: 125})
-        this.load.spritesheet('objetos', 'public/assets/mapa/objetos.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('objetosinv', 'public/assets/mapa/objetosinv.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('mesasCadeiras', 'public/assets/mapa/mesasCadeiras.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('player', 'public/assets/personagens/player.png', {frameWidth: 48, frameHeight: 50})
-        this.load.spritesheet('colunaV', 'public/assets/mapa/colunaV.png', {frameWidth: 6, frameHeight: 32})
-        this.load.spritesheet('colunaH', 'public/assets/mapa/colunaH.png', {frameWidth: 32, frameHeight: 6})
-        this.load.spritesheet('portas', 'public/assets/mapa/portas.png', {frameWidth: 96, frameHeight: 70})
-        this.load.spritesheet('vazio128x128', 'public/assets/mapa/vazio_128x128.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('enfeites', 'public/assets/mapa/enfeites.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('enfeitesPequenos', 'public/assets/mapa/enfeitesPequenos.png', {frameWidth: 16, frameHeight: 16})
-        this.load.spritesheet('maquinaFilmagem', 'public/assets/mapa/maquinaFilmagem.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('tapeteEDecoracoes', 'public/assets/mapa/tapeteEDecoracoes.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('cadeiraDentista', 'public/assets/mapa/cadeiraDentista.png', {frameWidth: 64, frameHeight: 64})
-        this.load.spritesheet('armas', 'public/assets/mapa/armas.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('carruagem', 'public/assets/mapa/carruagem.png', {frameWidth: 190, frameHeight: 80})
-        this.load.spritesheet('banheiro', 'public/assets/mapa/banheiro.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('canoa', 'public/assets/mapa/canoa.png', {frameWidth: 128, frameHeight: 128})
-        this.load.spritesheet('acessoriosIndigenas', 'public/assets/mapa/acessoriosIndigenas.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('cozinha', 'public/assets/mapa/cozinha.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('pedestalCatolico', 'public/assets/mapa/pedestalCatolico.png', {frameWidth: 128, frameHeight: 128})
-        this.load.spritesheet('quadros', 'public/assets/mapa/quadros.png', {frameWidth: 64, frameHeight: 64})
-        this.load.spritesheet('roupaPadre', 'public/assets/mapa/roupaPadre.png', {frameWidth: 128, frameHeight: 128})
-        this.load.spritesheet('roupasFestivas', 'public/assets/mapa/roupasFestivas.png', {frameWidth: 128, frameHeight: 128})
-        this.load.spritesheet('roupasFestivasInv', 'public/assets/mapa/roupasFestivasInv.png', {frameWidth: 128, frameHeight: 128})
-        this.load.spritesheet('arvoresGrandes', 'public/assets/mapa/arvoresGrandes.png', {frameWidth: 256, frameHeight: 256})
-        this.load.spritesheet('caixasMobilias', 'public/assets/mapa/caixasMobilias.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('cozinhaModificada', 'public/assets/mapa/cozinhaModificada.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('jardimFundos', 'public/assets/mapa/jardimFundos.png', {frameWidth: 32, frameHeight: 32})
-        this.load.spritesheet('pilares', 'public/assets/mapa/pilares.png', {frameWidth: 64, frameHeight: 64})
+        this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('mansao', 'public/assets/mapa/mansao.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('Graveyard', 'public/assets/mapa/Graveyard.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('escadaPrincipal', 'public/assets/mapa/escadaPrincipal.png', { frameWidth: 175, frameHeight: 125 })
+        this.load.spritesheet('objetos', 'public/assets/mapa/objetos.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('objetosinv', 'public/assets/mapa/objetosinv.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('mesasCadeiras', 'public/assets/mapa/mesasCadeiras.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('colunaV', 'public/assets/mapa/colunaV.png', { frameWidth: 6, frameHeight: 32 })
+        this.load.spritesheet('colunaH', 'public/assets/mapa/colunaH.png', { frameWidth: 32, frameHeight: 6 })
+        this.load.spritesheet('portas', 'public/assets/mapa/portas.png', { frameWidth: 96, frameHeight: 70 })
+        this.load.spritesheet('vazio128x128', 'public/assets/mapa/vazio_128x128.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('enfeites', 'public/assets/mapa/enfeites.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('enfeitesPequenos', 'public/assets/mapa/enfeitesPequenos.png', { frameWidth: 16, frameHeight: 16 })
+        this.load.spritesheet('maquinaFilmagem', 'public/assets/mapa/maquinaFilmagem.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('tapeteEDecoracoes', 'public/assets/mapa/tapeteEDecoracoes.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('cadeiraDentista', 'public/assets/mapa/cadeiraDentista.png', { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('armas', 'public/assets/mapa/armas.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('carruagem', 'public/assets/mapa/carruagem.png', { frameWidth: 190, frameHeight: 80 })
+        this.load.spritesheet('banheiro', 'public/assets/mapa/banheiro.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('canoa', 'public/assets/mapa/canoa.png', { frameWidth: 128, frameHeight: 128 })
+        this.load.spritesheet('acessoriosIndigenas', 'public/assets/mapa/acessoriosIndigenas.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('cozinha', 'public/assets/mapa/cozinha.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('pedestalCatolico', 'public/assets/mapa/pedestalCatolico.png', { frameWidth: 128, frameHeight: 128 })
+        this.load.spritesheet('quadros', 'public/assets/mapa/quadros.png', { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('roupaPadre', 'public/assets/mapa/roupaPadre.png', { frameWidth: 128, frameHeight: 128 })
+        this.load.spritesheet('roupasFestivas', 'public/assets/mapa/roupasFestivas.png', { frameWidth: 128, frameHeight: 128 })
+        this.load.spritesheet('roupasFestivasInv', 'public/assets/mapa/roupasFestivasInv.png', { frameWidth: 128, frameHeight: 128 })
+        this.load.spritesheet('arvoresGrandes', 'public/assets/mapa/arvoresGrandes.png', { frameWidth: 256, frameHeight: 256 })
+        this.load.spritesheet('caixasMobilias', 'public/assets/mapa/caixasMobilias.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('cozinhaModificada', 'public/assets/mapa/cozinhaModificada.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('jardimFundos', 'public/assets/mapa/jardimFundos.png', { frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('pilares', 'public/assets/mapa/pilares.png', { frameWidth: 64, frameHeight: 64 })
 
         const sonsParaCarregar = [
             { key: 'passo', path: 'public/assets/sons/passo.mp3' },
@@ -112,8 +118,6 @@ export default class Jogo extends Phaser.Scene {
         const tilesetJardimFundos = mapa.addTilesetImage('jardimFundos', 'jardimFundos')
         const tilesetPilares = mapa.addTilesetImage('pilares', 'pilares')
 
-        
-
         if (
             !tilesetChao ||
             !tilesetObjetos ||
@@ -143,8 +147,8 @@ export default class Jogo extends Phaser.Scene {
             !tilesetRoupasFestivasInv ||
             !tilesetArvoresGrandes ||
             !tilesetCaixasMobilias ||
-            !tilesetCasinhaDeEstoque||
-            !tilesetCozinhaModificada||
+            !tilesetCasinhaDeEstoque ||
+            !tilesetCozinhaModificada ||
             !tilesetEngenho ||
             !tilesetJardimFundos ||
             !tilesetPilares
@@ -270,6 +274,7 @@ export default class Jogo extends Phaser.Scene {
 
         this.layerColisao.setCollisionByExclusion([-1])
 
+        // Configuração do player
         this.player = this.physics.add.sprite(784.5, 3233.6, 'player')
         window.player = this.player //Comando para ver a localização do player no jogo, usando o comando console.log(player.x, player.y)
         this.direcao = 'baixo'
@@ -361,6 +366,15 @@ export default class Jogo extends Phaser.Scene {
 
         })
 
+        // Configuração NPC
+        this.npc = this.physics.add.sprite(762.8, 3323.6, 'npc')
+
+        // Configurações dos Inimigos
+        //this.enemy1 = this.physics.add.sprite(762.8, 3323.6, 'enemy1')
+        //this.enemy2 = this.physics.add.sprite(762.8, 3323.6, 'enemy2')
+        //this.enemy3 = this.physics.add.sprite(762.8, 3323.6, 'enemy3')
+
+        // Sons
         this.soundManager = new SoundManager(this)
         this.soundManager.create()
 
@@ -436,7 +450,7 @@ export default class Jogo extends Phaser.Scene {
             this.scene.pause()
             this.scene.launch('MenuPausa')
         } else {
-            this.soundManager.pararMusica() 
+            this.soundManager.pararMusica()
         }
 
 
