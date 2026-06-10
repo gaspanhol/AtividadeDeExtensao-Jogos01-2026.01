@@ -2,11 +2,11 @@ import MenuPausa from './MenuPausa.js'
 import SoundManager from './SoundManager.js'
 
 export default class Jogo extends Phaser.Scene {
-    constructor () {
+    constructor() {
         super('Jogo')
     }
 
-    preload () {
+    preload() {
         this.load.tilemapTiledJSON('mapa', 'public/assets/mapa/mapa.json')
 
         // Carregando os sprites dos personagens
@@ -14,7 +14,7 @@ export default class Jogo extends Phaser.Scene {
         this.load.spritesheet('enemy1', 'public/assets/personagens/enemy1.png', { frameWidth: 48, frameHeight: 60 })
         this.load.spritesheet('enemy2', 'public/assets/personagens/enemy2.png', { frameWidth: 48, frameHeight: 60 })
         this.load.spritesheet('enemy3', 'public/assets/personagens/enemy3.png', { frameWidth: 48, frameHeight: 60 })
-        this.load.spritesheet('npc', 'public/assets/personagens/npc.png', { frameWidth: 48, frameHeight: 60 })
+        this.load.spritesheet('npc', 'public/assets/personagens/npc.png', { frameWidth: 48, frameHeight: 50 })
 
         // Carregando os sprites do mapa
         this.load.image('casinhaDeEstoque', 'public/assets/mapa/casinhaDeEstoque.png')
@@ -52,6 +52,7 @@ export default class Jogo extends Phaser.Scene {
         this.load.spritesheet('cozinhaModificada', 'public/assets/mapa/cozinhaModificada.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('jardimFundos', 'public/assets/mapa/jardimFundos.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('pilares', 'public/assets/mapa/pilares.png', { frameWidth: 64, frameHeight: 64 })
+        this.load.image('iconeConversa', 'public/assets/botoes/iconeConversa.png')
 
         const sonsParaCarregar = [
             { key: 'passo', path: 'public/assets/sons/passo.mp3' },
@@ -69,8 +70,10 @@ export default class Jogo extends Phaser.Scene {
 
     }
 
-    create () {
+    create() {
         const mapa = this.make.tilemap({ key: 'mapa' })
+
+        // Mapeamento de teclas do teclado para as interações
         this.cursors = this.input.keyboard.createCursorKeys()
 
         this.shift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT) //botão shift
@@ -82,6 +85,7 @@ export default class Jogo extends Phaser.Scene {
             right: Phaser.Input.Keyboard.KeyCodes.D
         })
         this.teclaEsc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
+        this.teclaE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E)
 
         const tilesetChao = mapa.addTilesetImage('mansao', 'mansao')
         const tilesetObjetos = mapa.addTilesetImage('objetos', 'objetos')
@@ -275,9 +279,9 @@ export default class Jogo extends Phaser.Scene {
         this.layerColisao.setCollisionByExclusion([-1])
 
         // Configuração do player
-        this.player = this.physics.add.sprite(784.5, 3233.6, 'player')
+        this.player = this.physics.add.sprite(784.5, 3246.1, 'player')
         window.player = this.player //Comando para ver a localização do player no jogo, usando o comando console.log(player.x, player.y)
-        this.direcao = 'baixo'
+        this.direcao = 'esquerda'
         this.physics.add.collider(this.player, this.layerColisao)
         this.physics.add.collider(this.player, this.colunasColisao)
         this.player.setDepth(2)
@@ -367,7 +371,76 @@ export default class Jogo extends Phaser.Scene {
         })
 
         // Configuração NPC
-        this.npc = this.physics.add.sprite(762.8, 3323.6, 'npc')
+
+        this.npc = this.physics.add.sprite(675, 3244.5, 'npc')
+
+        this.physics.add.collider(this.npc, this.player)
+
+        this.npc.setPushable(false)
+        this.npc.setImmovable(true)
+
+        // Levantando
+        this.anims.create({
+            key: 'npc-levantando',
+            frames: this.anims.generateFrameNumbers('npc', {
+                start: 0,
+                end: 5
+            }),
+            frameRate: 3,
+            repeat: 0
+        })
+
+        // Virando para direita (idle)
+        this.anims.create({
+            key: 'npc-virandoDireita',
+            frames: this.anims.generateFrameNumbers('npc', {
+                start: 6,
+                end: 8
+            }),
+            frameRate: 2,
+            repeat: -1
+        })
+
+        // Agradecendo
+        this.anims.create({
+            key: 'npc-agradecendo',
+            frames: this.anims.generateFrameNumbers('npc', {
+                start: 9,
+                end: 12
+            }),
+            frameRate: 2,
+            repeat: 0
+        })
+
+        this.npc.play('npc-levantando')
+        this.npc.on('animationcomplete-npc-levantando', () => {
+            this.npc.play('npc-virandoDireita')
+        })
+
+        // Balão de fala do NPC
+        this.iconeConversa = this.add.image(
+            this.npc.x,
+            this.npc.y - 40,
+            'iconeConversa'
+        )
+
+        this.iconeConversa.setScale(0.5)
+        this.iconeConversa.setVisible(false)
+
+        this.physics.add.overlap(
+            this.player,
+            this.npc,
+            () => {
+                this.iconeConversa.setVisible(true)
+            },
+            null,
+            this
+        )
+
+        // Interação com o NPC
+        this.npc.on('animationcomplete-npc-agradecendo', () => {
+            this.npc.play('npc-virandoDireita')
+        })
 
         // Configurações dos Inimigos
         //this.enemy1 = this.physics.add.sprite(762.8, 3323.6, 'enemy1')
@@ -433,7 +506,7 @@ export default class Jogo extends Phaser.Scene {
         })
     }
 
-    update () {
+    update() {
 
         // debug colisão
         //this.layerColisao.renderDebug(this.add.graphics(), {
@@ -477,7 +550,7 @@ export default class Jogo extends Phaser.Scene {
 
         this.player.setVelocity(vx, vy)
 
-
+        
         if (vx !== 0 || vy !== 0) {
             const prefixo = correndo ? 'correr' : 'andar'
             this.player.anims.play(prefixo + '-' + this.direcao, true)
@@ -486,5 +559,37 @@ export default class Jogo extends Phaser.Scene {
             this.player.anims.play('idle-' + this.direcao, true)
             this.soundManager.pararPassos()
         }
+
+        // Balão de conversa do NPC:
+        this.iconeConversa.setPosition(
+            this.npc.x,
+            this.npc.y - 40
+        )
+
+        const distancia = Phaser.Math.Distance.Between(
+            this.player.x,
+            this.player.y,
+            this.npc.x,
+            this.npc.y
+        )
+
+        const pertoDoNpc = distancia < 50
+        const jogadorADireitaDoNpc = this.player.x > this.npc.x
+
+        this.iconeConversa.setVisible(
+            pertoDoNpc &&
+            jogadorADireitaDoNpc
+        )
+
+        const podeConversar = this.iconeConversa.visible
+
+        if (
+            podeConversar &&
+            Phaser.Input.Keyboard.JustDown(this.teclaE) &&
+            this.npc.anims.currentAnim.key !== 'npc-agradecendo'
+        ) {
+            this.npc.play('npc-agradecendo')
+        }
+
     }
 }
