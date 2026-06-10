@@ -12,174 +12,40 @@ export default class Jogo extends Phaser.Scene {
         // Carregando os sprites do mapa
         this.load.image('casinhaDeEstoque', 'public/assets/mapa/casinhaDeEstoque.png')
         this.load.image('engenho', 'public/assets/mapa/engenho.png')
-
-        this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('mansao', 'public/assets/mapa/mansao.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('Graveyard', 'public/assets/mapa/Graveyard.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('escadaPrincipal', 'public/assets/mapa/escadaPrincipal.png', {
-            frameWidth: 175,
-            frameHeight: 125
-        })
-
-        this.load.spritesheet('objetos', 'public/assets/mapa/objetos.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('objetosinv', 'public/assets/mapa/objetosinv.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('mesasCadeiras', 'public/assets/mapa/mesasCadeiras.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-
-        this.load.spritesheet('player', 'public/assets/personagens/player.png', {
-            frameWidth: 48,
-            frameHeight: 50
-        })
-        this.load.spritesheet('colunaV', 'public/assets/mapa/colunaV.png', {
-            frameWidth: 6,
-            frameHeight: 32
-        })
-        this.load.spritesheet('colunaH', 'public/assets/mapa/colunaH.png', {
-            frameWidth: 32,
-            frameHeight: 6
-        })
-        this.load.spritesheet('portas', 'public/assets/mapa/portas.png', {
-            frameWidth: 96,
-            frameHeight: 70
-        })
-
-        this.load.spritesheet('vazio128x128', 'public/assets/mapa/vazio_128x128.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('enfeites', 'public/assets/mapa/enfeites.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('enfeitesPequenos', 'public/assets/mapa/enfeitesPequenos.png', {
-            frameWidth: 16,
-            frameHeight: 16
-        })
-
-        this.load.spritesheet('maquinaFilmagem', 'public/assets/mapa/maquinaFilmagem.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('tapeteEDecoracoes', 'public/assets/mapa/tapeteEDecoracoes.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('cadeiraDentista', 'public/assets/mapa/cadeiraDentista.png', {
-            frameWidth: 64,
-            frameHeight: 64
-        })
-
-        this.load.spritesheet('armas', 'public/assets/mapa/armas.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('carruagem', 'public/assets/mapa/carruagem.png', {
-            frameWidth: 190,
-            frameHeight: 80
-        })
-
-        this.load.spritesheet('banheiro', 'public/assets/mapa/banheiro.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('canoa', 'public/assets/mapa/canoa.png', {
-            frameWidth: 128,
-            frameHeight: 128
-        })
-
-        this.load.spritesheet('acessoriosIndigenas', 'public/assets/mapa/acessoriosIndigenas.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('cozinha', 'public/assets/mapa/cozinha.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('pedestalCatolico', 'public/assets/mapa/pedestalCatolico.png', {
-            frameWidth: 128,
-            frameHeight: 128
-        })
-
-        this.load.spritesheet('quadros', 'public/assets/mapa/quadros.png', {
-            frameWidth: 64,
-            frameHeight: 64
-        })
-
-        this.load.spritesheet('roupaPadre', 'public/assets/mapa/roupaPadre.png', {
-            frameWidth: 128,
-            frameHeight: 128
-        })
-
-        this.load.spritesheet('roupasFestivas', 'public/assets/mapa/roupasFestivas.png', {
-            frameWidth: 128,
-            frameHeight: 128
-        })
-
-        this.load.spritesheet('roupasFestivasInv', 'public/assets/mapa/roupasFestivasInv.png', {
-            frameWidth: 128,
-            frameHeight: 128
-        })
-
-        this.load.spritesheet('arvoresGrandes', 'public/assets/mapa/arvoresGrandes.png', {
-            frameWidth: 256,
-            frameHeight: 256
-        })
-
-        this.load.spritesheet('caixasMobilias', 'public/assets/mapa/caixasMobilias.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('cozinhaModificada', 'public/assets/mapa/cozinhaModificada.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('jardimFundos', 'public/assets/mapa/jardimFundos.png', {
-            frameWidth: 32,
-            frameHeight: 32
-        })
-
-        this.load.spritesheet('pilares', 'public/assets/mapa/pilares.png', {
-            frameWidth: 64,
-            frameHeight: 64
-        })
+        this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', {frameWidth: 32, frameHeight: 32 })
+        this.load.spritesheet('mansao', 'public/assets/mapa/mansao.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('Graveyard', 'public/assets/mapa/Graveyard.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('escadaPrincipal', 'public/assets/mapa/escadaPrincipal.png', {frameWidth: 175, frameHeight: 125})
+        this.load.spritesheet('objetos', 'public/assets/mapa/objetos.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('objetosinv', 'public/assets/mapa/objetosinv.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('mesasCadeiras', 'public/assets/mapa/mesasCadeiras.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('player', 'public/assets/personagens/player.png', {frameWidth: 48, frameHeight: 50})
+        this.load.spritesheet('colunaV', 'public/assets/mapa/colunaV.png', {frameWidth: 6, frameHeight: 32})
+        this.load.spritesheet('colunaH', 'public/assets/mapa/colunaH.png', {frameWidth: 32, frameHeight: 6})
+        this.load.spritesheet('portas', 'public/assets/mapa/portas.png', {frameWidth: 96, frameHeight: 70})
+        this.load.spritesheet('vazio128x128', 'public/assets/mapa/vazio_128x128.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('enfeites', 'public/assets/mapa/enfeites.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('enfeitesPequenos', 'public/assets/mapa/enfeitesPequenos.png', {frameWidth: 16, frameHeight: 16})
+        this.load.spritesheet('maquinaFilmagem', 'public/assets/mapa/maquinaFilmagem.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('tapeteEDecoracoes', 'public/assets/mapa/tapeteEDecoracoes.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('cadeiraDentista', 'public/assets/mapa/cadeiraDentista.png', {frameWidth: 64, frameHeight: 64})
+        this.load.spritesheet('armas', 'public/assets/mapa/armas.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('carruagem', 'public/assets/mapa/carruagem.png', {frameWidth: 190, frameHeight: 80})
+        this.load.spritesheet('banheiro', 'public/assets/mapa/banheiro.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('canoa', 'public/assets/mapa/canoa.png', {frameWidth: 128, frameHeight: 128})
+        this.load.spritesheet('acessoriosIndigenas', 'public/assets/mapa/acessoriosIndigenas.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('cozinha', 'public/assets/mapa/cozinha.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('pedestalCatolico', 'public/assets/mapa/pedestalCatolico.png', {frameWidth: 128, frameHeight: 128})
+        this.load.spritesheet('quadros', 'public/assets/mapa/quadros.png', {frameWidth: 64, frameHeight: 64})
+        this.load.spritesheet('roupaPadre', 'public/assets/mapa/roupaPadre.png', {frameWidth: 128, frameHeight: 128})
+        this.load.spritesheet('roupasFestivas', 'public/assets/mapa/roupasFestivas.png', {frameWidth: 128, frameHeight: 128})
+        this.load.spritesheet('roupasFestivasInv', 'public/assets/mapa/roupasFestivasInv.png', {frameWidth: 128, frameHeight: 128})
+        this.load.spritesheet('arvoresGrandes', 'public/assets/mapa/arvoresGrandes.png', {frameWidth: 256, frameHeight: 256})
+        this.load.spritesheet('caixasMobilias', 'public/assets/mapa/caixasMobilias.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('cozinhaModificada', 'public/assets/mapa/cozinhaModificada.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('jardimFundos', 'public/assets/mapa/jardimFundos.png', {frameWidth: 32, frameHeight: 32})
+        this.load.spritesheet('pilares', 'public/assets/mapa/pilares.png', {frameWidth: 64, frameHeight: 64})
 
         const sonsParaCarregar = [
             { key: 'passo', path: 'public/assets/sons/passo.mp3' },
@@ -195,16 +61,6 @@ export default class Jogo extends Phaser.Scene {
             console.warn(`Arquivo não encontrado, ignorando: ${file.key}`)
         })
 
-        //menu
-        this.load.image('menuPausa','public/assets/telas/menu/menuPausa.png');
-        this.load.image('reiniciar','public/assets/telas/menu/reiniciar.png');
-        this.load.image('voltar','public/assets/telas/menu/voltar.png');
-        this.load.image('menos','public/assets/telas/menu/btn_menos.png');
-        this.load.image('mais','public/assets/telas/menu/btn_mais.png');
-        this.load.spritesheet('volume','public/assets/telas/menu/volumeMenu.png', {
-            frameWidth: 485,
-            frameHeight: 138
-        });
     }
 
     create () {
