@@ -2,11 +2,11 @@ import MenuPausa from './MenuPausa.js'
 import SoundManager from './SoundManager.js'
 
 export default class Jogo extends Phaser.Scene {
-    constructor () {
+    constructor() {
         super('Jogo')
     }
 
-    preload () {
+    preload() {
         this.load.tilemapTiledJSON('mapa', 'public/assets/mapa/mapa.json')
 
         // Carregando os sprites dos personagens
@@ -77,7 +77,7 @@ export default class Jogo extends Phaser.Scene {
 
     }
 
-    create () {
+    create() {
         const mapa = this.make.tilemap({ key: 'mapa' })
 
         // ..:: Mapeamento de teclas do teclado para as interações ::..
@@ -504,7 +504,7 @@ export default class Jogo extends Phaser.Scene {
             }
         ]
 
-        // Animações dos inimigos
+        // Criação das animações
         tiposEnemy.forEach(tipo => {
 
             animacoesEnemy.forEach(anim => {
@@ -543,24 +543,14 @@ export default class Jogo extends Phaser.Scene {
 
         })
 
-        // Fase 1
         const configInimigos = [
 
-            {
-                tipo: 'enemy1',
-                pontos: [
-                    { x: 618.2, y: 2755.8 },
-                    { x: 988.2, y: 2755.8 }
-                ]
-            },
+            // =========================
+            // FASE 1
+            // =========================
 
-            {
-                tipo: 'enemy1',
-                pontos: [
-                    { x: 563.2, y: 2755.8 },
-                    { x: 205.5, y: 2755.8 }
-                ]
-            },
+            { tipo: 'enemy1', pontos: [{ x: 618.2, y: 2755.8 }, { x: 988.2, y: 2755.8 }] },
+            { tipo: 'enemy1', pontos: [{ x: 563.2, y: 2755.8 }, { x: 205.5, y: 2755.8 }] },
 
             {
                 tipo: 'enemy1',
@@ -582,13 +572,163 @@ export default class Jogo extends Phaser.Scene {
                 ]
             },
 
+            { tipo: 'enemy1', pontos: [{ x: 944.1, y: 2502 }, { x: 944.1, y: 2769.5 }] },
+
+            // =========================
+            // FASE 2
+            // =========================
+
+            { tipo: 'enemy1', pontos: [{ x: 1907.5, y: 3399 }, { x: 1907.5, y: 3173.1 }] },
+
             {
                 tipo: 'enemy1',
                 pontos: [
-                    { x: 944.1, y: 2502 },
-                    { x: 944.1, y: 2769.5 }
+                    { x: 2072, y: 3160.6 },
+                    { x: 2072, y: 2845.6 },
+                    { x: 2120, y: 2845.6 },
+                    { x: 2120, y: 3160.6 }
                 ]
-            }
+            },
+
+            {
+                tipo: 'enemy1',
+                pontos: [
+                    { x: 2072, y: 2758.2 },
+                    { x: 2075.1, y: 2560 },
+                    { x: 2120, y: 2560 },
+                    { x: 2120, y: 2758.2 }
+                ]
+            },
+
+            { tipo: 'enemy1', pontos: [{ x: 2356, y: 2655.6 }, { x: 2201, y: 2655.6 }] },
+
+            {
+                tipo: 'enemy1',
+                pontos: [
+                    { x: 1966.1, y: 2530.8 },
+                    { x: 1966.1, y: 2653.3 },
+                    { x: 1851.1, y: 2653.3 }
+                ]
+            },
+
+            { tipo: 'enemy3', pontos: [{ x: 1970.6, y: 3258.2 }, { x: 2280.6, y: 3258.2 }] },
+
+            {
+                tipo: 'enemy3',
+                parado: true,
+                direcaoParado: 'esquerda',
+                pontos: [{ x: 1887.5, y: 2940.7 }]
+            },
+
+            // =========================
+            // FASE 3
+            // =========================
+
+            { tipo: 'enemy1', pontos: [{ x: 1240.5, y: 2022.5 }, { x: 1578, y: 2022.5 }] },
+
+            {
+                tipo: 'enemy1',
+                pontos: [
+                    { x: 286.1, y: 2119.4 },
+                    { x: 286.1, y: 2001.9 },
+                    { x: 400, y: 2001.9 },
+                    { x: 400, y: 2119.4 }
+                ]
+            },
+
+            { tipo: 'enemy2', pontos: [{ x: 1403.5, y: 2127.5 }, { x: 791, y: 2127.5 }] },
+
+            { tipo: 'enemy3', pontos: [{ x: 678.8, y: 2085.2 }, { x: 461.3, y: 2085.2 }] },
+
+            {
+                tipo: 'enemy3',
+                parado: true,
+                direcaoParado: 'cima',
+                pontos: [{ x: 931, y: 2057.5 }]
+            },
+
+            // =========================
+            // FASE 4
+            // =========================
+
+            { tipo: 'enemy1', pontos: [{ x: 1090, y: 1532.5 }, { x: 852.5, y: 1532.5 }] },
+
+            {
+                tipo: 'enemy1',
+                pontos: [
+                    { x: 420, y: 880 },
+                    { x: 797.5, y: 880 },
+                    { x: 797.5, y: 1077.5 },
+                    { x: 420, y: 1077.5 }
+                ]
+            },
+
+            { tipo: 'enemy1', pontos: [{ x: 523.1, y: 1324.5 }, { x: 188.1, y: 1324.5 }] },
+
+            { tipo: 'enemy2', pontos: [{ x: 200.3, y: 1153.7 }, { x: 1067.8, y: 1153.7 }] },
+
+            {
+                tipo: 'enemy2',
+                pontos: [
+                    { x: 870.7, y: 425.8 },
+                    { x: 1096, y: 425.8 },
+                    { x: 1096, y: 630.8 },
+                    { x: 870.7, y: 630.8 }
+                ]
+            },
+
+            {
+                tipo: 'enemy3',
+                pontos: [
+                    { x: 643.8, y: 1270 },
+                    { x: 791.3, y: 1270 },
+                    { x: 791.3, y: 1570 },
+                    { x: 643.8, y: 1570 }
+                ]
+            },
+
+            {
+                tipo: 'enemy3',
+                parado: true,
+                direcaoParado: 'cima',
+                pontos: [{ x: 300.6, y: 1003.4 }]
+            },
+
+            // =========================
+            // FASE 5
+            // =========================
+
+            {
+                tipo: 'enemy1',
+                pontos: [
+                    { x: 2284.8, y: 1352.2 },
+                    { x: 2284.8, y: 1457.3 },
+                    { x: 2189.8, y: 1457.3 }
+                ]
+            },
+
+            { tipo: 'enemy1', pontos: [{ x: 2511.9, y: 922.5 }, { x: 2351.9, y: 922.5 }] },
+
+            { tipo: 'enemy1', pontos: [{ x: 2755, y: 922.5 }, { x: 2601, y: 922.5 }] },
+
+            { tipo: 'enemy2', pontos: [{ x: 2259.1, y: 576.9 }, { x: 2259.1, y: 788 }] },
+
+            { tipo: 'enemy2', pontos: [{ x: 2194.3, y: 858 }, { x: 2194.3, y: 1238 }] },
+
+            { tipo: 'enemy2', pontos: [{ x: 2427.5, y: 1020 }, { x: 2760, y: 1020 }] },
+
+            {
+                tipo: 'enemy2',
+                pontos: [
+                    { x: 2390, y: 1173.25 },
+                    { x: 2755, y: 1173.25 },
+                    { x: 2755, y: 1288.25 },
+                    { x: 2390, y: 1288.25 }
+                ]
+            },
+
+            { tipo: 'enemy3', pontos: [{ x: 2385, y: 1447.4 }, { x: 2635, y: 1447.4 }] },
+            { tipo: 'enemy3', pontos: [{ x: 2368.5, y: 607.5 }, { x: 2750.3, y: 607.5 }] }
 
         ]
 
@@ -603,16 +743,54 @@ export default class Jogo extends Phaser.Scene {
             )
 
             inimigo.tipo = config.tipo
-            inimigo.velocidade = 100
-            inimigo.modoMovimento = 'andar'
+
+            switch (config.tipo) {
+
+                case 'enemy1':
+                    inimigo.velocidade = 100
+                    inimigo.modoMovimento = 'andar'
+                    break
+
+                case 'enemy2':
+                    inimigo.velocidade = 180
+                    inimigo.modoMovimento = 'correr'
+                    break
+
+                case 'enemy3':
+                    inimigo.velocidade = 60
+                    inimigo.modoMovimento = 'andar'
+                    inimigo.setScale(1.5)
+                    break
+            }
 
             inimigo.pontos = config.pontos
             inimigo.pontoAtual = 1
 
-            inimigo.setDepth(2)
+            inimigo.parado = config.parado || false
 
-            this.physics.add.collider(inimigo, this.layerColisao)
-            this.physics.add.collider(inimigo, this.colunasColisao)
+            if (inimigo.parado) {
+
+                inimigo.direcao = config.direcaoParado
+
+                inimigo.play(
+                    `${config.tipo}-idle-${config.direcaoParado}`
+                )
+
+            } else {
+
+                inimigo.direcao = 'baixo'
+
+                inimigo.play(
+                    `${config.tipo}-${inimigo.modoMovimento}-baixo`
+                )
+
+            }
+
+            inimigo.setDepth(2)
+            inimigo.setPushable(false)
+            inimigo.setImmovable(true)
+
+            // Apenas colisão com o player
             this.physics.add.collider(inimigo, this.player)
 
             this.inimigos.push(inimigo)
@@ -661,7 +839,7 @@ export default class Jogo extends Phaser.Scene {
                 start: 1,
                 end: 14
             }),
-            frameRate: 2,
+            frameRate: 4,
             repeat: -1
         })
 
@@ -672,7 +850,7 @@ export default class Jogo extends Phaser.Scene {
                 start: 1,
                 end: 3
             }),
-            frameRate: 2,
+            frameRate: 4,
             repeat: -1
         })
 
@@ -683,7 +861,7 @@ export default class Jogo extends Phaser.Scene {
                 start: 2,
                 end: 15
             }),
-            frameRate: 2,
+            frameRate: 4,
             repeat: -1
         })
 
@@ -694,7 +872,7 @@ export default class Jogo extends Phaser.Scene {
                 start: 1,
                 end: 13
             }),
-            frameRate: 2,
+            frameRate: 4,
             repeat: -1
         })
 
@@ -705,7 +883,7 @@ export default class Jogo extends Phaser.Scene {
                 start: 1,
                 end: 15
             }),
-            frameRate: 2,
+            frameRate: 4,
             repeat: -1
         })
 
@@ -786,7 +964,7 @@ export default class Jogo extends Phaser.Scene {
         })
     }
 
-    update () {
+    update() {
 
         // debug colisão
         //this.layerColisao.renderDebug(this.add.graphics(), {
@@ -874,6 +1052,8 @@ export default class Jogo extends Phaser.Scene {
         // ..:: Movimentação dos inimigos ::..
         this.inimigos.forEach(inimigo => {
 
+            if (inimigo.parado) return
+
             const alvo = inimigo.pontos[inimigo.pontoAtual]
 
             const distancia = Phaser.Math.Distance.Between(
@@ -883,7 +1063,7 @@ export default class Jogo extends Phaser.Scene {
                 alvo.y
             )
 
-            if (distancia < 16) {
+            if (distancia < 12) {
 
                 inimigo.pontoAtual++
 
@@ -913,10 +1093,15 @@ export default class Jogo extends Phaser.Scene {
                 direcao = vy > 0 ? 'baixo' : 'cima'
             }
 
-            inimigo.anims.play(
-                `${inimigo.tipo}-${inimigo.modoMovimento}-${direcao}`,
-                true
-            )
+            const animacaoAtual =
+                `${inimigo.tipo}-${inimigo.modoMovimento}-${direcao}`
+
+            if (
+                !inimigo.anims.currentAnim ||
+                inimigo.anims.currentAnim.key !== animacaoAtual
+            ) {
+                inimigo.play(animacaoAtual)
+            }
 
         })
 
