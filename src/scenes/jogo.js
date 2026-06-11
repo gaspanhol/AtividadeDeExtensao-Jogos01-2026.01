@@ -450,10 +450,151 @@ export default class Jogo extends Phaser.Scene {
             this.npc.play('npc-virandoDireita')
         })
 
-        // Configurações dos Inimigos
-        //this.enemy1 = this.physics.add.sprite(762.8, 3323.6, 'enemy1')
-        //this.enemy2 = this.physics.add.sprite(762.8, 3323.6, 'enemy2')
-        //this.enemy3 = this.physics.add.sprite(762.8, 3323.6, 'enemy3')
+        // ..:: Configurações dos Inimigos ::..
+
+        const tiposEnemy = ['enemy1', 'enemy2', 'enemy3']
+
+        const animacoesEnemy = [
+            {
+                nome: 'cima',
+                idle: [0, 1],
+                andar: [8, 16],
+                correr: [44, 51]
+            },
+            {
+                nome: 'esquerda',
+                idle: [2, 3],
+                andar: [17, 25],
+                correr: [52, 59]
+            },
+            {
+                nome: 'baixo',
+                idle: [4, 5],
+                andar: [26, 34],
+                correr: [60, 67]
+            },
+            {
+                nome: 'direita',
+                idle: [6, 7],
+                andar: [35, 43],
+                correr: [68, 75]
+            }
+        ]
+
+        // Animações dos inimigos
+        tiposEnemy.forEach(tipo => {
+
+            animacoesEnemy.forEach(anim => {
+
+                this.anims.create({
+                    key: `${tipo}-idle-${anim.nome}`,
+                    frames: this.anims.generateFrameNumbers(tipo, {
+                        start: anim.idle[0],
+                        end: anim.idle[1]
+                    }),
+                    frameRate: 2,
+                    repeat: -1
+                })
+
+                this.anims.create({
+                    key: `${tipo}-andar-${anim.nome}`,
+                    frames: this.anims.generateFrameNumbers(tipo, {
+                        start: anim.andar[0],
+                        end: anim.andar[1]
+                    }),
+                    frameRate: 8,
+                    repeat: -1
+                })
+
+                this.anims.create({
+                    key: `${tipo}-correr-${anim.nome}`,
+                    frames: this.anims.generateFrameNumbers(tipo, {
+                        start: anim.correr[0],
+                        end: anim.correr[1]
+                    }),
+                    frameRate: 12,
+                    repeat: -1
+                })
+
+            })
+
+        })
+
+        // Fase 1
+        const configInimigos = [
+
+            {
+                tipo: 'enemy1',
+                pontos: [
+                    { x: 618.2, y: 2755.8 },
+                    { x: 988.2, y: 2755.8 }
+                ]
+            },
+
+            {
+                tipo: 'enemy1',
+                pontos: [
+                    { x: 563.2, y: 2755.8 },
+                    { x: 205.5, y: 2755.8 }
+                ]
+            },
+
+            {
+                tipo: 'enemy1',
+                pontos: [
+                    { x: 383, y: 2657 },
+                    { x: 203, y: 2657 },
+                    { x: 203, y: 2484.5 },
+                    { x: 383, y: 2484.5 }
+                ]
+            },
+
+            {
+                tipo: 'enemy1',
+                pontos: [
+                    { x: 834.1, y: 2662 },
+                    { x: 529.1, y: 2662 },
+                    { x: 529.1, y: 2527 },
+                    { x: 834.1, y: 2527 }
+                ]
+            },
+
+            {
+                tipo: 'enemy1',
+                pontos: [
+                    { x: 944.1, y: 2502 },
+                    { x: 944.1, y: 2769.5 }
+                ]
+            }
+
+        ]
+
+        this.inimigos = []
+
+        configInimigos.forEach(config => {
+
+            const inimigo = this.physics.add.sprite(
+                config.pontos[0].x,
+                config.pontos[0].y,
+                config.tipo
+            )
+
+            inimigo.tipo = config.tipo
+            inimigo.velocidade = 100
+            inimigo.modoMovimento = 'andar'
+
+            inimigo.pontos = config.pontos
+            inimigo.pontoAtual = 1
+
+            inimigo.setDepth(2)
+
+            this.physics.add.collider(inimigo, this.layerColisao)
+            this.physics.add.collider(inimigo, this.colunasColisao)
+            this.physics.add.collider(inimigo, this.player)
+
+            this.inimigos.push(inimigo)
+
+        })
 
         // ..:: Configuração dos itens ::..
 
@@ -666,7 +807,7 @@ export default class Jogo extends Phaser.Scene {
 
         this.player.setVelocity(vx, vy)
 
-        
+
         if (vx !== 0 || vy !== 0) {
             const prefixo = correndo ? 'correr' : 'andar'
             this.player.anims.play(prefixo + '-' + this.direcao, true)
@@ -706,6 +847,55 @@ export default class Jogo extends Phaser.Scene {
         ) {
             this.npc.play('npc-agradecendo')
         }
+
+        // ..:: Movimentação dos inimigos ::..
+        this.inimigos.forEach(inimigo => {
+
+            const alvo = inimigo.pontos[inimigo.pontoAtual]
+
+            const distancia = Phaser.Math.Distance.Between(
+                inimigo.x,
+                inimigo.y,
+                alvo.x,
+                alvo.y
+            )
+
+            if (distancia < 16) {
+
+                inimigo.pontoAtual++
+
+                if (inimigo.pontoAtual >= inimigo.pontos.length) {
+                    inimigo.pontoAtual = 0
+                }
+
+            }
+
+            const alvoAtual = inimigo.pontos[inimigo.pontoAtual]
+
+            this.physics.moveTo(
+                inimigo,
+                alvoAtual.x,
+                alvoAtual.y,
+                inimigo.velocidade
+            )
+
+            const vx = inimigo.body.velocity.x
+            const vy = inimigo.body.velocity.y
+
+            let direcao
+
+            if (Math.abs(vx) > Math.abs(vy)) {
+                direcao = vx > 0 ? 'direita' : 'esquerda'
+            } else {
+                direcao = vy > 0 ? 'baixo' : 'cima'
+            }
+
+            inimigo.anims.play(
+                `${inimigo.tipo}-${inimigo.modoMovimento}-${direcao}`,
+                true
+            )
+
+        })
 
     }
 }
