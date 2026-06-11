@@ -59,6 +59,8 @@ export default class Jogo extends Phaser.Scene {
         this.load.spritesheet('maquinaDeEscrever', 'public/assets/itens/maquinaDeEscrever.png', { frameWidth: 64, frameHeight: 64 })
         this.load.spritesheet('mascaraTribal', 'public/assets/itens/mascaraTribal.png', { frameWidth: 64, frameHeight: 64 })
         this.load.spritesheet('relicarioDourado', 'public/assets/itens/relicarioDourado.png', { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('mochila', 'public/assets/botoes/Botao_mochila.png', {frameWidth: 128, frameHeight: 128}) // #carrega mochila
+
 
         // ..:: Carregando os sons do jogo ::..
         const sonsParaCarregar = [
@@ -961,7 +963,42 @@ export default class Jogo extends Phaser.Scene {
             })
 
             return sprite
-        })
+        });
+
+
+        // #animacao mochila
+    this.anims.create({
+        key: 'abrir_mochila',
+        frames: this.anims.generateFrameNumbers('mochila', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: 0
+    });
+     this.anims.create({
+        key: 'fechar_mochila',
+        frames: this.anims.generateFrameNumbers('mochila', { start: 3, end: 0 }),
+        frameRate: 10,
+        repeat: 0
+    });
+
+    let margemX = 330; 
+    let margemY = this.cameras.main.height - 190; 
+
+    let mochila = this.add.sprite(margemX,margemY,'mochila', 0);
+    mochila.setDepth(5);
+    mochila.setScale(0.5);
+    mochila.setScrollFactor(0);
+    mochila.setOrigin(0, 1); 
+    mochila.setInteractive({ useHandCursor: true });
+
+    mochila.on('pointerover', function () {
+        mochila.play('abrir_mochila');
+    });
+    mochila.on('pointerout', function () {
+        mochila.stop();
+        mochila.play('fechar_mochila'); 
+    });
+
+
     }
 
     update() {
