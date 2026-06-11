@@ -19,6 +19,7 @@ export default class Jogo extends Phaser.Scene {
         // Carregando os sprites do mapa
         this.load.image('casinhaDeEstoque', 'public/assets/mapa/casinhaDeEstoque.png')
         this.load.image('engenho', 'public/assets/mapa/engenho.png')
+        this.load.image('iconeConversa', 'public/assets/botoes/iconeConversa.png')
         this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('mansao', 'public/assets/mapa/mansao.png', { frameWidth: 32, frameHeight: 32 })
@@ -52,8 +53,13 @@ export default class Jogo extends Phaser.Scene {
         this.load.spritesheet('cozinhaModificada', 'public/assets/mapa/cozinhaModificada.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('jardimFundos', 'public/assets/mapa/jardimFundos.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('pilares', 'public/assets/mapa/pilares.png', { frameWidth: 64, frameHeight: 64 })
-        this.load.image('iconeConversa', 'public/assets/botoes/iconeConversa.png')
+        this.load.spritesheet('cranioDeOnca', 'public/assets/itens/cranioDeOnca.png', { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('espadaDomPedro', 'public/assets/itens/espadaDomPedro.png', { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('maquinaDeEscrever', 'public/assets/itens/maquinaDeEscrever.png', { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('mascaraTribal', 'public/assets/itens/mascaraTribal.png', { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('relicarioDourado', 'public/assets/itens/relicarioDourado.png', { frameWidth: 64, frameHeight: 64 })
 
+        // ..:: Carregando os sons do jogo ::..
         const sonsParaCarregar = [
             { key: 'passo', path: 'public/assets/sons/passo.mp3' },
             { key: 'correr', path: 'public/assets/sons/passo.mp3' },
@@ -73,7 +79,7 @@ export default class Jogo extends Phaser.Scene {
     create() {
         const mapa = this.make.tilemap({ key: 'mapa' })
 
-        // Mapeamento de teclas do teclado para as interações
+        // ..:: Mapeamento de teclas do teclado para as interações ::..
         this.cursors = this.input.keyboard.createCursorKeys()
 
         this.shift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT) //botão shift
@@ -87,6 +93,8 @@ export default class Jogo extends Phaser.Scene {
         this.teclaEsc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
         this.teclaE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E)
 
+
+        // ..:: Criação de constantes para os tileset dos elementos do mapa ::..
         const tilesetChao = mapa.addTilesetImage('mansao', 'mansao')
         const tilesetObjetos = mapa.addTilesetImage('objetos', 'objetos')
         const tilesetObjetosInv = mapa.addTilesetImage('objetosinv', 'objetosinv')
@@ -122,6 +130,7 @@ export default class Jogo extends Phaser.Scene {
         const tilesetJardimFundos = mapa.addTilesetImage('jardimFundos', 'jardimFundos')
         const tilesetPilares = mapa.addTilesetImage('pilares', 'pilares')
 
+        // ..:: Verificação de carregamento dos sprites ::..
         if (
             !tilesetChao ||
             !tilesetObjetos ||
@@ -160,6 +169,7 @@ export default class Jogo extends Phaser.Scene {
             console.error('Erro ao carregar algum tileset')
         }
 
+        // ..:: criação das layers e das colisões ::..
         const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas, tilesetEscada, tilesetMesasCadeiras, tilesetEnfeites, tilesetEnfeitesPequenos, tilesetMaquinaFilmagem, tilesetTapeteEDecoracoes, tilesetCadeiraDentista, tilesetArmas, tilesetBanheiro, tilesetCarruagem, tilesetCanoa, tilesetAcessoriosIndigenas, tilesetCozinha, tilesetPedestal, tilesetQuadros, tilesetRoupaPadre, tilesetRoupasFestivas, tilesetRoupasFestivasInv, tilesetArvoresGrandes, tilesetCaixasMobilias, tilesetCasinhaDeEstoque, tilesetCozinhaModificada, tilesetEngenho, tilesetJardimFundos, tilesetPilares]
 
         mapa.createLayer('chao', tilesets, 0, 0)
@@ -230,9 +240,7 @@ export default class Jogo extends Phaser.Scene {
                         break
                 }
 
-                // ==========================
-                // COLISÃO DAS COLUNAS
-                // ==========================
+                // ..:: COLISÃO DAS COLUNAS ::..
                 if (tileset.name === 'colunaV') {
 
                     sprite.setVisible(false)
@@ -278,7 +286,7 @@ export default class Jogo extends Phaser.Scene {
 
         this.layerColisao.setCollisionByExclusion([-1])
 
-        // Configuração do player
+        // ..:: Configuração do player ::..
         this.player = this.physics.add.sprite(784.5, 3246.1, 'player')
         window.player = this.player //Comando para ver a localização do player no jogo, usando o comando console.log(player.x, player.y)
         this.direcao = 'esquerda'
@@ -370,7 +378,7 @@ export default class Jogo extends Phaser.Scene {
 
         })
 
-        // Configuração NPC
+        // ..:: Configuração NPC ::..
 
         this.npc = this.physics.add.sprite(675, 3244.5, 'npc')
 
@@ -446,6 +454,114 @@ export default class Jogo extends Phaser.Scene {
         //this.enemy1 = this.physics.add.sprite(762.8, 3323.6, 'enemy1')
         //this.enemy2 = this.physics.add.sprite(762.8, 3323.6, 'enemy2')
         //this.enemy3 = this.physics.add.sprite(762.8, 3323.6, 'enemy3')
+
+        // ..:: Configuração dos itens ::..
+
+        // gerando os sprites dos itens no mapa
+        this.cranioDeOnca = this.physics.add.sprite(1018.9, 2012.4, 'cranioDeOnca')
+        this.espadaDomPedro = this.physics.add.sprite(945.3, 496.2, 'espadaDomPedro')
+        this.maquinaDeEscrever = this.physics.add.sprite(244.2, 2536.5, 'maquinaDeEscrever')
+        this.mascaraTribal = this.physics.add.sprite(1888.6, 2570.8, 'mascaraTribal')
+        this.relicarioDourado = this.physics.add.sprite(2700.3, 1464.8, 'relicarioDourado')
+
+        // Fazendo a colisão dos itens com o player
+        this.physics.add.collider(this.cranioDeOnca, this.player)
+        this.physics.add.collider(this.espadaDomPedro, this.player)
+        this.physics.add.collider(this.maquinaDeEscrever, this.player)
+        this.physics.add.collider(this.mascaraTribal, this.player)
+        this.physics.add.collider(this.relicarioDourado, this.player)
+
+        // Deixando os itens imóveis
+        this.npc.setPushable(false)
+        this.npc.setImmovable(true)
+
+        this.cranioDeOnca.setPushable(false)
+        this.cranioDeOnca.setImmovable(true)
+
+        this.espadaDomPedro.setPushable(false)
+        this.espadaDomPedro.setImmovable(true)
+
+        this.maquinaDeEscrever.setPushable(false)
+        this.maquinaDeEscrever.setImmovable(true)
+
+        this.mascaraTribal.setPushable(false)
+        this.mascaraTribal.setImmovable(true)
+
+        this.relicarioDourado.setPushable(false)
+        this.relicarioDourado.setImmovable(true)
+
+        // animação cranio
+        this.anims.create({
+            key: 'cranio-brilhando',
+            frames: this.anims.generateFrameNumbers('cranioDeOnca', {
+                start: 1,
+                end: 14
+            }),
+            frameRate: 2,
+            repeat: -1
+        })
+
+        // animação espada
+        this.anims.create({
+            key: 'espada-brilhando',
+            frames: this.anims.generateFrameNumbers('espadaDomPedro', {
+                start: 1,
+                end: 3
+            }),
+            frameRate: 2,
+            repeat: -1
+        })
+
+        // animação maquina de escrever
+        this.anims.create({
+            key: 'maquina-brilhando',
+            frames: this.anims.generateFrameNumbers('maquinaDeEscrever', {
+                start: 2,
+                end: 15
+            }),
+            frameRate: 2,
+            repeat: -1
+        })
+
+        // animação mascara
+        this.anims.create({
+            key: 'mascara-brilhando',
+            frames: this.anims.generateFrameNumbers('mascaraTribal', {
+                start: 1,
+                end: 13
+            }),
+            frameRate: 2,
+            repeat: -1
+        })
+
+        // animação relicário
+        this.anims.create({
+            key: 'relicario-brilhando',
+            frames: this.anims.generateFrameNumbers('relicarioDourado', {
+                start: 1,
+                end: 15
+            }),
+            frameRate: 2,
+            repeat: -1
+        })
+
+        // Corrigindo escala dos itens e iniciando animação
+        this.cranioDeOnca.setScale(0.5)
+        this.cranioDeOnca.play('cranio-brilhando')
+
+        this.espadaDomPedro.setScale(0.8)
+        this.espadaDomPedro.play('espada-brilhando')
+        this.espadaDomPedro.setDepth(4)
+
+        this.maquinaDeEscrever.setScale(0.5)
+        this.maquinaDeEscrever.play('maquina-brilhando')
+
+        this.mascaraTribal.setScale(0.5)
+        this.mascaraTribal.play('mascara-brilhando')
+
+        this.relicarioDourado.setScale(0.8)
+        this.relicarioDourado.play('relicario-brilhando')
+
 
         // Sons
         this.soundManager = new SoundManager(this)
