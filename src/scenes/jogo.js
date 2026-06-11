@@ -2,11 +2,11 @@ import MenuPausa from './MenuPausa.js'
 import SoundManager from './SoundManager.js'
 
 export default class Jogo extends Phaser.Scene {
-    constructor() {
+    constructor () {
         super('Jogo')
     }
 
-    preload() {
+    preload () {
         this.load.tilemapTiledJSON('mapa', 'public/assets/mapa/mapa.json')
 
         // Carregando os sprites dos personagens
@@ -18,7 +18,7 @@ export default class Jogo extends Phaser.Scene {
 
         // Carregando os sprites do mapa
         this.load.image('casinhaDeEstoque', 'public/assets/mapa/casinhaDeEstoque.png')
-        this.load.image('engenho', 'public/assets/mapa/engenho.png')
+        this.load.spritesheet('engenho', 'public/assets/mapa/engenho.png', { frameWidth: 362, frameHeight: 96 })
         this.load.image('iconeConversa', 'public/assets/botoes/iconeConversa.png')
         this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', { frameWidth: 32, frameHeight: 32 })
@@ -30,6 +30,7 @@ export default class Jogo extends Phaser.Scene {
         this.load.spritesheet('mesasCadeiras', 'public/assets/mapa/mesasCadeiras.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('colunaV', 'public/assets/mapa/colunaV.png', { frameWidth: 6, frameHeight: 32 })
         this.load.spritesheet('colunaH', 'public/assets/mapa/colunaH.png', { frameWidth: 32, frameHeight: 6 })
+        this.load.spritesheet('bloco', 'public/assets/mapa/bloco.png', { frameWidth: 16, frameHeight: 8 })
         this.load.spritesheet('portas', 'public/assets/mapa/portas.png', { frameWidth: 96, frameHeight: 70 })
         this.load.spritesheet('vazio128x128', 'public/assets/mapa/vazio_128x128.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('enfeites', 'public/assets/mapa/enfeites.png', { frameWidth: 32, frameHeight: 32 })
@@ -40,7 +41,7 @@ export default class Jogo extends Phaser.Scene {
         this.load.spritesheet('armas', 'public/assets/mapa/armas.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('carruagem', 'public/assets/mapa/carruagem.png', { frameWidth: 190, frameHeight: 80 })
         this.load.spritesheet('banheiro', 'public/assets/mapa/banheiro.png', { frameWidth: 32, frameHeight: 32 })
-        this.load.spritesheet('canoa', 'public/assets/mapa/canoa.png', { frameWidth: 128, frameHeight: 128 })
+        this.load.spritesheet('canoa', 'public/assets/mapa/canoa.png', { frameWidth: 128, frameHeight: 64 })
         this.load.spritesheet('acessoriosIndigenas', 'public/assets/mapa/acessoriosIndigenas.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('cozinha', 'public/assets/mapa/cozinha.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('pedestalCatolico', 'public/assets/mapa/pedestalCatolico.png', { frameWidth: 128, frameHeight: 128 })
@@ -48,7 +49,7 @@ export default class Jogo extends Phaser.Scene {
         this.load.spritesheet('roupaPadre', 'public/assets/mapa/roupaPadre.png', { frameWidth: 128, frameHeight: 128 })
         this.load.spritesheet('roupasFestivas', 'public/assets/mapa/roupasFestivas.png', { frameWidth: 128, frameHeight: 128 })
         this.load.spritesheet('roupasFestivasInv', 'public/assets/mapa/roupasFestivasInv.png', { frameWidth: 128, frameHeight: 128 })
-        this.load.spritesheet('arvoresGrandes', 'public/assets/mapa/arvoresGrandes.png', { frameWidth: 256, frameHeight: 256 })
+        this.load.spritesheet('arvoresGrandes', 'public/assets/mapa/arvoresGrandes.png', { frameWidth: 64, frameHeight: 64 })
         this.load.spritesheet('caixasMobilias', 'public/assets/mapa/caixasMobilias.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('cozinhaModificada', 'public/assets/mapa/cozinhaModificada.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('jardimFundos', 'public/assets/mapa/jardimFundos.png', { frameWidth: 32, frameHeight: 32 })
@@ -76,7 +77,7 @@ export default class Jogo extends Phaser.Scene {
 
     }
 
-    create() {
+    create () {
         const mapa = this.make.tilemap({ key: 'mapa' })
 
         // ..:: Mapeamento de teclas do teclado para as interações ::..
@@ -103,6 +104,7 @@ export default class Jogo extends Phaser.Scene {
         const tilesetGardenTerrain = mapa.addTilesetImage('GardenTerrain', 'GardenTerrain')
         const tilesetColunaV = mapa.addTilesetImage('colunaV', 'colunaV')
         const tilesetColunaH = mapa.addTilesetImage('colunaH', 'colunaH')
+        const tilesetBloco = mapa.addTilesetImage('bloco', 'bloco')
         const tilesetPortas = mapa.addTilesetImage('portas', 'portas')
         const tilesetEscada = mapa.addTilesetImage('escadaPrincipal', 'escadaPrincipal')
         const tilesetMesasCadeiras = mapa.addTilesetImage('mesasCadeiras', 'mesasCadeiras')
@@ -142,6 +144,7 @@ export default class Jogo extends Phaser.Scene {
             !tilesetEscada ||
             !tilesetColunaV ||
             !tilesetColunaH ||
+            !tilesetBloco ||
             !tilesetPortas ||
             !tilesetEnfeites ||
             !tilesetEnfeitesPequenos ||
@@ -170,7 +173,7 @@ export default class Jogo extends Phaser.Scene {
         }
 
         // ..:: criação das layers e das colisões ::..
-        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetPortas, tilesetEscada, tilesetMesasCadeiras, tilesetEnfeites, tilesetEnfeitesPequenos, tilesetMaquinaFilmagem, tilesetTapeteEDecoracoes, tilesetCadeiraDentista, tilesetArmas, tilesetBanheiro, tilesetCarruagem, tilesetCanoa, tilesetAcessoriosIndigenas, tilesetCozinha, tilesetPedestal, tilesetQuadros, tilesetRoupaPadre, tilesetRoupasFestivas, tilesetRoupasFestivasInv, tilesetArvoresGrandes, tilesetCaixasMobilias, tilesetCasinhaDeEstoque, tilesetCozinhaModificada, tilesetEngenho, tilesetJardimFundos, tilesetPilares]
+        const tilesets = [tilesetChao, tilesetObjetos, tilesetObjetosInv, tilesetGardenTerrain, tilesetGardenWalls, tilesetGraveyard, tilesetColunaV, tilesetColunaH, tilesetBloco, tilesetPortas, tilesetEscada, tilesetMesasCadeiras, tilesetEnfeites, tilesetEnfeitesPequenos, tilesetMaquinaFilmagem, tilesetTapeteEDecoracoes, tilesetCadeiraDentista, tilesetArmas, tilesetBanheiro, tilesetCarruagem, tilesetCanoa, tilesetAcessoriosIndigenas, tilesetCozinha, tilesetPedestal, tilesetQuadros, tilesetRoupaPadre, tilesetRoupasFestivas, tilesetRoupasFestivasInv, tilesetArvoresGrandes, tilesetCaixasMobilias, tilesetCasinhaDeEstoque, tilesetCozinhaModificada, tilesetEngenho, tilesetJardimFundos, tilesetPilares]
 
         mapa.createLayer('chao', tilesets, 0, 0)
         mapa.createLayer('parede', tilesets, 0, 0)
@@ -267,6 +270,26 @@ export default class Jogo extends Phaser.Scene {
 
                     const largura = 32
                     const altura = 6
+
+                    const cx = obj.x + largura / 2
+                    const cy = obj.y - altura / 2
+
+                    const colisor = this.add.rectangle(cx, cy, largura, altura)
+
+                    // deixe true para testar
+                    // colisor.visible = false
+                    colisor.setAlpha(0.5)
+
+                    this.physics.add.existing(colisor, true)
+
+                    this.colunasColisao.add(colisor)
+                }
+                if (tileset.name === 'bloco') {
+
+                    sprite.setVisible(false)
+
+                    const largura = 16
+                    const altura = 8
 
                     const cx = obj.x + largura / 2
                     const cy = obj.y - altura / 2
@@ -763,7 +786,7 @@ export default class Jogo extends Phaser.Scene {
         })
     }
 
-    update() {
+    update () {
 
         // debug colisão
         //this.layerColisao.renderDebug(this.add.graphics(), {
