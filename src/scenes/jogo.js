@@ -2,11 +2,11 @@ import MenuPausa from './MenuPausa.js'
 import SoundManager from './SoundManager.js'
 
 export default class Jogo extends Phaser.Scene {
-    constructor() {
+    constructor () {
         super('Jogo')
     }
 
-    preload() {
+    preload () {
         this.load.tilemapTiledJSON('mapa', 'public/assets/mapa/mapa.json')
 
         // Carregando os sprites dos personagens
@@ -59,7 +59,7 @@ export default class Jogo extends Phaser.Scene {
         this.load.spritesheet('maquinaDeEscrever', 'public/assets/itens/maquinaDeEscrever.png', { frameWidth: 64, frameHeight: 64 })
         this.load.spritesheet('mascaraTribal', 'public/assets/itens/mascaraTribal.png', { frameWidth: 64, frameHeight: 64 })
         this.load.spritesheet('relicarioDourado', 'public/assets/itens/relicarioDourado.png', { frameWidth: 64, frameHeight: 64 })
-        this.load.spritesheet('mochila', 'public/assets/botoes/Botao_mochila.png', {frameWidth: 128, frameHeight: 128}) // #carrega mochila
+        this.load.spritesheet('mochila', 'public/assets/botoes/Botao_mochila.png', { frameWidth: 128, frameHeight: 128 }) // #carrega mochila
 
 
         // ..:: Carregando os sons do jogo ::..
@@ -79,7 +79,7 @@ export default class Jogo extends Phaser.Scene {
 
     }
 
-    create() {
+    create () {
         const mapa = this.make.tilemap({ key: 'mapa' })
 
         // ..:: Mapeamento de teclas do teclado para as interações ::..
@@ -484,25 +484,29 @@ export default class Jogo extends Phaser.Scene {
                 nome: 'cima',
                 idle: [0, 1],
                 andar: [8, 16],
-                correr: [44, 51]
+                correr: [44, 51],
+                atacar: [76, 81]
             },
             {
                 nome: 'esquerda',
                 idle: [2, 3],
                 andar: [17, 25],
-                correr: [52, 59]
+                correr: [52, 59],
+                atacar: [82, 87]
             },
             {
                 nome: 'baixo',
                 idle: [4, 5],
                 andar: [26, 34],
-                correr: [60, 67]
+                correr: [60, 67],
+                atacar: [88, 93]
             },
             {
                 nome: 'direita',
                 idle: [6, 7],
                 andar: [35, 43],
-                correr: [68, 75]
+                correr: [68, 75],
+                atacar: [94, 99]
             }
         ]
 
@@ -536,6 +540,15 @@ export default class Jogo extends Phaser.Scene {
                     frames: this.anims.generateFrameNumbers(tipo, {
                         start: anim.correr[0],
                         end: anim.correr[1]
+                    }),
+                    frameRate: 12,
+                    repeat: -1
+                })
+                this.anims.create({
+                    key: `${tipo}-atacar-${anim.nome}`,
+                    frames: this.anims.generateFrameNumbers(tipo, {
+                        start: anim.atacar[0],
+                        end: anim.atacar[1]
                     }),
                     frameRate: 12,
                     repeat: -1
@@ -967,41 +980,41 @@ export default class Jogo extends Phaser.Scene {
 
 
         // #animacao mochila
-    this.anims.create({
-        key: 'abrir_mochila',
-        frames: this.anims.generateFrameNumbers('mochila', { start: 0, end: 3 }),
-        frameRate: 10,
-        repeat: 0
-    });
-     this.anims.create({
-        key: 'fechar_mochila',
-        frames: this.anims.generateFrameNumbers('mochila', { start: 3, end: 0 }),
-        frameRate: 10,
-        repeat: 0
-    });
+        this.anims.create({
+            key: 'abrir_mochila',
+            frames: this.anims.generateFrameNumbers('mochila', { start: 0, end: 3 }),
+            frameRate: 10,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'fechar_mochila',
+            frames: this.anims.generateFrameNumbers('mochila', { start: 3, end: 0 }),
+            frameRate: 10,
+            repeat: 0
+        });
 
-    let margemX = 330; 
-    let margemY = this.cameras.main.height - 190; 
+        let margemX = 330;
+        let margemY = this.cameras.main.height - 190;
 
-    let mochila = this.add.sprite(margemX,margemY,'mochila', 0);
-    mochila.setDepth(5);
-    mochila.setScale(0.5);
-    mochila.setScrollFactor(0);
-    mochila.setOrigin(0, 1); 
-    mochila.setInteractive({ useHandCursor: true });
+        let mochila = this.add.sprite(margemX, margemY, 'mochila', 0);
+        mochila.setDepth(5);
+        mochila.setScale(0.5);
+        mochila.setScrollFactor(0);
+        mochila.setOrigin(0, 1);
+        mochila.setInteractive({ useHandCursor: true });
 
-    mochila.on('pointerover', function () {
-        mochila.play('abrir_mochila');
-    });
-    mochila.on('pointerout', function () {
-        mochila.stop();
-        mochila.play('fechar_mochila'); 
-    });
+        mochila.on('pointerover', function () {
+            mochila.play('abrir_mochila');
+        });
+        mochila.on('pointerout', function () {
+            mochila.stop();
+            mochila.play('fechar_mochila');
+        });
 
 
     }
 
-    update() {
+    update () {
 
         // debug colisão
         //this.layerColisao.renderDebug(this.add.graphics(), {
