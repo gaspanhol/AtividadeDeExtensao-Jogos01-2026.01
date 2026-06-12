@@ -97,6 +97,7 @@ export default class Jogo extends Phaser.Scene {
         this.teclaE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E)
 
         this.inventarioPlayer = [];
+        this.inventarioNpc = [];
 
         this.dadosItens = {
 
@@ -1101,7 +1102,7 @@ export default class Jogo extends Phaser.Scene {
             mochila.stop();
             mochila.play('fechar_mochila');
         });
-        
+
         window.jogo = this;
 
 
@@ -1187,14 +1188,25 @@ export default class Jogo extends Phaser.Scene {
             jogadorADireitaDoNpc
         )
 
-        const podeConversar = this.iconeConversa.visible
+        const podeConversar = this.iconeConversa.visible;
 
         if (
             podeConversar &&
             Phaser.Input.Keyboard.JustDown(this.teclaE) &&
             this.npc.anims.currentAnim.key !== 'npc-agradecendo'
         ) {
-            this.npc.play('npc-agradecendo')
+
+            if (this.inventarioPlayer.length === 0) {
+
+                // conversa normal
+                console.log("NPC: Vá buscar os artefatos!");
+
+            } else {
+
+                // entrega dos itens
+                this.entregarItens();
+
+            }
         }
 
         // ..:: Movimentação dos inimigos ::..
@@ -1283,6 +1295,29 @@ export default class Jogo extends Phaser.Scene {
 
                 }
             );
+        }
+    }
+    entregarItens () {
+
+        if (this.inventarioPlayer.length === 0) {
+            return;
+        }
+
+        this.inventarioNpc.push(...this.inventarioPlayer);
+
+        this.inventarioPlayer = [];
+
+        console.log("Itens entregues!");
+        console.table(this.inventarioNpc);
+
+        this.npc.play('npc-agradecendo');
+
+        if (this.inventarioNpc.length >= 5) {
+
+            this.time.delayedCall(1000, () => {
+                this.scene.start('Vitoria');
+            });
+
         }
     }
 }
