@@ -20,6 +20,7 @@ export default class Jogo extends Phaser.Scene {
         this.load.image('casinhaDeEstoque', 'public/assets/mapa/casinhaDeEstoque.png')
         this.load.spritesheet('engenho', 'public/assets/mapa/engenho.png', { frameWidth: 362, frameHeight: 96 })
         this.load.image('iconeConversa', 'public/assets/botoes/iconeConversa.png')
+        this.load.image('inventario', 'public/assets/telas/menu/inventario.png')
         this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('mansao', 'public/assets/mapa/mansao.png', { frameWidth: 32, frameHeight: 32 })
@@ -1103,6 +1104,32 @@ export default class Jogo extends Phaser.Scene {
             mochila.play('fechar_mochila');
         });
 
+        // fundo do inventário
+        this.painelInventario = this.add.image(
+            this.cameras.main.width / 2,
+            this.cameras.main.height / 2,
+            'inventario'
+        );
+
+        this.iconesInventario = [];
+
+        this.inventarioAberto = false;
+
+        this.painelInventario.setScrollFactor(0);
+        this.painelInventario.setDepth(100);
+        this.painelInventario.setVisible(false);
+        this.painelInventario.setScale(0.4);
+
+        mochila.on('pointerdown', () => {
+
+            if (!this.inventarioAberto) {
+                this.abrirInventario();
+            } else {
+                this.fecharInventario();
+            }
+
+        });
+
         window.jogo = this;
 
 
@@ -1129,6 +1156,10 @@ export default class Jogo extends Phaser.Scene {
         }
 
         if (this.coletandoItem) {
+            this.player.setVelocity(0, 0);
+            return;
+        }
+        if (this.inventarioAberto) {
             this.player.setVelocity(0, 0);
             return;
         }
@@ -1319,5 +1350,89 @@ export default class Jogo extends Phaser.Scene {
             });
 
         }
+    }
+
+    abrirInventario () {
+
+        this.inventarioAberto = true;
+
+        this.physics.pause();
+
+        this.painelInventario.setVisible(true);
+
+        this.desenharItensInventario();
+
+    }
+
+    fecharInventario () {
+
+        this.inventarioAberto = false;
+
+        this.physics.resume();
+
+        this.painelInventario.setVisible(false);
+
+        this.iconesInventario.forEach(icone => {
+            icone.destroy();
+        });
+
+        this.iconesInventario = [];
+
+    }
+
+    desenharItensInventario () {
+
+        const centroX = this.painelInventario.x;
+        const centroY = this.painelInventario.y;
+
+        const posicoesItens = {
+
+            cranioDeOnca: {
+                x: centroX - 70,
+                y: centroY - 40
+            },
+
+            maquinaDeEscrever: {
+                x: centroX + 70,
+                y: centroY - 40
+            },
+
+            mascaraTribal: {
+                x: centroX - 70,
+                y: centroY + 40
+            },
+
+            relicarioDourado: {
+                x: centroX + 70,
+                y: centroY + 40
+            },
+
+            espadaDomPedro: {
+                x: centroX,
+                y: centroY + 90
+            }
+
+        };
+
+        this.inventarioPlayer.forEach(item => {
+
+            const pos = posicoesItens[item.id];
+
+            const icone = this.add.image(
+                pos.x,
+                pos.y,
+                item.sprite
+            );
+
+            icone.setScale(1);
+
+            icone.setScrollFactor(0);
+
+            icone.setDepth(101);
+
+            this.iconesInventario.push(icone);
+
+        });
+
     }
 }
