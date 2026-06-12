@@ -2,11 +2,11 @@ import MenuPausa from './MenuPausa.js'
 import SoundManager from './SoundManager.js'
 
 export default class Jogo extends Phaser.Scene {
-    constructor () {
+    constructor() {
         super('Jogo')
     }
 
-    preload () {
+    preload() {
         this.load.tilemapTiledJSON('mapa', 'public/assets/mapa/mapa.json')
 
         // Carregando os sprites dos personagens
@@ -21,6 +21,7 @@ export default class Jogo extends Phaser.Scene {
         this.load.spritesheet('engenho', 'public/assets/mapa/engenho.png', { frameWidth: 362, frameHeight: 96 })
         this.load.image('iconeConversa', 'public/assets/botoes/iconeConversa.png')
         this.load.image('inventario', 'public/assets/telas/menu/inventario.png')
+        this.load.image('pegarItem', 'public/assets/botoes/pegarItem.png')
         this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('mansao', 'public/assets/mapa/mansao.png', { frameWidth: 32, frameHeight: 32 })
@@ -80,7 +81,7 @@ export default class Jogo extends Phaser.Scene {
 
     }
 
-    create () {
+    create() {
         const mapa = this.make.tilemap({ key: 'mapa' })
 
         // ..:: Mapeamento de teclas do teclado para as interações ::..
@@ -920,6 +921,13 @@ export default class Jogo extends Phaser.Scene {
             this
         );
 
+        this.iconeMao = this.add.image(0, 0, 'pegarItem')
+        this.iconeMao.setVisible(false)
+        this.iconeMao.setDepth(5)
+        this.iconeMao.setScale(0.5)
+
+        this.itemProximo = null
+
 
         // Deixando os itens imóveis
         this.npc.setPushable(false)
@@ -1135,7 +1143,7 @@ export default class Jogo extends Phaser.Scene {
 
     }
 
-    update () {
+    update() {
 
         // debug colisão
         //this.layerColisao.renderDebug(this.add.graphics(), {
@@ -1295,9 +1303,36 @@ export default class Jogo extends Phaser.Scene {
             }
 
         })
+        
+        // ..:: Configuração para aparecer a mão indicando que o player pode pegar o item ::..
+        const itensColetaveis = [
+            this.cranioDeOnca,
+            this.espadaDomPedro,
+            this.maquinaDeEscrever,
+            this.mascaraTribal,
+            this.relicarioDourado
+        ].filter(item => item.active)
 
+        this.itemProximo = null
+
+        itensColetaveis.forEach(item => {
+            const dist = Phaser.Math.Distance.Between(
+                this.player.x, this.player.y,
+                item.x, item.y
+            )
+            if (dist < 40) {
+                this.itemProximo = item
+            }
+        })
+
+        if (this.itemProximo) {
+            this.iconeMao.setVisible(true)
+            this.iconeMao.setPosition(this.itemProximo.x, this.itemProximo.y - 40)
+        } else {
+            this.iconeMao.setVisible(false)
+        }
     }
-    coletarItem (item) {
+    coletarItem(item) {
 
         if (
             !this.coletandoItem &&
@@ -1328,7 +1363,7 @@ export default class Jogo extends Phaser.Scene {
             );
         }
     }
-    entregarItens () {
+    entregarItens() {
 
         if (this.inventarioPlayer.length === 0) {
             return;
@@ -1352,7 +1387,7 @@ export default class Jogo extends Phaser.Scene {
         }
     }
 
-    abrirInventario () {
+    abrirInventario() {
 
         this.inventarioAberto = true;
 
@@ -1364,7 +1399,7 @@ export default class Jogo extends Phaser.Scene {
 
     }
 
-    fecharInventario () {
+    fecharInventario() {
 
         this.inventarioAberto = false;
 
@@ -1380,7 +1415,7 @@ export default class Jogo extends Phaser.Scene {
 
     }
 
-    desenharItensInventario () {
+    desenharItensInventario() {
 
         const centroX = this.painelInventario.x;
         const centroY = this.painelInventario.y;
