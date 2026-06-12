@@ -22,6 +22,7 @@ export default class Jogo extends Phaser.Scene {
         this.load.image('iconeConversa', 'public/assets/botoes/iconeConversa.png')
         this.load.image('inventario', 'public/assets/telas/menu/inventario.png')
         this.load.image('pegarItem', 'public/assets/botoes/pegarItem.png')
+        this.load.image('check', 'public/assets/telas/menu/check.png')
         this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('mansao', 'public/assets/mapa/mansao.png', { frameWidth: 32, frameHeight: 32 })
@@ -376,7 +377,8 @@ export default class Jogo extends Phaser.Scene {
                 andar: [1, 8],
                 correr: [75, 81],
                 pegarItem: [36, 41],
-                cair: [60, 65]
+                cair: [60, 65],
+                levantar: [65, 60]
             },
             {
                 nome: 'esquerda',
@@ -384,7 +386,8 @@ export default class Jogo extends Phaser.Scene {
                 andar: [10, 17],
                 correr: [82, 88],
                 pegarItem: [42, 47],
-                cair: [60, 65]
+                cair: [60, 65],
+                levantar: [65, 60]
             },
             {
                 nome: 'baixo',
@@ -392,7 +395,8 @@ export default class Jogo extends Phaser.Scene {
                 andar: [19, 26],
                 correr: [91, 97],
                 pegarItem: [48, 53],
-                cair: [60, 65]
+                cair: [60, 65],
+                levantar: [65, 60]
             },
             {
                 nome: 'direita',
@@ -400,9 +404,12 @@ export default class Jogo extends Phaser.Scene {
                 andar: [28, 35],
                 correr: [98, 105],
                 pegarItem: [54, 59],
-                cair: [60, 65]
+                cair: [60, 65],
+                levantar: [65, 60]
             }
         ]
+
+
 
         animacoes.forEach(anim => {
 
@@ -428,6 +435,7 @@ export default class Jogo extends Phaser.Scene {
                 repeat: -1
             })
 
+            // CORRER
             this.anims.create({
                 key: 'correr-' + anim.nome,
                 frames: this.anims.generateFrameNumbers('player', {
@@ -438,6 +446,7 @@ export default class Jogo extends Phaser.Scene {
                 repeat: -1
             })
 
+            // PEGAR ITEM
             this.anims.create({
                 key: 'pegarItem-' + anim.nome,
                 frames: this.anims.generateFrameNumbers('player', {
@@ -448,6 +457,31 @@ export default class Jogo extends Phaser.Scene {
             })
 
         })
+
+        // Animação de cair (igual para todas as direções)
+        this.anims.create({
+            key: 'cair',
+            frames: this.anims.generateFrameNumbers('player', {
+                start: 60, end: 65
+            }),
+            frameRate: 8,
+            repeat: 0
+        })
+
+        // Animação de levantar
+        this.anims.create({
+            key: 'levantar',
+            frames: this.anims.generateFrameNumbers('player', {
+                frames: [65, 64, 63, 62, 61, 60]
+            }),
+            frameRate: 8,
+            repeat: 0
+        })
+
+        // Player recebendo dano
+        this.tomandoDano = false;
+        this.spawnX = 784.5;
+        this.spawnY = 3246.1;
 
         // ..:: Configuração NPC ::..
 
@@ -628,8 +662,8 @@ export default class Jogo extends Phaser.Scene {
                 pontos: [
                     { x: 834.1, y: 2662 },
                     { x: 529.1, y: 2662 },
-                    { x: 529.1, y: 2527 },
-                    { x: 834.1, y: 2527 }
+                    { x: 529.1, y: 2559.1 },
+                    { x: 834.1, y: 2559.1 }
                 ]
             },
 
@@ -697,7 +731,15 @@ export default class Jogo extends Phaser.Scene {
                 ]
             },
 
-            { tipo: 'enemy2', pontos: [{ x: 1403.5, y: 2127.5 }, { x: 791, y: 2127.5 }] },
+            {
+                tipo: 'enemy2', pontos: [
+                    { x: 851.26, y: 2091.64 },  // extremo esquerdo
+                    { x: 1107.6, y: 2183 },    // ponta do V (centro/baixo)
+                    { x: 1307, y: 2095.8 },  // extremo direito
+                    { x: 1107.6, y: 2183 },    // ponta do V de volta
+                    { x: 851.26, y: 2091.64 }   // extremo esquerdo de volta
+                ]
+            },
 
             { tipo: 'enemy3', pontos: [{ x: 678.8, y: 2085.2 }, { x: 461.3, y: 2085.2 }] },
 
@@ -705,7 +747,7 @@ export default class Jogo extends Phaser.Scene {
                 tipo: 'enemy3',
                 parado: true,
                 direcaoParado: 'cima',
-                pontos: [{ x: 931, y: 2057.5 }]
+                pontos: [{ x: 963.6, y: 2045.5 }]
             },
 
             // =========================
@@ -726,15 +768,17 @@ export default class Jogo extends Phaser.Scene {
 
             { tipo: 'enemy1', pontos: [{ x: 523.1, y: 1324.5 }, { x: 188.1, y: 1324.5 }] },
 
-            { tipo: 'enemy2', pontos: [{ x: 200.3, y: 1153.7 }, { x: 1067.8, y: 1153.7 }] },
+            { tipo: 'enemy2', pontos: [{ x: 200.3, y: 1153.7 }, { x: 579.4, y: 1153.7 }] },
+
+            { tipo: 'enemy2', pontos: [{ x: 599.4, y: 1153.7 }, { x: 1067.8, y: 1153.7 }] },
 
             {
                 tipo: 'enemy2',
                 pontos: [
                     { x: 870.7, y: 425.8 },
                     { x: 1096, y: 425.8 },
-                    { x: 1096, y: 630.8 },
-                    { x: 870.7, y: 630.8 }
+                    { x: 1096, y: 573.1 },
+                    { x: 870.7, y: 573.1 }
                 ]
             },
 
@@ -852,10 +896,11 @@ export default class Jogo extends Phaser.Scene {
             inimigo.setImmovable(true)
 
             // Apenas colisão com o player
-            this.physics.add.collider(inimigo, this.player)
+            this.physics.add.overlap(inimigo, this.player, () => {
+                this.receberDano(inimigo)
+            }, null, this)
 
             this.inimigos.push(inimigo)
-
         })
 
         // ..:: Configuração dos itens ::..
@@ -870,7 +915,7 @@ export default class Jogo extends Phaser.Scene {
         this.maquinaDeEscrever = this.physics.add.sprite(244.2, 2536.5, 'maquinaDeEscrever')
         this.maquinaDeEscrever.name = 'maquinaDeEscrever';
         this.maquinaDeEscrever.itemId = 'maquinaDeEscrever';
-        this.mascaraTribal = this.physics.add.sprite(1888.6, 2570.8, 'mascaraTribal')
+        this.mascaraTribal = this.physics.add.sprite(1835.5, 2530.6, 'mascaraTribal')
         this.mascaraTribal.name = 'mascaraTribal';
         this.mascaraTribal.itemId = 'mascaraTribal';
         this.relicarioDourado = this.physics.add.sprite(2700.3, 1464.8, 'relicarioDourado')
@@ -1046,7 +1091,7 @@ export default class Jogo extends Phaser.Scene {
             // ..:: cenário fase 2 ::..
             { x: 1773.5, y: 3200, destX: 990, destY: 3166.9 }, // porta 1
             { x: 1773.5, y: 3360.8, destX: 995, destY: 3328.77 }, // porta 2
-            { x: 2096.6, y: 2458.5, destX: 1330, destY: 2175.8 }, // porta 3
+            { x: 2096.6, y: 2458.5, destX: 1330, destY: 2180.8 }, // porta 3
 
             // ..:: cenário fase 3 ::..
             { x: 319.16, y: 2225, destX: 319.16, destY: 2480 }, // porta 1
@@ -1168,6 +1213,10 @@ export default class Jogo extends Phaser.Scene {
             return;
         }
         if (this.inventarioAberto) {
+            this.player.setVelocity(0, 0);
+            return;
+        }
+        if (this.tomandoDano) {
             this.player.setVelocity(0, 0);
             return;
         }
@@ -1303,7 +1352,7 @@ export default class Jogo extends Phaser.Scene {
             }
 
         })
-        
+
         // ..:: Configuração para aparecer a mão indicando que o player pode pegar o item ::..
         const itensColetaveis = [
             this.cranioDeOnca,
@@ -1363,14 +1412,55 @@ export default class Jogo extends Phaser.Scene {
             );
         }
     }
-    entregarItens() {
 
+    receberDano(inimigo) {
+        if (this.tomandoDano) return;
+
+        this.tomandoDano = true;
+        this.player.setVelocity(0, 0);
+
+        const dx = this.player.x - inimigo.x;
+        const dy = this.player.y - inimigo.y;
+        let direcaoAtaque;
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+            direcaoAtaque = dx > 0 ? 'direita' : 'esquerda';
+        } else {
+            direcaoAtaque = dy > 0 ? 'baixo' : 'cima';
+        }
+
+        // Para o inimigo
+        inimigo.parado = true;
+        inimigo.setVelocity(0, 0);
+        inimigo.play(`${inimigo.tipo}-atacar-${direcaoAtaque}`);
+
+        this.time.delayedCall(400, () => {
+            this.player.anims.play('cair');
+            this.cameras.main.fadeOut(800);
+
+            this.cameras.main.once('camerafadeoutcomplete', () => {
+                this.player.x = this.spawnX;
+                this.player.y = this.spawnY;
+
+                this.cameras.main.fadeIn(800);
+                this.player.anims.play('levantar');
+
+                this.player.once('animationcomplete-levantar', () => {
+                    // Retoma o movimento do inimigo
+                    inimigo.parado = false;
+                    this.tomandoDano = false;
+                });
+            });
+        });
+    }
+
+    entregarItens() {
         if (this.inventarioPlayer.length === 0) {
             return;
         }
 
+        // Move itens para o inventário do NPC, mantendo registro
         this.inventarioNpc.push(...this.inventarioPlayer);
-
         this.inventarioPlayer = [];
 
         console.log("Itens entregues!");
@@ -1379,11 +1469,9 @@ export default class Jogo extends Phaser.Scene {
         this.npc.play('npc-agradecendo');
 
         if (this.inventarioNpc.length >= 5) {
-
             this.time.delayedCall(1000, () => {
                 this.scene.start('Vitoria');
             });
-
         }
     }
 
@@ -1416,58 +1504,47 @@ export default class Jogo extends Phaser.Scene {
     }
 
     desenharItensInventario() {
-
         const centroX = this.painelInventario.x;
         const centroY = this.painelInventario.y;
 
         const posicoesItens = {
-
-            cranioDeOnca: {
-                x: centroX - 70,
-                y: centroY - 40
-            },
-
-            maquinaDeEscrever: {
-                x: centroX + 70,
-                y: centroY - 40
-            },
-
-            mascaraTribal: {
-                x: centroX - 70,
-                y: centroY + 40
-            },
-
-            relicarioDourado: {
-                x: centroX + 70,
-                y: centroY + 40
-            },
-
-            espadaDomPedro: {
-                x: centroX,
-                y: centroY + 90
-            }
-
+            cranioDeOnca: { x: centroX - 70, y: centroY - 40 },
+            maquinaDeEscrever: { x: centroX + 70, y: centroY - 40 },
+            mascaraTribal: { x: centroX - 70, y: centroY + 40 },
+            relicarioDourado: { x: centroX + 70, y: centroY + 40 },
+            espadaDomPedro: { x: centroX, y: centroY + 90 }
         };
 
-        this.inventarioPlayer.forEach(item => {
+        // IDs dos itens já entregues ao NPC
+        const idsEntregues = this.inventarioNpc.map(i => i.id);
 
-            const pos = posicoesItens[item.id];
-
-            const icone = this.add.image(
-                pos.x,
-                pos.y,
-                item.sprite
-            );
-
-            icone.setScale(1);
-
-            icone.setScrollFactor(0);
-
-            icone.setDepth(101);
-
-            this.iconesInventario.push(icone);
-
+        // Junta itens na mochila + itens já entregues (sem duplicar)
+        const todosOsItens = [...this.inventarioPlayer];
+        this.inventarioNpc.forEach(item => {
+            if (!todosOsItens.find(i => i.id === item.id)) {
+                todosOsItens.push(item);
+            }
         });
 
+        todosOsItens.forEach(item => {
+            const pos = posicoesItens[item.id];
+            if (!pos) return;
+
+            // Ícone do item
+            const icone = this.add.image(pos.x, pos.y, item.sprite);
+            icone.setScale(1);
+            icone.setScrollFactor(0);
+            icone.setDepth(101);
+            this.iconesInventario.push(icone);
+
+            // Se o item foi entregue, adiciona o check ao lado direito
+            if (idsEntregues.includes(item.id)) {
+                const check = this.add.image(pos.x + 24, pos.y - 24, 'check');
+                check.setScale(0.4);
+                check.setScrollFactor(0);
+                check.setDepth(102);
+                this.iconesInventario.push(check);
+            }
+        });
     }
 }
