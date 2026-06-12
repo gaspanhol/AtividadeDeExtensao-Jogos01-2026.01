@@ -872,6 +872,7 @@ export default class Jogo extends Phaser.Scene {
             inimigo.pontoAtual = 1
 
             inimigo.parado = config.parado || false
+            inimigo.paradoOriginal = config.parado || false
 
             if (inimigo.parado) {
 
@@ -922,6 +923,23 @@ export default class Jogo extends Phaser.Scene {
         this.relicarioDourado.name = 'relicarioDourado';
         this.relicarioDourado.itemId = 'relicarioDourado';
 
+        // Posições originais do item
+        this.posicoesOriginaisItens = {
+            cranioDeOnca: { x: 1018.9, y: 2012.4 },
+            espadaDomPedro: { x: 945.3, y: 496.2 },
+            maquinaDeEscrever: { x: 244.2, y: 2536.5 },
+            mascaraTribal: { x: 1835.5, y: 2530.6 },
+            relicarioDourado: { x: 2700.3, y: 1464.8 }
+        }
+
+        // Mapa de id do item para o sprite correspondente
+        this.spritesItens = {
+            cranioDeOnca: this.cranioDeOnca,
+            espadaDomPedro: this.espadaDomPedro,
+            maquinaDeEscrever: this.maquinaDeEscrever,
+            mascaraTribal: this.mascaraTribal,
+            relicarioDourado: this.relicarioDourado
+        }
 
         this.coletandoItem = false;
 
@@ -1429,10 +1447,23 @@ export default class Jogo extends Phaser.Scene {
             direcaoAtaque = dy > 0 ? 'baixo' : 'cima';
         }
 
-        // Para o inimigo
         inimigo.parado = true;
         inimigo.setVelocity(0, 0);
         inimigo.play(`${inimigo.tipo}-atacar-${direcaoAtaque}`);
+
+        // ..:: Roubo dos itens — devolve ao mapa os itens sem check ::..
+        if (this.inventarioPlayer.length > 0) {
+            this.inventarioPlayer.forEach(item => {
+                const sprite = this.spritesItens[item.id]
+                const pos = this.posicoesOriginaisItens[item.id]
+
+                if (sprite && pos) {
+                    sprite.enableBody(true, pos.x, pos.y, true, true)
+                }
+            })
+
+            this.inventarioPlayer = []
+        }
 
         this.time.delayedCall(400, () => {
             this.player.anims.play('cair');
@@ -1446,8 +1477,11 @@ export default class Jogo extends Phaser.Scene {
                 this.player.anims.play('levantar');
 
                 this.player.once('animationcomplete-levantar', () => {
-                    // Retoma o movimento do inimigo
-                    inimigo.parado = false;
+                    inimigo.parado = inimigo.paradoOriginal;
+                    if (inimigo.paradoOriginal) {
+                        inimigo.play(`${inimigo.tipo}-idle-${inimigo.direcao}`)
+                    }
+
                     this.tomandoDano = false;
                 });
             });
