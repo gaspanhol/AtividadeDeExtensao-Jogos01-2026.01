@@ -96,6 +96,46 @@ export default class Jogo extends Phaser.Scene {
         this.teclaEsc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
         this.teclaE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E)
 
+        this.inventarioPlayer = [];
+
+        this.dadosItens = {
+
+            cranioDeOnca: {
+                id: 'cranioDeOnca',
+                nome: 'Crânio de Onça',
+                sprite: 'cranioDeOnca',
+                descricao: 'Crânio utilizado em rituais e tradições de povos indígenas.'
+            },
+
+            espadaDomPedro: {
+                id: 'espadaDomPedro',
+                nome: 'Espada de Dom Pedro',
+                sprite: 'espadaDomPedro',
+                descricao: 'Espada associada ao período do Império do Brasil.'
+            },
+
+            maquinaDeEscrever: {
+                id: 'maquinaDeEscrever',
+                nome: 'Máquina de Escrever',
+                sprite: 'maquinaDeEscrever',
+                descricao: 'Equipamento utilizado para produção de documentos antes dos computadores.'
+            },
+
+            mascaraTribal: {
+                id: 'mascaraTribal',
+                nome: 'Máscara Tribal',
+                sprite: 'mascaraTribal',
+                descricao: 'Máscara utilizada em cerimônias e manifestações culturais.'
+            },
+
+            relicarioDourado: {
+                id: 'relicarioDourado',
+                nome: 'Relicário Dourado',
+                sprite: 'relicarioDourado',
+                descricao: 'Objeto decorativo utilizado para guardar relíquias religiosas.'
+            }
+
+        };
 
         // ..:: Criação de constantes para os tileset dos elementos do mapa ::..
         const tilesetChao = mapa.addTilesetImage('mansao', 'mansao')
@@ -819,10 +859,21 @@ export default class Jogo extends Phaser.Scene {
 
         // gerando os sprites dos itens no mapa
         this.cranioDeOnca = this.physics.add.sprite(1018.9, 2012.4, 'cranioDeOnca')
+        this.cranioDeOnca.name = 'cranioDeOnca';
+        this.cranioDeOnca.itemId = 'cranioDeOnca';
         this.espadaDomPedro = this.physics.add.sprite(945.3, 496.2, 'espadaDomPedro')
+        this.espadaDomPedro.name = 'espadaDomPedro';
+        this.espadaDomPedro.itemId = 'espadaDomPedro';
         this.maquinaDeEscrever = this.physics.add.sprite(244.2, 2536.5, 'maquinaDeEscrever')
+        this.maquinaDeEscrever.name = 'maquinaDeEscrever';
+        this.maquinaDeEscrever.itemId = 'maquinaDeEscrever';
         this.mascaraTribal = this.physics.add.sprite(1888.6, 2570.8, 'mascaraTribal')
+        this.mascaraTribal.name = 'mascaraTribal';
+        this.mascaraTribal.itemId = 'mascaraTribal';
         this.relicarioDourado = this.physics.add.sprite(2700.3, 1464.8, 'relicarioDourado')
+        this.relicarioDourado.name = 'relicarioDourado';
+        this.relicarioDourado.itemId = 'relicarioDourado';
+
 
         this.coletandoItem = false;
 
@@ -1050,6 +1101,8 @@ export default class Jogo extends Phaser.Scene {
             mochila.stop();
             mochila.play('fechar_mochila');
         });
+        
+        window.jogo = this;
 
 
     }
@@ -1218,7 +1271,14 @@ export default class Jogo extends Phaser.Scene {
                 'animationcomplete-pegarItem-' + this.direcao,
                 () => {
 
+                    const dadosItem = this.dadosItens[item.itemId];
+
+                    this.inventarioPlayer.push(dadosItem);
+
+                    console.log(this.inventarioPlayer);
+
                     item.disableBody(true, true);
+
                     this.coletandoItem = false;
 
                 }
