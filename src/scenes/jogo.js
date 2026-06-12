@@ -23,6 +23,7 @@ export default class Jogo extends Phaser.Scene {
         this.load.image('inventario', 'public/assets/telas/menu/inventario.png')
         this.load.image('pegarItem', 'public/assets/botoes/pegarItem.png')
         this.load.image('check', 'public/assets/telas/menu/check.png')
+        this.load.image('abrirInventario', 'public/assets/botoes/abrirInventario.png')
         this.load.spritesheet('GardenTerrain', 'public/assets/mapa/GardenTerrain.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('GardenWalls', 'public/assets/mapa/GardenWalls.png', { frameWidth: 32, frameHeight: 32 })
         this.load.spritesheet('mansao', 'public/assets/mapa/mansao.png', { frameWidth: 32, frameHeight: 32 })
@@ -98,6 +99,7 @@ export default class Jogo extends Phaser.Scene {
         })
         this.teclaEsc = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
         this.teclaE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E)
+        this.teclaI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I)
 
         this.inventarioPlayer = [];
         this.inventarioNpc = [];
@@ -1160,20 +1162,30 @@ export default class Jogo extends Phaser.Scene {
         let margemX = 330;
         let margemY = this.cameras.main.height - 190;
 
-        let mochila = this.add.sprite(margemX, margemY, 'mochila', 0);
-        mochila.setDepth(5);
-        mochila.setScale(0.5);
-        mochila.setScrollFactor(0);
-        mochila.setOrigin(0, 1);
-        mochila.setInteractive({ useHandCursor: true });
+        this.mochila = this.add.sprite(margemX, margemY, 'mochila', 0);
+        this.mochila.setDepth(5);
+        this.mochila.setScale(0.5);
+        this.mochila.setScrollFactor(0);
+        this.mochila.setOrigin(0, 1);
+        this.mochila.setInteractive({ useHandCursor: true });
 
-        mochila.on('pointerover', function () {
-            mochila.play('abrir_mochila');
+        this.mochila.on('pointerover', () => {
+            this.mochila.play('abrir_mochila');
         });
-        mochila.on('pointerout', function () {
-            mochila.stop();
-            mochila.play('fechar_mochila');
+        this.mochila.on('pointerout', () => {
+            this.mochila.stop();
+            this.mochila.play('fechar_mochila');
         });
+
+        // Ícone de dica acima da mochila
+        this.iconeAbrirInventario = this.add.image(
+            margemX + 32,        // centralizado sobre a mochila
+            margemY - 78,        // acima da mochila
+            'abrirInventario'
+        )
+        this.iconeAbrirInventario.setScrollFactor(0)
+        this.iconeAbrirInventario.setDepth(6)
+        this.iconeAbrirInventario.setScale(1)
 
         // fundo do inventário
         this.painelInventario = this.add.image(
@@ -1191,7 +1203,7 @@ export default class Jogo extends Phaser.Scene {
         this.painelInventario.setVisible(false);
         this.painelInventario.setScale(0.4);
 
-        mochila.on('pointerdown', () => {
+        this.mochila.on('pointerdown', () => {
 
             if (!this.inventarioAberto) {
                 this.abrirInventario();
@@ -1217,6 +1229,15 @@ export default class Jogo extends Phaser.Scene {
 
         // debug posição do personagem
         // console.log(this.player.x, this.player.y)
+        if (Phaser.Input.Keyboard.JustDown(this.teclaI)) {
+            if (!this.inventarioAberto) {
+                this.mochila.play('abrir_mochila')
+                this.abrirInventario()
+            } else {
+                this.mochila.play('fechar_mochila')
+                this.fecharInventario()
+            }
+        }
         if (!this.soundManager) return
         if (Phaser.Input.Keyboard.JustDown(this.teclaEsc)) {
             this.soundManager.tocarMusica()
@@ -1238,6 +1259,7 @@ export default class Jogo extends Phaser.Scene {
             this.player.setVelocity(0, 0);
             return;
         }
+
 
 
         const correndo = this.shift.isDown
