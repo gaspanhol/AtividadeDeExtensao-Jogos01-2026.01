@@ -332,28 +332,32 @@ export default class Jogo extends Phaser.Scene {
                 idle: [66, 67],
                 andar: [1, 8],
                 correr: [75, 81],
-                pegarItem: [37, 42]
+                pegarItem: [36, 41],
+                cair: [60, 65]
             },
             {
                 nome: 'esquerda',
                 idle: [68, 69],
                 andar: [10, 17],
                 correr: [82, 88],
-                pegarItem: [43, 48]
+                pegarItem: [42, 47],
+                cair: [60, 65]
             },
             {
                 nome: 'baixo',
                 idle: [70, 71],
                 andar: [19, 26],
                 correr: [91, 97],
-                pegarItem: [49, 54]
+                pegarItem: [48, 53],
+                cair: [60, 65]
             },
             {
                 nome: 'direita',
                 idle: [72, 73],
                 andar: [28, 35],
                 correr: [98, 105],
-                pegarItem: [55, 60]
+                pegarItem: [54, 59],
+                cair: [60, 65]
             }
         ]
 
@@ -397,8 +401,7 @@ export default class Jogo extends Phaser.Scene {
                     start: anim.pegarItem[0],
                     end: anim.pegarItem[1]
                 }),
-                frameRate: 8,
-                repeat: -1
+                frameRate: 8
             })
 
         })
@@ -821,12 +824,49 @@ export default class Jogo extends Phaser.Scene {
         this.mascaraTribal = this.physics.add.sprite(1888.6, 2570.8, 'mascaraTribal')
         this.relicarioDourado = this.physics.add.sprite(2700.3, 1464.8, 'relicarioDourado')
 
+        this.coletandoItem = false;
+
         // Fazendo a colisão dos itens com o player
-        this.physics.add.collider(this.cranioDeOnca, this.player)
-        this.physics.add.collider(this.espadaDomPedro, this.player)
-        this.physics.add.collider(this.maquinaDeEscrever, this.player)
-        this.physics.add.collider(this.mascaraTribal, this.player)
-        this.physics.add.collider(this.relicarioDourado, this.player)
+        this.physics.add.overlap(
+            this.player,
+            this.cranioDeOnca,
+            () => this.coletarItem(this.cranioDeOnca),
+            null,
+            this
+        );
+
+        this.physics.add.overlap(
+            this.player,
+            this.espadaDomPedro,
+            () => this.coletarItem(this.espadaDomPedro),
+            null,
+            this
+        );
+
+        this.physics.add.overlap(
+            this.player,
+            this.maquinaDeEscrever,
+            () => this.coletarItem(this.maquinaDeEscrever),
+            null,
+            this
+        );
+
+        this.physics.add.overlap(
+            this.player,
+            this.mascaraTribal,
+            () => this.coletarItem(this.mascaraTribal),
+            null,
+            this
+        );
+
+        this.physics.add.overlap(
+            this.player,
+            this.relicarioDourado,
+            () => this.coletarItem(this.relicarioDourado),
+            null,
+            this
+        );
+
 
         // Deixando os itens imóveis
         this.npc.setPushable(false)
@@ -1034,6 +1074,11 @@ export default class Jogo extends Phaser.Scene {
             this.soundManager.pararMusica()
         }
 
+        if (this.coletandoItem) {
+            this.player.setVelocity(0, 0);
+            return;
+        }
+
 
         const correndo = this.shift.isDown
 
@@ -1155,5 +1200,29 @@ export default class Jogo extends Phaser.Scene {
 
         })
 
+    }
+    coletarItem (item) {
+
+        if (
+            !this.coletandoItem &&
+            Phaser.Input.Keyboard.JustDown(this.teclaE)
+        ) {
+
+            this.coletandoItem = true;
+
+            this.player.anims.play(
+                'pegarItem-' + this.direcao
+            );
+
+            this.player.once(
+                'animationcomplete-pegarItem-' + this.direcao,
+                () => {
+
+                    item.disableBody(true, true);
+                    this.coletandoItem = false;
+
+                }
+            );
+        }
     }
 }
