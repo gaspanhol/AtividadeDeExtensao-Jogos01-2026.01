@@ -1425,6 +1425,7 @@ export default class Jogo extends Phaser.Scene {
 
         if (
             !this.coletandoItem &&
+            !this.tomandoDano &&
             Phaser.Input.Keyboard.JustDown(this.teclaE)
         ) {
 
@@ -1434,27 +1435,48 @@ export default class Jogo extends Phaser.Scene {
                 'pegarItem-' + this.direcao
             );
 
+            // Guarda a referência do callback para poder cancelá-lo
+            // caso a animação seja interrompida por receberDano().
+            this.callbackColeta = () => {
+
+                const dadosItem = this.dadosItens[item.itemId];
+
+                this.inventarioPlayer.push(dadosItem);
+
+                console.log(this.inventarioPlayer);
+
+                item.disableBody(true, true);
+
+                this.coletandoItem = false;
+                this.callbackColeta = null;
+
+            };
+
             this.player.once(
                 'animationcomplete-pegarItem-' + this.direcao,
-                () => {
-
-                    const dadosItem = this.dadosItens[item.itemId];
-
-                    this.inventarioPlayer.push(dadosItem);
-
-                    console.log(this.inventarioPlayer);
-
-                    item.disableBody(true, true);
-
-                    this.coletandoItem = false;
-
-                }
+                this.callbackColeta
             );
         }
     }
 
     receberDano(inimigo) {
         if (this.tomandoDano) return;
+
+        // Se o jogador for atingido no meio da animação de coletar item,
+        // a animação 'pegarItem-...' é interrompida abaixo e o evento
+        // 'animationcomplete-pegarItem-...' nunca dispara. Sem isto,
+        // 'coletandoItem' ficaria travado em true para sempre, prendendo
+        // o personagem (ver checagem em update()).
+        if (this.coletandoItem) {
+            if (this.callbackColeta) {
+                this.player.off(
+                    'animationcomplete-pegarItem-' + this.direcao,
+                    this.callbackColeta
+                );
+                this.callbackColeta = null;
+            }
+            this.coletandoItem = false;
+        }
 
         this.tomandoDano = true;
         this.player.setVelocity(0, 0);
