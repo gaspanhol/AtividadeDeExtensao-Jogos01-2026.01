@@ -908,22 +908,22 @@ export default class Jogo extends Phaser.Scene {
 
         // ..:: Configuração dos itens ::..
 
-        // gerando os sprites dos itens no mapa
-        this.cranioDeOnca = this.physics.add.sprite(1018.9, 2012.4, 'cranioDeOnca')
+        // gerando os sprites dos itens no mapa   
+        this.cranioDeOnca = this.physics.add.sprite(1018.9, 2012.4, 'cranioDeOnca') // this.player.x=1040.9, this.player.y=2012.4
         this.cranioDeOnca.name = 'cranioDeOnca';
         this.cranioDeOnca.itemId = 'cranioDeOnca';
-        this.espadaDomPedro = this.physics.add.sprite(945.3, 496.2, 'espadaDomPedro')
+        this.espadaDomPedro = this.physics.add.sprite(945.3, 496.2, 'espadaDomPedro') // this.player.x=945.3, this.player.y=496.2
         this.espadaDomPedro.name = 'espadaDomPedro';
         this.espadaDomPedro.itemId = 'espadaDomPedro';
-        this.maquinaDeEscrever = this.physics.add.sprite(244.2, 2536.5, 'maquinaDeEscrever')
+        this.maquinaDeEscrever = this.physics.add.sprite(244.2, 2536.5, 'maquinaDeEscrever') // this.player.x=244.2, this.player.y=2530.6
         this.maquinaDeEscrever.name = 'maquinaDeEscrever';
         this.maquinaDeEscrever.itemId = 'maquinaDeEscrever';
-        this.mascaraTribal = this.physics.add.sprite(1835.5, 2530.6, 'mascaraTribal')
+        this.mascaraTribal = this.physics.add.sprite(1835.5, 2530.6, 'mascaraTribal') // this.player.x=1835.5, this.player.y=2530.6
         this.mascaraTribal.name = 'mascaraTribal';
         this.mascaraTribal.itemId = 'mascaraTribal';
-        this.relicarioDourado = this.physics.add.sprite(2700.3, 1464.8, 'relicarioDourado')
+        this.relicarioDourado = this.physics.add.sprite(2700.3, 1464.8, 'relicarioDourado') // this.player.x=2700.3, this.player.y=1464.8
         this.relicarioDourado.name = 'relicarioDourado';
-        this.relicarioDourado.itemId = 'relicarioDourado';
+        this.relicarioDourado.itemId = 'relicarioDourado';  // Spawn this.player.x=784.5, this.player.y=3246.1
 
         // Posições originais do item
         this.posicoesOriginaisItens = {

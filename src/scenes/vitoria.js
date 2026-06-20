@@ -16,8 +16,9 @@ export default class Vitoria extends Phaser.Scene {
 
         // clique em qualquer lugar da tela
         this.input.once("pointerdown", () => {
-            // recarrega a página inteira (zera tudo)
-            window.location.reload();
+            this.scene.stop('Vitoria')
+            this.scene.start('Menu')
         });
+
     }
 }
