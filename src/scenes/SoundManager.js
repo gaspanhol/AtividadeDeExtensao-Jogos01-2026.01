@@ -17,11 +17,11 @@ export default class SoundManager {
             }
         }
 
-        tentarAdicionar('passo',   { loop: false, volume: 0.5 })
+        tentarAdicionar('passo',   { loop: false, volume: 0.7 })
         tentarAdicionar('correr',  { loop: false, volume: 0.7 })
-        tentarAdicionar('musica',  { loop: true,  volume: 0.3 })
-        tentarAdicionar('porta',   { loop: false, volume: 0.3 })
-        tentarAdicionar('item',    { loop: false, volume: 0.3 })
+        tentarAdicionar('musica',  { loop: true,  volume: 0.7 })
+        tentarAdicionar('porta',   { loop: false, volume: 0.7 })
+        tentarAdicionar('item',    { loop: false, volume: 0.7 })
         tentarAdicionar('abertura',{ loop: false, volume: 0.7 })
     }
 

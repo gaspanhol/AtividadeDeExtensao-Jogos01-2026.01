@@ -1111,13 +1111,13 @@ export default class Jogo extends Phaser.Scene {
             // ..:: cenário fase 2 ::..
             { x: 1773.5, y: 3200, destX: 990, destY: 3166.9 }, // porta 1
             { x: 1773.5, y: 3360.8, destX: 995, destY: 3328.77 }, // porta 2
-            { x: 2096.6, y: 2458.5, destX: 1330, destY: 2180.8 }, // porta 3
+            { x: 2096.6, y: 2438.5, destX: 1330, destY: 2180.8 }, // porta 3
 
             // ..:: cenário fase 3 ::..
             { x: 319.16, y: 2225, destX: 319.16, destY: 2480 }, // porta 1
             { x: 593, y: 2225, destX: 593, destY: 2480 }, // porta 2
             { x: 863.5, y: 2225, destX: 863.5, destY: 2480 }, // porta 3
-            { x: 1328.6, y: 2225, destX: 2097.6, destY: 2507.5 }, // porta 4
+            { x: 1328.6, y: 2225, destX: 2097.6, destY: 2485 }, // porta 4
             { x: 513.60, y: 1940, destX: 512.8, destY: 1598.3 }, // porta 5
 
             // ..:: cenário fase 4 ::..

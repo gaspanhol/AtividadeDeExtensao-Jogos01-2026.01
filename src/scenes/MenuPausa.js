@@ -41,11 +41,8 @@ export default class MenuPausa extends Phaser.Scene {
     .setInteractive()
 
     const botaoMais = this.add.image(centroX + 180, 500, 'mais')
-      .setScale(0.3)
-      .setInteractive()
-
-
-
+    .setScale(0.3)
+    .setInteractive()
 
     const jogo = this.scene.get('Jogo');
     const atualizarVolumeVisual = () => {
