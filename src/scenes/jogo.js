@@ -854,17 +854,17 @@ export default class Jogo extends Phaser.Scene {
             switch (config.tipo) {
 
                 case 'enemy1':
-                    inimigo.velocidade = 100
+                    inimigo.velocidade = 150
                     inimigo.modoMovimento = 'andar'
                     break
 
                 case 'enemy2':
-                    inimigo.velocidade = 180
+                    inimigo.velocidade = 200
                     inimigo.modoMovimento = 'correr'
                     break
 
                 case 'enemy3':
-                    inimigo.velocidade = 60
+                    inimigo.velocidade = 100
                     inimigo.modoMovimento = 'andar'
                     inimigo.setScale(1.5)
                     break
@@ -1269,19 +1269,36 @@ export default class Jogo extends Phaser.Scene {
         let vx = 0
         let vy = 0
 
-        if (this.cursors.left.isDown || this.wasd.left.isDown) {
-            vx = -velocidade
-            this.direcao = 'esquerda'
-        } else if (this.cursors.right.isDown || this.wasd.right.isDown) {
-            vx = velocidade
-            this.direcao = 'direita'
-        } else if (this.cursors.up.isDown || this.wasd.up.isDown) {
-            vy = -velocidade
-            this.direcao = 'cima'
-        } else if (this.cursors.down.isDown || this.wasd.down.isDown) {
-            vy = velocidade
-            this.direcao = 'baixo'
+        const esquerda = this.cursors.left.isDown || this.wasd.left.isDown
+        const direita = this.cursors.right.isDown || this.wasd.right.isDown
+        const cima = this.cursors.up.isDown || this.wasd.up.isDown
+        const baixo = this.cursors.down.isDown || this.wasd.down.isDown
+
+        if (esquerda) vx = -1
+        else if (direita) vx = 1
+
+        if (cima) vy = -1
+        else if (baixo) vy = 1
+
+        // Atualiza a direção da animação. Em diagonal, o eixo vertical
+        // tem prioridade visual (não existem frames de diagonal na
+        // spritesheet), então o personagem "olha" para cima/baixo
+        // mas se move nos dois eixos ao mesmo tempo.
+        if (vy < 0) this.direcao = 'cima'
+        else if (vy > 0) this.direcao = 'baixo'
+        else if (vx < 0) this.direcao = 'esquerda'
+        else if (vx > 0) this.direcao = 'direita'
+
+        // Normaliza a velocidade para que andar na diagonal não seja
+        // mais rápido do que andar reto (vetor (1,1) tem módulo > 1).
+        if (vx !== 0 && vy !== 0) {
+            const fator = Math.SQRT1_2 // 1/raiz(2)
+            vx *= fator
+            vy *= fator
         }
+
+        vx *= velocidade
+        vy *= velocidade
 
         this.player.setVelocity(vx, vy)
 
@@ -1495,6 +1512,18 @@ export default class Jogo extends Phaser.Scene {
         inimigo.setVelocity(0, 0);
         inimigo.play(`${inimigo.tipo}-atacar-${direcaoAtaque}`);
 
+        // Congela todos os outros inimigos do mapa também. Sem isso, eles
+        // continuam patrulhando livremente durante o fadeOut/fadeIn e as
+        // animações de cair/levantar (quase 2s), e como nunca tiveram
+        // collider com as paredes, ficam visivelmente atravessando tudo
+        // quando a câmera volta.
+        this.inimigos.forEach(outroInimigo => {
+            if (outroInimigo === inimigo) return
+            outroInimigo.congeladoPorDano = !outroInimigo.parado
+            outroInimigo.parado = true
+            outroInimigo.setVelocity(0, 0)
+        })
+
         // ..:: Roubo dos itens — devolve ao mapa os itens sem check ::..
         if (this.inventarioPlayer.length > 0) {
             this.inventarioPlayer.forEach(item => {
@@ -1525,6 +1554,25 @@ export default class Jogo extends Phaser.Scene {
                     if (inimigo.paradoOriginal) {
                         inimigo.play(`${inimigo.tipo}-idle-${inimigo.direcao}`)
                     }
+
+                    // Devolve cada inimigo que estava patrulhando para a
+                    // posição de origem (primeiro ponto da rota) e reinicia
+                    // a patrulha do zero, em vez de deixá-lo de onde
+                    // congelou (evita teleporte estranho a meio de parede
+                    // e mantém o padrão original do jogo).
+                    this.inimigos.forEach(outroInimigo => {
+                        if (outroInimigo === inimigo) return
+                        if (!outroInimigo.congeladoPorDano) return
+
+                        const origem = outroInimigo.pontos[0]
+                        outroInimigo.x = origem.x
+                        outroInimigo.y = origem.y
+                        outroInimigo.pontoAtual = 1
+                        outroInimigo.setVelocity(0, 0)
+                        outroInimigo.congeladoPorDano = false
+                        outroInimigo.parado = false
+                        outroInimigo.play(`${outroInimigo.tipo}-${outroInimigo.modoMovimento}-baixo`)
+                    })
 
                     this.tomandoDano = false;
                 });
