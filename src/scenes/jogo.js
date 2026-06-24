@@ -756,7 +756,7 @@ export default class Jogo extends Phaser.Scene {
             // FASE 4
             // =========================
 
-            { tipo: 'enemy1', pontos: [{ x: 1090, y: 1532.5 }, { x: 852.5, y: 1532.5 }] },
+            { tipo: 'enemy1', pontos: [{ x: 512.8, y: 1525.8 }, { x: 512.8, y: 1246.63 }] },
 
             {
                 tipo: 'enemy1',
@@ -768,11 +768,30 @@ export default class Jogo extends Phaser.Scene {
                 ]
             },
 
-            { tipo: 'enemy1', pontos: [{ x: 523.1, y: 1324.5 }, { x: 188.1, y: 1324.5 }] },
+            { tipo: 'enemy1', 
+                pontos: [
+                    { x: 926.4, y: 1602.5 },
+                    { x: 926.4, y: 1517.5 },
+                    { x: 1095, y: 1517.5 }, 
+                    { x: 1095, y: 1602.5 },
+                    { x: 1095, y: 1517.5 },
+                    { x: 926.4, y: 1517.5 },
+                    { x: 926.4, y: 1602.5 }
+                ] 
+            },
 
             { tipo: 'enemy2', pontos: [{ x: 200.3, y: 1153.7 }, { x: 579.4, y: 1153.7 }] },
 
             { tipo: 'enemy2', pontos: [{ x: 599.4, y: 1153.7 }, { x: 1067.8, y: 1153.7 }] },
+
+            {tipo: 'enemy2',
+                pontos: [
+                    { x: 868.82, y: 847.90 },
+                    { x: 868.82, y: 642.90 },
+                    { x: 1091.32, y: 642.90 },
+                    { x: 1091.32, y: 847.90 }
+                ]
+            },
 
             {
                 tipo: 'enemy2',
@@ -786,19 +805,29 @@ export default class Jogo extends Phaser.Scene {
 
             {
                 tipo: 'enemy3',
+                parado: true,
+                direcaoParado: 'cima',
+                pontos: [{ x: 300.6, y: 1003.4 }]
+            },
+
+            {
+                tipo: 'enemy3',
+                pontos: [
+                    { x: 701.65, y: 654.22 },
+                    { x: 219.15, y: 654.22 },
+                    { x: 219.15, y: 449.22 },
+                    { x: 701.65, y: 449.22 }
+                ]
+            },
+
+            {
+                tipo: 'enemy3',
                 pontos: [
                     { x: 643.8, y: 1270 },
                     { x: 791.3, y: 1270 },
                     { x: 791.3, y: 1570 },
                     { x: 643.8, y: 1570 }
                 ]
-            },
-
-            {
-                tipo: 'enemy3',
-                parado: true,
-                direcaoParado: 'cima',
-                pontos: [{ x: 300.6, y: 1003.4 }]
             },
 
             // =========================
@@ -813,29 +842,32 @@ export default class Jogo extends Phaser.Scene {
                     { x: 2189.8, y: 1457.3 }
                 ]
             },
-
             { tipo: 'enemy1', pontos: [{ x: 2511.9, y: 922.5 }, { x: 2351.9, y: 922.5 }] },
-
             { tipo: 'enemy1', pontos: [{ x: 2755, y: 922.5 }, { x: 2601, y: 922.5 }] },
 
             { tipo: 'enemy2', pontos: [{ x: 2259.1, y: 576.9 }, { x: 2259.1, y: 788 }] },
-
             { tipo: 'enemy2', pontos: [{ x: 2194.3, y: 858 }, { x: 2194.3, y: 1238 }] },
-
             { tipo: 'enemy2', pontos: [{ x: 2427.5, y: 1020 }, { x: 2760, y: 1020 }] },
-
             {
                 tipo: 'enemy2',
                 pontos: [
                     { x: 2390, y: 1173.25 },
                     { x: 2755, y: 1173.25 },
-                    { x: 2755, y: 1288.25 },
-                    { x: 2390, y: 1288.25 }
+                    { x: 2755, y: 1268.25 },
+                    { x: 2390, y: 1268.25 }
                 ]
             },
 
-            { tipo: 'enemy3', pontos: [{ x: 2385, y: 1447.4 }, { x: 2635, y: 1447.4 }] },
-            { tipo: 'enemy3', pontos: [{ x: 2368.5, y: 607.5 }, { x: 2750.3, y: 607.5 }] }
+            { tipo: 'enemy3', pontos: [{ x: 2385, y: 1447.4 }, { x: 2752.5, y: 1447.4 }] },
+            { tipo: 'enemy3', pontos: [{ x: 2368.5, y: 607.5 }, { x: 2745.3, y: 607.5 }] },
+            { tipo: 'enemy3', pontos: [{ x: 2619.16, y: 1114.4 }, { x: 2751.6, y: 1114.45 }] },
+            { tipo: 'enemy3', pontos: [{ x: 2358.3, y: 1332.8 }, { x: 2495.3, y: 1332.8 }] },
+            {
+                tipo: 'enemy3',
+                parado: true,
+                direcaoParado: 'esquerda',
+                pontos: [{ x: 2725, y: 778.8 }]
+            },
 
         ]
 
@@ -1247,6 +1279,62 @@ export default class Jogo extends Phaser.Scene {
             this.soundManager.pararMusica()
         }
 
+        // ..:: Movimentação dos inimigos — roda sempre, independente do estado do player ::..
+        this.inimigos.forEach(inimigo => {
+
+            if (inimigo.parado) return
+
+            const alvo = inimigo.pontos[inimigo.pontoAtual]
+
+            const distanciaInimigo = Phaser.Math.Distance.Between(
+                inimigo.x,
+                inimigo.y,
+                alvo.x,
+                alvo.y
+            )
+
+            if (distanciaInimigo < 12) {
+
+                inimigo.pontoAtual++
+
+                if (inimigo.pontoAtual >= inimigo.pontos.length) {
+                    inimigo.pontoAtual = 0
+                }
+
+            }
+
+            const alvoAtual = inimigo.pontos[inimigo.pontoAtual]
+
+            this.physics.moveTo(
+                inimigo,
+                alvoAtual.x,
+                alvoAtual.y,
+                inimigo.velocidade
+            )
+
+            const ivx = inimigo.body.velocity.x
+            const ivy = inimigo.body.velocity.y
+
+            let direcaoInimigo
+
+            if (Math.abs(ivx) > Math.abs(ivy)) {
+                direcaoInimigo = ivx > 0 ? 'direita' : 'esquerda'
+            } else {
+                direcaoInimigo = ivy > 0 ? 'baixo' : 'cima'
+            }
+
+            const animacaoAtual =
+                `${inimigo.tipo}-${inimigo.modoMovimento}-${direcaoInimigo}`
+
+            if (
+                !inimigo.anims.currentAnim ||
+                inimigo.anims.currentAnim.key !== animacaoAtual
+            ) {
+                inimigo.play(animacaoAtual)
+            }
+
+        })
+
         if (this.coletandoItem) {
             this.player.setVelocity(0, 0);
             return;
@@ -1354,62 +1442,6 @@ export default class Jogo extends Phaser.Scene {
             }
         }
 
-        // ..:: Movimentação dos inimigos ::..
-        this.inimigos.forEach(inimigo => {
-
-            if (inimigo.parado) return
-
-            const alvo = inimigo.pontos[inimigo.pontoAtual]
-
-            const distancia = Phaser.Math.Distance.Between(
-                inimigo.x,
-                inimigo.y,
-                alvo.x,
-                alvo.y
-            )
-
-            if (distancia < 12) {
-
-                inimigo.pontoAtual++
-
-                if (inimigo.pontoAtual >= inimigo.pontos.length) {
-                    inimigo.pontoAtual = 0
-                }
-
-            }
-
-            const alvoAtual = inimigo.pontos[inimigo.pontoAtual]
-
-            this.physics.moveTo(
-                inimigo,
-                alvoAtual.x,
-                alvoAtual.y,
-                inimigo.velocidade
-            )
-
-            const vx = inimigo.body.velocity.x
-            const vy = inimigo.body.velocity.y
-
-            let direcao
-
-            if (Math.abs(vx) > Math.abs(vy)) {
-                direcao = vx > 0 ? 'direita' : 'esquerda'
-            } else {
-                direcao = vy > 0 ? 'baixo' : 'cima'
-            }
-
-            const animacaoAtual =
-                `${inimigo.tipo}-${inimigo.modoMovimento}-${direcao}`
-
-            if (
-                !inimigo.anims.currentAnim ||
-                inimigo.anims.currentAnim.key !== animacaoAtual
-            ) {
-                inimigo.play(animacaoAtual)
-            }
-
-        })
-
         // ..:: Configuração para aparecer a mão indicando que o player pode pegar o item ::..
         const itensColetaveis = [
             this.cranioDeOnca,
@@ -1512,17 +1544,7 @@ export default class Jogo extends Phaser.Scene {
         inimigo.setVelocity(0, 0);
         inimigo.play(`${inimigo.tipo}-atacar-${direcaoAtaque}`);
 
-        // Congela todos os outros inimigos do mapa também. Sem isso, eles
-        // continuam patrulhando livremente durante o fadeOut/fadeIn e as
-        // animações de cair/levantar (quase 2s), e como nunca tiveram
-        // collider com as paredes, ficam visivelmente atravessando tudo
-        // quando a câmera volta.
-        this.inimigos.forEach(outroInimigo => {
-            if (outroInimigo === inimigo) return
-            outroInimigo.congeladoPorDano = !outroInimigo.parado
-            outroInimigo.parado = true
-            outroInimigo.setVelocity(0, 0)
-        })
+
 
         // ..:: Roubo dos itens — devolve ao mapa os itens sem check ::..
         if (this.inventarioPlayer.length > 0) {
@@ -1554,25 +1576,6 @@ export default class Jogo extends Phaser.Scene {
                     if (inimigo.paradoOriginal) {
                         inimigo.play(`${inimigo.tipo}-idle-${inimigo.direcao}`)
                     }
-
-                    // Devolve cada inimigo que estava patrulhando para a
-                    // posição de origem (primeiro ponto da rota) e reinicia
-                    // a patrulha do zero, em vez de deixá-lo de onde
-                    // congelou (evita teleporte estranho a meio de parede
-                    // e mantém o padrão original do jogo).
-                    this.inimigos.forEach(outroInimigo => {
-                        if (outroInimigo === inimigo) return
-                        if (!outroInimigo.congeladoPorDano) return
-
-                        const origem = outroInimigo.pontos[0]
-                        outroInimigo.x = origem.x
-                        outroInimigo.y = origem.y
-                        outroInimigo.pontoAtual = 1
-                        outroInimigo.setVelocity(0, 0)
-                        outroInimigo.congeladoPorDano = false
-                        outroInimigo.parado = false
-                        outroInimigo.play(`${outroInimigo.tipo}-${outroInimigo.modoMovimento}-baixo`)
-                    })
 
                     this.tomandoDano = false;
                 });
