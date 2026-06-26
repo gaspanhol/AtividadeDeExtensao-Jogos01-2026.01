@@ -1267,10 +1267,340 @@ export default class Jogo extends Phaser.Scene {
 
         window.jogo = this;
 
-
+        // ==============================================================
+        // ..:: INTRODUÇÃO — inicia a sequência de cutscene + tutorial ::..\
+        // ==============================================================
+        this.iniciarIntroducao()
     }
 
-    update() {
+    // ================================================================
+    // ..:: INTRODUÇÃO ::..\
+    //
+    // Fluxo:
+    //   1. emIntro = true  →  player e inimigos travados
+    //   2. player caminha automaticamente até o NPC
+    //   3. ao chegar, diálogo de falas do NPC aparece
+    //   4. última fala fecha e abre a tela de tutorial
+    //   5. jogador pressiona qualquer tecla / clica  →  emIntro = false
+    // ================================================================
+
+    iniciarIntroducao () {
+
+        // Flag principal: enquanto true, update() bloqueia movimento
+        // do player e ignora ESC/inventário.
+        this.emIntro = true
+
+        // Sub-flag: true enquanto o player está caminhando automaticamente
+        // até o NPC. Durante esse tempo o update() NÃO zera a velocidade.
+        this.introMovendo = false
+
+        // ..:: Falas do NPC durante a introdução ::..\
+        // Cada string é uma "página" do diálogo — o jogador avança
+        // pressionando E ou clicando na caixa.
+        this.falasIntro = [
+            'Que bom que você está aqui! O museu foi invadido!',
+            'Ladrões estão roubando os nossos artefatos históricos!',
+            'Preciso chamar a polícia, mas eles podem fugir antes que ela chegue...',
+            'Você pode me ajudar? Há 5 artefatos roubados espalhados pelo museu.',
+            'Recupere todos e traga de volta para mim antes que os bandidos escapem!',
+        ]
+        this.falaIntroAtual = 0
+
+        // Referências da caixa de diálogo (criadas mais abaixo em
+        // mostrarDialogoIntro). Guardamos aqui para poder destruir depois.
+        this.elementosDialogoIntro = []
+
+        // Aguarda a câmera/fade terminar e então inicia o movimento
+        // automático do player em direção ao NPC.
+        this.cameras.main.fadeIn(600)
+        this.cameras.main.once('camerafadeincomplete', () => {
+            this.moverPlayerAteNpc()
+        })
+    }
+
+    moverPlayerAteNpc () {
+
+        // Posição-alvo: logo à direita do NPC (mesma lógica da
+        // checagem de diálogo: jogadorADireitaDoNpc).
+        const alvoX = this.npc.x + 35
+        const alvoY = this.npc.y
+
+        // O player anda para a esquerda em direção ao NPC
+        this.direcao = 'esquerda'
+        this.player.anims.play('andar-esquerda', true)
+        this.player.setVelocityX(-80)
+        this.player.setVelocityY(0)
+        this.introMovendo = true
+
+        // ..:: Listener no update para detectar chegada ::..\
+        // Usamos um evento temporário que roda a cada frame até
+        // o player chegar perto o suficiente do alvo.
+        this.introMoverListener = () => {
+
+            const dist = Phaser.Math.Distance.Between(
+                this.player.x, this.player.y,
+                alvoX, alvoY
+            )
+
+            if (dist < 20) {
+                // Chegou — para o player e inicia o diálogo
+                this.introMovendo = false
+                this.player.setVelocity(0, 0)
+                this.player.anims.play('idle-esquerda', true)
+
+                // Remove este listener temporário
+                this.events.off('update', this.introMoverListener)
+                this.introMoverListener = null
+
+                // Pequena pausa dramática antes de o NPC falar
+                this.time.delayedCall(200, () => {
+                    this.mostrarDialogoIntro()
+                })
+            }
+        }
+
+        this.events.on('update', this.introMoverListener)
+    }
+
+    mostrarDialogoIntro () {
+
+        const { width, height } = this.scale
+
+        // ..:: Limpa diálogo anterior se existir ::..\
+        this.elementosDialogoIntro.forEach(el => el.destroy())
+        this.elementosDialogoIntro = []
+
+        const falaAtual = this.falasIntro[this.falaIntroAtual]
+        const ultimaFala = this.falaIntroAtual === this.falasIntro.length - 1
+
+        // ..:: Fundo semitransparente da caixa ::..\
+        const caixaLarg = 500
+        const caixaAltu = 45
+
+        const caixaX = 330 + 330
+        const caixaY = height - 190 - 20
+
+        const fundo = this.add.rectangle(caixaX, caixaY, caixaLarg, caixaAltu, 0x1a0e05, 0.88)
+        fundo.setScrollFactor(0)
+        fundo.setDepth(200)
+        fundo.setStrokeStyle(2, 0xc8a96e)
+
+        // ..:: Etiqueta "NPC" no canto superior esquerdo da caixa ::..\
+        const nomeNpc = this.add.text(
+            caixaX - caixaLarg / 2 + 10,
+            caixaY - caixaAltu / 2 + 5,
+            'Guardião do Museu',
+            {
+                fontFamily: 'Georgia, serif',
+                fontSize: '12px',
+                color: '#e9c97e',
+                fontStyle: 'bold'
+            }
+        )
+        nomeNpc.setScrollFactor(0)
+        nomeNpc.setDepth(201)
+
+        // ..:: Texto da fala ::..\
+        const texto = this.add.text(
+            caixaX - caixaLarg / 2 + 10,
+            caixaY + 8,
+            falaAtual,
+            {
+                fontFamily: 'Georgia, serif',
+                fontSize: '13px',
+                color: '#f5e6c8',
+                wordWrap: { width: caixaLarg - 25 }
+            }
+        )
+        texto.setScrollFactor(0)
+        texto.setDepth(201)
+        texto.setOrigin(0, 0.5)
+
+        // ..:: Indicador de "continuar" no canto inferior direito ::..\
+        const labelContinuar = ultimaFala ? 'Iniciar  ▶' : 'E / Clique  ▶'
+        const indicador = this.add.text(
+            caixaX + caixaLarg / 2 - 10,
+            caixaY + caixaAltu / 2 - 8,
+            labelContinuar,
+            {
+                fontFamily: 'Georgia, serif',
+                fontSize: '9px',
+                color: '#c8a96e',
+                fontStyle: 'italic'
+            }
+        )
+        indicador.setScrollFactor(0)
+        indicador.setDepth(201)
+        indicador.setOrigin(1, 1)
+
+        // Guarda todos os elementos para destruir depois
+        this.elementosDialogoIntro.push(fundo, nomeNpc, texto, indicador)
+
+        // ..:: Tornar a caixa clicável para avançar ::..\
+        fundo.setInteractive()
+        fundo.once('pointerdown', () => this.avancarDialogoIntro())
+
+        // ..:: Flag para o update() saber que pode aceitar tecla E ::..\
+        this.aguardandoAvancoDialogoIntro = true
+    }
+
+    avancarDialogoIntro () {
+
+        // Garante que só avança uma vez por "pressione E"
+        if (!this.aguardandoAvancoDialogoIntro) return
+        this.aguardandoAvancoDialogoIntro = false
+
+        this.falaIntroAtual++
+
+        if (this.falaIntroAtual < this.falasIntro.length) {
+            // Ainda há falas — mostra a próxima
+            this.mostrarDialogoIntro()
+        } else {
+            // Diálogo terminou — destrói a caixa e abre o tutorial
+            this.elementosDialogoIntro.forEach(el => el.destroy())
+            this.elementosDialogoIntro = []
+            this.mostrarTutorial()
+        }
+    }
+
+    mostrarTutorial () {
+
+        const { width, height } = this.scale
+
+        // ..:: Fundo escuro cobrindo a tela inteira ::..\
+        const overlay = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.78)
+        overlay.setScrollFactor(0)
+        overlay.setDepth(300)
+
+        // ..:: Painel central do tutorial ::..\
+        const painelLarg = 600
+        const painelAltu = 400
+        const painelX = width / 2
+        const painelY = height / 2 - 20
+
+        const painel = this.add.rectangle(painelX, painelY, painelLarg, painelAltu, 0x1a0e05, 0.95)
+        painel.setScrollFactor(0)
+        painel.setDepth(301)
+        painel.setStrokeStyle(2, 0xc8a96e)
+
+        // ..:: Título ::..\
+        const titulo = this.add.text(painelX, painelY - painelAltu / 2 + 28, 'CONTROLES', {
+            fontFamily: 'Georgia, serif',
+            fontSize: '22px',
+            color: '#e9c97e',
+            fontStyle: 'bold'
+        })
+        titulo.setScrollFactor(0)
+        titulo.setDepth(302)
+        titulo.setOrigin(0.5)
+
+        // Linha separadora abaixo do título
+        const separador = this.add.rectangle(painelX, painelY - painelAltu / 2 + 48, painelLarg - 40, 1, 0xc8a96e, 0.5)
+        separador.setScrollFactor(0)
+        separador.setDepth(302)
+
+        // ..:: Função auxiliar para desenhar uma linha de controle ::..\
+        //  tecla   — texto da tecla (ex: 'W A S D')
+        //  descricao — o que ela faz
+        //  y       — posição vertical
+        const corTecla = '#e9d3a3'
+        const corBorda = 0x5c3a1e
+        const corDesc = '#d4b896'
+
+        const desenharControle = (tecla, descricao, y) => {
+            // Caixa da tecla
+            const boxTecla = this.add.rectangle(painelX - 130, y, 150, 34, 0x3a1e0a)
+            boxTecla.setScrollFactor(0)
+            boxTecla.setDepth(302)
+            boxTecla.setStrokeStyle(2, corBorda)
+
+            const txtTecla = this.add.text(painelX - 130, y, tecla, {
+                fontFamily: 'Georgia, serif',
+                fontSize: '14px',
+                color: corTecla,
+                fontStyle: 'bold'
+            })
+            txtTecla.setScrollFactor(0)
+            txtTecla.setDepth(303)
+            txtTecla.setOrigin(0.5)
+
+            // Texto de descrição
+            const txtDesc = this.add.text(painelX - 50, y, descricao, {
+                fontFamily: 'Georgia, serif',
+                fontSize: '15px',
+                color: corDesc
+            })
+            txtDesc.setScrollFactor(0)
+            txtDesc.setDepth(303)
+            txtDesc.setOrigin(0, 0.5)
+
+            return [boxTecla, txtTecla, txtDesc]
+        }
+
+        const linhaInicio = painelY - painelAltu / 2 + 80
+        const espacamento = 52
+
+        const controles = [
+            ['W A S D  /  ↑ ← ↓ →', 'Mover o personagem', linhaInicio],
+            ['SHIFT', 'Segurar para correr', linhaInicio + espacamento],
+            ['E', 'Interagir / Pegar item', linhaInicio + espacamento * 2],
+            ['I', 'Abrir / Fechar mochila', linhaInicio + espacamento * 3],
+            ['ESC', 'Pausar o jogo', linhaInicio + espacamento * 4],
+        ]
+
+        const elementosTutorial = [overlay, painel, titulo, separador]
+
+        controles.forEach(([tecla, desc, y]) => {
+            desenharControle(tecla, desc, y).forEach(el => elementosTutorial.push(el))
+        })
+
+        // ..:: Texto "pressione qualquer tecla para iniciar" ::..\
+        const txtIniciar = this.add.text(painelX, painelY + painelAltu / 2 - 28, '— Pressione qualquer tecla ou clique para iniciar —', {
+            fontFamily: 'Georgia, serif',
+            fontSize: '13px',
+            color: '#c8a96e',
+            fontStyle: 'italic'
+        })
+        txtIniciar.setScrollFactor(0)
+        txtIniciar.setDepth(302)
+        txtIniciar.setOrigin(0.5)
+        elementosTutorial.push(txtIniciar)
+
+        elementosTutorial.forEach(el => {
+            el.setScale(0.7)
+        })
+
+        // Efeito de piscar no texto de iniciar
+        this.tweens.add({
+            targets: txtIniciar,
+            alpha: 0.2,
+            duration: 700,
+            yoyo: true,
+            repeat: -1
+        })
+
+        // ..:: Fechar tutorial ao clicar em qualquer lugar ou qualquer tecla ::..\
+        const fecharTutorial = () => {
+            elementosTutorial.forEach(el => el.destroy())
+            this.emIntro = false
+            // Remove o listener de clique para não disparar duas vezes
+            this.input.off('pointerdown', fecharTutorial)
+        }
+
+        // Aguarda um frame antes de registrar os listeners (evita
+        // fechar imediatamente com o mesmo clique que avançou o diálogo)
+        this.time.delayedCall(200, () => {
+            this.input.once('pointerdown', fecharTutorial)
+            // Qualquer tecla encerra o tutorial
+            this.input.keyboard.once('keydown', fecharTutorial)
+        })
+    }
+
+    // ================================================================
+    // Fim do bloco de introdução
+    // ================================================================
+
+    update () {
 
         // debug colisão
         //this.layerColisao.renderDebug(this.add.graphics(), {
@@ -1281,6 +1611,35 @@ export default class Jogo extends Phaser.Scene {
 
         // debug posição do personagem
         // console.log(this.player.x, this.player.y)
+
+        // ==============================================================
+        // ..:: BLOQUEIO DURANTE A INTRODUÇÃO ::..\
+        // Enquanto emIntro for true, o player fica travado e nenhuma
+        // ação de jogo é processada (inventário, ESC, etc).
+        // O listener de movimento automático (introMoverListener) ainda
+        // roda via events.on('update'), mas é separado daqui.
+        // A tecla E avança o diálogo se estiver aguardando.
+        // ==============================================================
+        if (this.emIntro) {
+            // Só trava o player se ele não estiver em movimento automático.
+            // Durante introMovendo = true a velocidade é controlada por
+            // moverPlayerAteNpc() e não deve ser zerada aqui.
+            if (!this.introMovendo) {
+                this.player.setVelocity(0, 0)
+            }
+
+            // Tecla E avança o diálogo da introdução
+            if (
+                this.aguardandoAvancoDialogoIntro &&
+                Phaser.Input.Keyboard.JustDown(this.teclaE)
+            ) {
+                this.avancarDialogoIntro()
+            }
+
+            return
+        }
+        // ==============================================================
+
         if (Phaser.Input.Keyboard.JustDown(this.teclaI)) {
             if (!this.inventarioAberto) {
                 this.mochila.play('abrir_mochila')
