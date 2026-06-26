@@ -51,6 +51,7 @@ export default class Configuracao extends Phaser.Scene {
 
     const botaoDificuldade = this.add.image(width / 2 + 3, height - 490, 'botaoDificuldade')
     botaoDificuldade.setScale(escalaBotaoDificuldade)
+    botaoDificuldade.setFrame(indiceDificuldade)
     botaoDificuldade.setInteractive({ useHandCursor: true })
 
     botaoDificuldade.on('pointerover', () => {

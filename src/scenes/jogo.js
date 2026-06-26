@@ -768,23 +768,25 @@ export default class Jogo extends Phaser.Scene {
                 ]
             },
 
-            { tipo: 'enemy1', 
+            {
+                tipo: 'enemy1',
                 pontos: [
                     { x: 926.4, y: 1602.5 },
                     { x: 926.4, y: 1517.5 },
-                    { x: 1095, y: 1517.5 }, 
+                    { x: 1095, y: 1517.5 },
                     { x: 1095, y: 1602.5 },
                     { x: 1095, y: 1517.5 },
                     { x: 926.4, y: 1517.5 },
                     { x: 926.4, y: 1602.5 }
-                ] 
+                ]
             },
 
             { tipo: 'enemy2', pontos: [{ x: 200.3, y: 1153.7 }, { x: 579.4, y: 1153.7 }] },
 
             { tipo: 'enemy2', pontos: [{ x: 599.4, y: 1153.7 }, { x: 1067.8, y: 1153.7 }] },
 
-            {tipo: 'enemy2',
+            {
+                tipo: 'enemy2',
                 pontos: [
                     { x: 868.82, y: 847.90 },
                     { x: 868.82, y: 642.90 },
@@ -861,7 +863,12 @@ export default class Jogo extends Phaser.Scene {
             { tipo: 'enemy3', pontos: [{ x: 2385, y: 1447.4 }, { x: 2752.5, y: 1447.4 }] },
             { tipo: 'enemy3', pontos: [{ x: 2368.5, y: 607.5 }, { x: 2745.3, y: 607.5 }] },
             { tipo: 'enemy3', pontos: [{ x: 2619.16, y: 1114.4 }, { x: 2751.6, y: 1114.45 }] },
-            { tipo: 'enemy3', pontos: [{ x: 2358.3, y: 1332.8 }, { x: 2495.3, y: 1332.8 }] },
+            {
+                tipo: 'enemy3',
+                parado: true,
+                direcaoParado: 'direita',
+                pontos: [{ x: 2465.58, y: 1342.98 }]
+            },
             {
                 tipo: 'enemy3',
                 parado: true,
@@ -873,7 +880,20 @@ export default class Jogo extends Phaser.Scene {
 
         this.inimigos = []
 
+        // Multiplicador de velocidade baseado na dificuldade escolhida no menu
+        const multiplicadoresDificuldade = {
+            pacifica: 0,   // inimigos não serão criados
+            facil: 0.6,
+            normal: 1,
+            dificil: 1.4
+        }
+        const dificuldadeAtual = window.dificuldade || 'normal'
+        const multiplicadorVelocidade = multiplicadoresDificuldade[dificuldadeAtual] ?? 1
+
         configInimigos.forEach(config => {
+
+            // Modo pacífico: não cria nenhum inimigo
+            if (dificuldadeAtual === 'pacifica') return
 
             const inimigo = this.physics.add.sprite(
                 config.pontos[0].x,
@@ -886,17 +906,17 @@ export default class Jogo extends Phaser.Scene {
             switch (config.tipo) {
 
                 case 'enemy1':
-                    inimigo.velocidade = 150
+                    inimigo.velocidade = 150 * multiplicadorVelocidade
                     inimigo.modoMovimento = 'andar'
                     break
 
                 case 'enemy2':
-                    inimigo.velocidade = 200
+                    inimigo.velocidade = 200 * multiplicadorVelocidade
                     inimigo.modoMovimento = 'correr'
                     break
 
                 case 'enemy3':
-                    inimigo.velocidade = 100
+                    inimigo.velocidade = 100 * multiplicadorVelocidade
                     inimigo.modoMovimento = 'andar'
                     inimigo.setScale(1.5)
                     break
