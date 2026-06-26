@@ -124,7 +124,11 @@ export default class Menu extends Phaser.Scene {
         targets: botaoExtras,
         scale: escalaBotao,
         duration: 100
+        
       })
+    botaoExtras.on('pointerdown', () => {
+        this.scene.start('MenuExtras')
+    })
 
       botaoExtras.clearTint()
     })

@@ -54,6 +54,9 @@ export default class Jogo extends Phaser.Scene {
         this.load.spritesheet('pilares', 'public/assets/mapa/pilares.png', { frameWidth: 64, frameHeight: 64 })
         this.load.image('iconeConversa', 'public/assets/botoes/iconeConversa.png')
 
+        //carregando sprite mochila
+        this.load.image('mochila', 'public/assets/botoes/Botao_mochila.png')
+
         const sonsParaCarregar = [
             { key: 'passo', path: 'public/assets/sons/passo.mp3' },
             { key: 'correr', path: 'public/assets/sons/passo.mp3' },
@@ -121,6 +124,22 @@ export default class Jogo extends Phaser.Scene {
         const tilesetEngenho = mapa.addTilesetImage('engenho', 'engenho')
         const tilesetJardimFundos = mapa.addTilesetImage('jardimFundos', 'jardimFundos')
         const tilesetPilares = mapa.addTilesetImage('pilares', 'pilares')
+
+        //mochila
+
+
+        this.Botao_mochila = this.add.image(16, this.scale.height - 16, 'mochila')
+            .setOrigin(0, 1)
+            .setScrollFactor(0)
+            .setDepth(10)
+            .setScale(0.8)
+
+        // Câmera principal ignora a mochila
+        this.cameras.main.ignore(this.Botao_mochila)
+
+
+
+
 
         if (
             !tilesetChao ||
