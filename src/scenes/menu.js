@@ -71,7 +71,7 @@ export default class Menu extends Phaser.Scene {
     // Mudar cena ao clicar no botão
     botaoJogar.on('pointerdown', () => {
       this.SoundManager.pararMusica()
-      this.SoundManager.tocarAbertura()
+      //this.SoundManager.tocarAbertura()
       this.scene.start('Jogo')
     })
 
@@ -110,42 +110,32 @@ export default class Menu extends Phaser.Scene {
     })
 
     // ..:: BOTÃO EXTRAS ::..
-    const botaoExtras = this.add.image(width / 2, 510, 'botaoExtras')
-    botaoExtras.setScale(escalaBotao)
-    botaoExtras.setInteractive()
+   const botaoExtras = this.add.image(width / 2, 510, 'botaoExtras')
+botaoExtras.setScale(escalaBotao)
+botaoExtras.setInteractive()
 
-    // aumentar escala quando o mouse está sobre o botão
-    botaoExtras.on('pointerover', () => {
-      this.tweens.add({
-        targets: botaoExtras,
-        scale: escalaBotao * 1.1,
-        duration: 100
-      })
+botaoExtras.on('pointerover', () => {
+  this.tweens.add({
+    targets: botaoExtras,
+    scale: escalaBotao * 1.1,
+    duration: 100
+  })
+  botaoExtras.setTint(0xE6B967)
+})
 
-      botaoExtras.setTint(0xE6B967)
-    })
+botaoExtras.on('pointerout', () => {
+  this.tweens.add({
+    targets: botaoExtras,
+    scale: escalaBotao,
+    duration: 100
+  })
+  botaoExtras.clearTint()
+})
 
-    // voltar escala ao padrão quando o mouse não está sobre o botão
-    botaoExtras.on('pointerout', () => {
-      this.tweens.add({
-        targets: botaoExtras,
-        scale: escalaBotao,
-        duration: 100
-        
-      })
-    botaoExtras.on('pointerdown', () => {
-        this.scene.start('MenuExtras')
-    })
-
-      botaoExtras.clearTint()
-    })
-
-    // Entra na cena de extras
-    botaoExtras.on('pointerdown', () => {
-      this.SoundManager.pararMusica()
-      this.SoundManager.tocarAbertura()
-      this.scene.start('Extras')
-    })
+botaoExtras.on('pointerdown', () => {
+  this.SoundManager.pararMusica()
+  this.scene.start('MenuExtras')
+})
 
   }
 }
