@@ -62,7 +62,7 @@ export default class MenuExtras extends Phaser.Scene {
         oculto: 'oculto_cabeca',
         revelado: 'rev_cabeca',
         nome: 'Crânio Indígena',
-        descricao: 'Vestígio sagrado de um\nancestral indígena.\nGuarda histórias de um\npovo esquecido.'
+        descricao: 'Cracio de onça.\nGuarda histórias de um\npovo esquecido.'
       },
       {
         oculto: 'oculto_madeira',
@@ -74,7 +74,7 @@ export default class MenuExtras extends Phaser.Scene {
         oculto: 'oculto_espada',
         revelado: 'rev_espada',
         nome: 'Espada Dom Pedro',
-        descricao: 'Lâmina que pertenceu\nà corte imperial.\nTestemunha de batalhas\ne da independência.'
+        descricao: 'Lâmina que pertenceu\nà Dom Pedro Segundo.\nTestemunha de batalhas\ne da independência.'
       },
       {
         oculto: 'oculto_maquina',
@@ -86,7 +86,7 @@ export default class MenuExtras extends Phaser.Scene {
         oculto: 'oculto_reliquario',
         revelado: 'rev_reliquario',
         nome: 'Relicário Dourado',
-        descricao: 'Caixa sagrada que abriga\nrelíquias de santos.\nObjeto de devoção e fé\nda população colonial.'
+        descricao: 'Objeto sagrado que abriga\nrelíquias de santos.\nObjeto de devoção e fé\nda população colonial.'
       }
     ]
 

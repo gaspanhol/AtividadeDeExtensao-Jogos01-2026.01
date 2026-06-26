@@ -374,7 +374,7 @@ export default class Jogo extends Phaser.Scene {
 
         // ..:: Configuração do player ::..
         this.player = this.physics.add.sprite(784.5, 3246.1, 'player')
-        window.player = this.player //Comando para ver a localização do player no jogo, usando o comando console.log(player.x, player.y)
+        //window.player = this.player //Comando para ver a localização do player no jogo, usando o comando console.log(player.x, player.y)
         this.direcao = 'esquerda'
         this.physics.add.collider(this.player, this.layerColisao)
         this.physics.add.collider(this.player, this.colunasColisao)
