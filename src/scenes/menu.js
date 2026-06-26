@@ -102,6 +102,13 @@ export default class Menu extends Phaser.Scene {
       botaoConfiguracoes.clearTint()
     })
 
+    // Entrar na cena de configurações
+    botaoConfiguracoes.on('pointerdown', () => {
+      this.SoundManager.pararMusica()
+      this.SoundManager.tocarAbertura()
+      this.scene.start('Configuracao')
+    })
+
     // ..:: BOTÃO EXTRAS ::..
     const botaoExtras = this.add.image(width / 2, 510, 'botaoExtras')
     botaoExtras.setScale(escalaBotao)
@@ -131,6 +138,13 @@ export default class Menu extends Phaser.Scene {
     })
 
       botaoExtras.clearTint()
+    })
+
+    // Entra na cena de extras
+    botaoExtras.on('pointerdown', () => {
+      this.SoundManager.pararMusica()
+      this.SoundManager.tocarAbertura()
+      this.scene.start('Extras')
     })
 
   }
